@@ -1,0 +1,10 @@
+{% extends 'base.html.jinja' %}
+{% block main %}
+<h2>Vos informations</h2>
+<form action="#" method="post">
+    <label for="username">Nom d'utilisateur</label>
+    <input type="text" name="username" id="username" value="{{ username }}" disabled>
+    <label for="mail">Adresse mail</label>
+    <input type="email" name="mail" id="mail" value="{{ mail }}" disabled>
+</form>
+{% endblock %}

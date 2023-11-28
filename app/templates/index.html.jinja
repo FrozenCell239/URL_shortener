@@ -1,0 +1,10 @@
+{% extends 'base.html.jinja' %}
+{% block main %}
+<h2>Nouveau raccourci</h2>
+<p>Entrez l'URL que vous souhaitez raccourcir puis cliquez sur le bouton "Raccourcir".</p>
+<form action="#" method="post">
+    <label for="original_url">URL original :</label>
+    <input type="text" name="original_url" id="original_url" required>
+    <button type="submit">Raccourcir</button>
+</form>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.jinja' %}
+{% block main %}
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Raccourci</th>
+            <th>Nombre de clicks</th>
+            <th>Statut</th>
+            <th>Original</th>
+            <th>Fichier attaché</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for link in links %}
+        <tr>
+            <td>{{ link.id }}</td>
+            <td><a href='https://localhost:8052/{{ link.short }}'>https://localhost:8052/{{ link.short }}</a></td>
+            <td>{{ link.clicks }}</td>
+            <td>{{ "Actif" if link.state else "Désactivé" }}</td>
+            <td>
+                {% if link.original %}
+                <a href='{{ link.original }}'>{{ link.original }}</a>
+                {% else %}
+                Aucun
+                {% endif %}
+            </td>
+            <td>{{ link.attached_file_name if link.attached_file_name else "Aucun" }}</td>
+            <td>
+                <a href="/u/toggle/{{ link.id }}">{{ "Désactiver" if link.state else "Réactiver"}}</a>
+                <a href="#">Supprimer</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--link rel="icon" type="image/x-icon" href="{#{ asset('img/favicon.png') }#}"-->
+        <title>{% block title %}{{ title }}{% endblock %}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'styles/style.css') }}">
+    </head>
+    <body class="bg-gray-200">
+        <header>
+            {% block header %}
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('main.index') }}">Index</a></li>
+                    {% if session.username %}
+                    <li><a href="{{ url_for('user.profile') }}">Mes infos</a></li>
+                    <li><a href="{{ url_for('user.index') }}">Mes liens</a></li>
+                    <li><a href="#">Mes fichiers</a></li>
+                    <li><a href="{{ url_for('main.logout') }}">Logout</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('main.login') }}">Login</a></li>
+                    <li><a href="{{ url_for('main.register') }}">Register</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endblock %}
+        </header>
+        <main>
+            {% with messages = get_flashed_messages(with_categories = true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% include './_partials/_flash.html.jinja' %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block main %}{% endblock %}
+        </main>
+        <footer>
+            {#% block footer %}
+                {% include "./_partials/_footer.html.twig" %}
+            {% endblock %#}
+        </footer>
+    </body>
+</html>

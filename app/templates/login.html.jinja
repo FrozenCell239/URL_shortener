@@ -1,0 +1,10 @@
+{% extends 'base.html.jinja' %}
+{% block main %}
+<form action="#" method="post">
+    <label for="username">Nom d'utilisateur</label>
+    <input type="text" name="username" id="username" required>
+    <label for="password">Mot de passe</label>
+    <input type="password" name="password" id="password" required>
+    <button type="submit">Connexion</button>
+</form>
+{% endblock %}
