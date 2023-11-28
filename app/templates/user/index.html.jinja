@@ -16,7 +16,7 @@
         {% for link in links %}
         <tr>
             <td>{{ link.id }}</td>
-            <td><a href='https://localhost:8052/{{ link.short }}'>https://localhost:8052/{{ link.short }}</a></td>
+            <td><a href='http://localhost:8052/{{ link.short }}'>http://localhost:8052/{{ link.short }}</a></td>
             <td>{{ link.clicks }}</td>
             <td>{{ "Actif" if link.state else "Désactivé" }}</td>
             <td>
