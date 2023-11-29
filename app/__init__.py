@@ -19,9 +19,4 @@ def create_app(config_class = Config):
     from app.error import error_bp
     app.register_blueprint(error_bp, url_prefix='/error')
 
-    # Test route.
-    @app.route('/test')
-    def test_page():
-        return "<h1>It looks like it's working...</h1>"
-
     return app
