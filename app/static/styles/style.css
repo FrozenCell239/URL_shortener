@@ -1,3 +1,8 @@
-body{
-    background-color: slategray;
+/* Colors */
+body {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgb(200, 220, 239);
 }
+
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,7 @@
+@import './variables.scss';
+@import './mixins.scss';
+@import './placeholders.scss';
+
+body{
+    background-color: $background_color;
+}
