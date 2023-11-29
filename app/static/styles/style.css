@@ -1,8 +1,37 @@
 /* Colors */
+.success-flash, .warning-flash, .info-flash, .danger-flash {
+  border-width: 0.75rem;
+  padding: 1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* General */
 body {
   height: 100vh;
   width: 100vw;
   background-color: rgb(200, 220, 239);
+}
+
+/* Flash boxes */
+.danger-flash {
+  border-color: rgb(227, 114, 133);
+  background-color: rgb(240, 178, 189);
+}
+
+.info-flash {
+  border-color: rgb(101, 144, 213);
+  background-color: rgb(171, 194, 232);
+}
+
+.warning-flash {
+  border-color: rgb(234, 181, 76);
+  background-color: rgb(244, 215, 157);
+}
+
+.success-flash {
+  border-color: rgb(28, 226, 107);
+  background-color: rgb(131, 240, 174);
 }
 
 /*# sourceMappingURL=style.css.map */
