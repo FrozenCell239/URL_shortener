@@ -9,21 +9,33 @@ from app.models.link import Link
 def index(requested_link : str = None):
     # Redirecting short links to original ones
     if requested_link :
+        # Getting the link from database
         link = Link.query.filter_by(
             short = requested_link
         ).first()
+
+        # Redirecting to the original link if the short one exists and is valid
         if link and link.state == True :
             link.clicks += 1
             db.session.commit()
             return redirect(link.original, code = 301)
+
+        # Redirecting to an error page if the short link is not active
         elif link and link.state == False :
             return redirect(url_for('error.index', error_type = 'DISABLED'))
+
+        # Redirecting to an error page if the short link doesn't exist
         elif not link :
             return redirect(url_for('error.index', error_type = 'DELETED'))
 
-    # Link shortening then page display
+    # Page display if no short link
     elif request.method == 'POST' :
-        if not 'username' in session : flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'error')
+        # Redirect to login page if no user is connected
+        if not 'username' in session : 
+            flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'error')
+            return redirect(url_for('main.login'))
+        
+        # Link shortening
         else:
             # Checking original link's validity
             if(
