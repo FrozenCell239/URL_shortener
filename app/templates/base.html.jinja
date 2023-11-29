@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
+        <!-- HTML settings -->
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--link rel="icon" type="image/x-icon" href="{#{ asset('img/favicon.png') }#}"-->
         <title>{% block title %}{{ title }}{% endblock %}</title>
+
+        <!-- Styles -->
         <link rel="stylesheet" href="{{ url_for('static', filename = 'styles/style.css') }}">
+
+        <!-- JavaScript -->
+        <script src="{{ url_for('static', filename = 'js/app.js') }}"></script>
     </head>
     <body class="bg-gray-200">
         <header>
@@ -31,7 +37,9 @@
             {% with messages = get_flashed_messages(with_categories = true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        {% include './_partials/_flash.html.jinja' %}
+                        {% with flash_id = loop.index %}
+                            {% include './_partials/_flash.html.jinja' %}
+                        {% endwith %}
                     {% endfor %}
                 {% endif %}
             {% endwith %}

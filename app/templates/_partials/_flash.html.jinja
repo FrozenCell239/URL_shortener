@@ -1,1 +1,4 @@
-<p>[{{ category }}] {{ message }}</p>
+<div class="{{ category }}-flash" id="flash-{{ flash_id }}">
+    {{ message }}
+    <button onclick="flashDismiss('{{ flash_id }}')">X</button>
+</div>
