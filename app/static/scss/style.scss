@@ -10,6 +10,13 @@ body{
 }
 
 /* Flash boxes */
+.flash-zone{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 10rem;
+    padding-right: 10rem;
+}
 .danger-flash{
     @extend %flash;
     border-color: rgb(227 114 133);
