@@ -32,7 +32,7 @@ def index(requested_link : str = None):
     elif request.method == 'POST' :
         # Redirect to login page if no user is connected
         if not 'username' in session : 
-            flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'error')
+            flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
             return redirect(url_for('main.login'))
         
         # Link shortening
@@ -44,7 +44,7 @@ def index(requested_link : str = None):
                 request.form['original_url'].startswith("www.") ==
                 False
             ):
-                flash("Le lien saisi n'est pas un lien valide.", 'error')
+                flash("Le lien saisi n'est pas un lien valide.", 'danger')
 
             # Creating the new short link if the original one is valid
             else:
@@ -100,7 +100,7 @@ def register():
         
         # Page display with errors if some occured
         else:
-            for error in errors : flash(error, 'error')
+            for error in errors : flash(error, 'danger')
             return render_template('register.html.jinja', title = "Création de compte")
 
 @main_bp.route('/login', methods = ['POST', 'GET'])
@@ -128,7 +128,7 @@ def login():
 
         # Page display if the user doesn't exist in the database
         if not found_user or not pw_check :
-            flash("Nom d'utilisateur et/ou mot de passe incorrect(s).", 'error')
+            flash("Nom d'utilisateur et/ou mot de passe incorrect(s).", 'danger')
             return render_template('login.html.jinja', title = "Connexion")
         
         # Connecting the user if found in the database

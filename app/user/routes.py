@@ -15,7 +15,7 @@ def index():
             links = user_links
         )
     else:
-        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'error')
+        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
         return redirect(url_for('main.login'))
 
 @user_bp.route('/profile')
@@ -36,7 +36,7 @@ def profile():
             mail = found_user.mail #//if found_user.mail else None
         )
     else:
-        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'error')
+        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
         return redirect(url_for('main.login'))
 
 @user_bp.route('/toggle/<int:link_id>')
