@@ -19,15 +19,15 @@
             {% block header %}
             <nav>
                 <ul>
-                    <li><a href="{{ url_for('main.index') }}">Index</a></li>
+                    <li style="float: left;"><a href="{{ url_for('main.index') }}">ShortThatLink!</a></li>
                     {% if session.username %}
                     <li><a href="{{ url_for('user.profile') }}">Mes infos</a></li>
                     <li><a href="{{ url_for('user.index') }}">Mes liens</a></li>
                     <li><a href="#">Mes fichiers</a></li>
-                    <li><a href="{{ url_for('main.logout') }}">Logout</a></li>
+                    <li><a href="{{ url_for('main.logout') }}">Déconnexion</a></li>
                     {% else %}
-                    <li><a href="{{ url_for('main.login') }}">Login</a></li>
-                    <li><a href="{{ url_for('main.register') }}">Register</a></li>
+                    <li><a href="{{ url_for('main.login') }}">Se connecter</a></li>
+                    <li><a href="{{ url_for('main.register') }}">S'inscrire</a></li>
                     {% endif %}
                 </ul>
             </nav>
@@ -48,9 +48,13 @@
             {% block main %}{% endblock %}
         </main>
         <footer>
-            {#% block footer %}
-                {% include "./_partials/_footer.html.twig" %}
-            {% endblock %#}
+            <p>Ce service est gratuit et...&nbsp;<a href="https://github.com/FrozenCell239/URL_shortener">open source</a>&nbsp;! =]</p>
+            <p>
+                Fait avec &#10084;, mais aussi avec&nbsp;
+                <span><img src="{{ url_for('static', filename = 'images/flask-original.svg') }}" alt="Flask"></span>,&nbsp;
+                <span><img src="{{ url_for('static', filename = 'images/postgresql-original.svg') }}" alt="PostGreSQL"></span>, et&nbsp;
+                <span><img src="{{ url_for('static', filename = 'images/sass-original.svg') }}" alt="Sass"></span>&nbsp;!
+            </p>
         </footer>
     </body>
 </html>
