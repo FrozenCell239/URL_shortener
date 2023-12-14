@@ -4,6 +4,8 @@ from app.extensions import db, bcrypt
 from app.models.user import User
 from app.models.link import Link
 
+webapp_name = "ShortThatLink!"
+
 @main_bp.route('/', methods = ['POST', 'GET'])
 @main_bp.route('/<requested_link>')
 def index(requested_link : str = None):
@@ -57,9 +59,9 @@ def index(requested_link : str = None):
                 db.session.commit()
                 flash(f"""Raccourci créé avec succès ! <a href="{ url_for('user.index') }" >Tout voir</a>""", 'success')
 
-        return render_template('index.html.jinja', title = 'Easy Link')
+        return render_template('index.html.jinja', title = webapp_name)
     # Page display
-    else: return render_template('index.html.jinja', title = 'Easy Link')
+    else: return render_template('index.html.jinja', title = webapp_name)
 
 @main_bp.route('/register', methods = ['POST', 'GET'])
 def register():
@@ -69,7 +71,7 @@ def register():
 
     # Page display
     if request.method != 'POST':
-        return render_template('register.html.jinja', title = "Création de compte")
+        return render_template('register.html.jinja', title = "S'inscrire")
 
     # Register form handling
     else:
