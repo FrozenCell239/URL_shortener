@@ -19,15 +19,25 @@
             {% block header %}
             <nav>
                 <ul>
-                    <li style="float: left;"><a href="{{ url_for('main.index') }}">ShortThatLink!</a></li>
+                    <li id="logo"><a href="{{ url_for('main.index') }}">ShortThatLink!</a></li>
                     {% if session.username %}
-                    <li><a href="{{ url_for('user.profile') }}">Mes infos</a></li>
-                    <li><a href="{{ url_for('user.index') }}">Mes liens</a></li>
-                    <li><a href="#">Mes fichiers</a></li>
                     <li><a href="{{ url_for('main.logout') }}">Déconnexion</a></li>
+                        {% if self._TemplateReference__context.name != "user/profile.html.jinja" %}
+                        <li><a href="{{ url_for('user.profile') }}">Mes infos</a></li>
+                        {% endif %}
+                        {% if self._TemplateReference__context.name != "user/files.html.jinja" %}
+                        <li><a href="#">Mes fichiers</a></li>
+                        {% endif %}
+                        {% if self._TemplateReference__context.name != "user/index.html.jinja" %}
+                        <li><a href="{{ url_for('user.index') }}">Mes liens</a></li>
+                        {% endif %}
                     {% else %}
-                    <li><a href="{{ url_for('main.login') }}">Se connecter</a></li>
-                    <li><a href="{{ url_for('main.register') }}">S'inscrire</a></li>
+                        {% if self._TemplateReference__context.name != "login.html.jinja" %}
+                        <li><a href="{{ url_for('main.login') }}">Se connecter</a></li>
+                        {% endif %}
+                        {% if self._TemplateReference__context.name != "register.html.jinja" %}
+                        <li><a href="{{ url_for('main.register') }}">S'inscrire</a></li>
+                        {% endif %}
                     {% endif %}
                 </ul>
             </nav>
