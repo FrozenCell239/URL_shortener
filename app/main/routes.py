@@ -57,7 +57,7 @@ def index(requested_link : str = None):
                 )
                 db.session.add(new_link)
                 db.session.commit()
-                flash(f"""Raccourci créé avec succès ! <a href="{ url_for('user.index') }" >Tout voir</a>""", 'success')
+                flash(f"""Raccourci créé avec succès ! <a href="{ url_for('user.links') }" >Tout voir</a>""", 'success')
 
         return render_template('index.html.jinja', title = webapp_name)
     # Page display

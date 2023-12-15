@@ -28,8 +28,8 @@
                         {% if self._TemplateReference__context.name != "user/files.html.jinja" %}
                         <li><a href="#">Mes fichiers</a></li>
                         {% endif %}
-                        {% if self._TemplateReference__context.name != "user/index.html.jinja" %}
-                        <li><a href="{{ url_for('user.index') }}">Mes liens</a></li>
+                        {% if self._TemplateReference__context.name != "user/links.html.jinja" %}
+                        <li><a href="{{ url_for('user.links') }}">Mes liens</a></li>
                         {% endif %}
                     {% else %}
                         {% if self._TemplateReference__context.name != "login.html.jinja" %}

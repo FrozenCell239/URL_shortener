@@ -5,18 +5,7 @@ from app.models.user import User
 from app.models.link import Link
 
 @user_bp.route('/')
-def index():
-    if 'username' in session :
-        found_user = User.query.filter_by(username = session['username']).first()
-        user_links = Link.query.filter_by(owner_id = found_user.id).order_by(Link.id).all()
-        return render_template(
-            'user/index.html.jinja',
-            title = "Mes infos",
-            links = user_links
-        )
-    else:
-        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
-        return redirect(url_for('main.login'))
+def index(): return redirect(url_for('user.links'))
 
 @user_bp.route('/profile')
 def profile():
@@ -33,13 +22,27 @@ def profile():
             'user/profile.html.jinja',
             title = "Mes infos",
             username = session['username'],
-            mail = found_user.mail #//if found_user.mail else None
+            mail = found_user.mail
         )
     else:
         flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
         return redirect(url_for('main.login'))
 
-@user_bp.route('/toggle/<int:link_id>')
+@user_bp.route('/links')
+def links():
+    if 'username' in session :
+        found_user = User.query.filter_by(username = session['username']).first()
+        user_links = Link.query.filter_by(owner_id = found_user.id).order_by(Link.id).all()
+        return render_template(
+            'user/links.html.jinja',
+            title = "Mes infos",
+            links = user_links
+        )
+    else:
+        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
+        return redirect(url_for('main.login'))
+
+@user_bp.route('/links/toggle/<int:link_id>')
 def toggle_link(link_id : int):
     # Getting the link to toggle
     link = Link.query.filter_by(id = link_id, owner_id = session['user_id']).first()

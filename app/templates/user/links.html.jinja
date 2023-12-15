@@ -21,7 +21,7 @@
                 <td>{{ "Actif" if link.state else "Désactivé" }}</td>
                 <td><a href='{{ link.original }}'>{{ link.original }}</a></td>
                 <td>
-                    <a href="/u/toggle/{{ link.id }}">{{ "Désactiver" if link.state else "Réactiver"}}</a>
+                    <a href="/u/links/toggle/{{ link.id }}">{{ "Désactiver" if link.state else "Réactiver"}}</a>
                     <a href="#">Supprimer</a>
                 </td>
             </tr>
