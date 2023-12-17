@@ -7,3 +7,11 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=10)
+
+class AppInfos:
+
+    @staticmethod
+    def web_app_name(): return 'ShortThatLink!'
+
+    @staticmethod
+    def domain_name() : return 'http://localhost:8052/'
