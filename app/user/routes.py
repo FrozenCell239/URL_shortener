@@ -58,3 +58,17 @@ def toggle_link(link_id : int):
         link.state = not link.state
         db.session.commit()
         return redirect(url_for('user.index'))
+
+@user_bp.route('/links/delete/<int:link_id>')
+def delete_link(link_id : int):
+    # Getting the link to delete
+    link = Link.query.filter_by(id = link_id, owner_id = session['user_id']).first()
+
+    # Redirecting to error page if a link is trying to get deleted by someone else than its owner
+    if not link : return redirect(url_for('error.index'))
+
+    # Deleting link
+    else:
+        link = Link.query.filter_by(id = link_id).delete()
+        db.session.commit()
+        return redirect(url_for('user.index'))
