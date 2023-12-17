@@ -3,6 +3,7 @@ from app.user import user_bp
 from app.extensions import db
 from app.models.user import User
 from app.models.link import Link
+from config import AppInfos
 
 @user_bp.route('/')
 def index(): return redirect(url_for('user.links'))
@@ -35,6 +36,7 @@ def links():
         user_links = Link.query.filter_by(owner_id = found_user.id).order_by(Link.id).all()
         return render_template(
             'user/links.html.jinja',
+            domain_name = AppInfos.domain_name(),
             title = "Mes infos",
             links = user_links
         )

@@ -3,8 +3,7 @@ from app.main import main_bp
 from app.extensions import db, bcrypt
 from app.models.user import User
 from app.models.link import Link
-
-webapp_name = "ShortThatLink!"
+from config import AppInfos
 
 @main_bp.route('/', methods = ['POST', 'GET'])
 @main_bp.route('/<requested_link>')
@@ -59,9 +58,9 @@ def index(requested_link : str = None):
                 db.session.commit()
                 flash(f"""Raccourci créé avec succès ! <a href="{ url_for('user.links') }" >Tout voir</a>""", 'success')
 
-        return render_template('index.html.jinja', title = webapp_name)
+        return render_template('index.html.jinja', title = AppInfos.web_app_name())
     # Page display
-    else: return render_template('index.html.jinja', title = webapp_name)
+    else: return render_template('index.html.jinja', title = AppInfos.web_app_name())
 
 @main_bp.route('/register', methods = ['POST', 'GET'])
 def register():

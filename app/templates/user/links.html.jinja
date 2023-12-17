@@ -16,7 +16,7 @@
             {% if link.original and not link.attached_file_name %}
             <tr>
                 <td>{{ link.id }}</td>
-                <td><a href='http://localhost:8052/{{ link.short }}'>http://localhost:8052/{{ link.short }}</a></td>
+                <td><a href='{{ domain_name ~ link.short }}'>{{ domain_name ~ link.short }}</a></td>
                 <td>{{ link.clicks }}</td>
                 <td>{{ "Actif" if link.state else "Désactivé" }}</td>
                 <td><a href='{{ link.original }}'>{{ link.original }}</a></td>
