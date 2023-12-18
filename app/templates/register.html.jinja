@@ -1,14 +1,22 @@
 {% extends 'base.html.jinja' %}
 {% block main %}
-<form action="#" method="post">
-    <label for="username">Nom d'utilisateur</label>
-    <input type="text" name="username" id="username" required>
-    <label for="mail">Adresse mail</label>
-    <input type="email" name="mail" id="mail" required>
-    <label for="password">Mot de passe</label>
-    <input type="password" name="password" id="password" required>
-    <label for="password_confirm">Confirmation mot de passe</label>
-    <input type="password" name="password_confirm" id="password_confirm" required>
+<h1>{{ title }}</h1>
+<form action="#" method="post" id="register-form">
+    <div id="inputs-box">
+        <fieldset>
+            <label for="username">Nom d'utilisateur</label>
+            <input type="text" name="username" id="username" required>
+            <label for="mail">Adresse mail</label>
+            <input type="email" name="mail" id="mail" required>
+        </fieldset>
+        <div class="separator"></div>
+        <fieldset>
+            <label for="password">Mot de passe</label>
+            <input type="password" name="password" id="password" required>
+            <label for="password-confirm">Confirmation mot de passe</label>
+            <input type="password" name="password_confirm" id="password-confirm" required>
+        </fieldset>
+    </div>
     <button type="submit">S'enregistrer</button>
 </form>
 {% endblock %}

@@ -1,16 +1,15 @@
 %flash{
-    border: 0.2rem solid;
-    border-radius: 5rem;
+    border: 2px solid;
+    border-radius: 2rem;
     width: 100%;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1rem;
     text-align: center;
     line-height: 2;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    padding-right: 4rem;
-    padding-left: 4rem;
-    margin-bottom: 1rem;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    padding-right: 2rem;
+    padding-left: 2rem;
     button{
         border: none;
         background: none;
@@ -18,5 +17,34 @@
         font-size: 2rem;
         color: rgb(222, 66, 66);
         float: right;
+        cursor: pointer;
+    }
+}
+
+%form{
+    display: flex;
+    font-size: 0.8rem;
+    border: 2px solid whitesmoke;
+    border-radius: 2rem;
+    height: 200px;
+    padding: 50px 50px 50px 50px;
+    input, button{
+        border: 2px solid whitesmoke;
+        border-radius: 2rem;
+        color: whitesmoke;
+    }
+    button{
+        font-size: 0.8rem;
+        width: calc(100% - 50px);
+        align-self: center;
+        background-color: rgb(40, 50, 60);
+    }
+    input{
+        margin-top: 5px;
+        margin-bottom: 20px;
+        background-color: rgb(40, 50, 60);
+        height: 40px;
+        font-size: 0.8rem;
+        width: 100%;
     }
 }
