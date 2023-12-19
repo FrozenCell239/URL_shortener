@@ -1,11 +1,11 @@
 %flash{
     border: 2px solid;
     border-radius: 2rem;
+    height: 30px;
     width: 100%;
-    font-weight: 700;
+    font-weight: 300;
     font-size: 1rem;
     text-align: center;
-    line-height: 2;
     padding-top: 0.6rem;
     padding-bottom: 0.6rem;
     padding-right: 2rem;
@@ -17,6 +17,7 @@
         font-size: 2rem;
         color: rgb(222, 66, 66);
         float: right;
+        line-height: 0.6;
         cursor: pointer;
     }
 }
