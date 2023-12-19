@@ -20,8 +20,8 @@
             <td>{{ "Actif" if link.state else "Désactivé" }}</td>
             <td><a href='{{ link.original }}'>{{ link.original }}</a></td>
             <td>
-                <a href="/u/links/toggle/{{ link.id }}">{{ "Désactiver" if link.state else "Réactiver"}}</a>
-                <a href="/u/links/delete/{{ link.id }}">Supprimer</a>
+                <a href="/u/links/{{ link.id }}/toggle">{{ "Désactiver" if link.state else "Réactiver"}}</a>
+                <a href="/u/links/{{ link.id }}/delete">Supprimer</a>
             </td>
         </tr>
         {% endfor %}

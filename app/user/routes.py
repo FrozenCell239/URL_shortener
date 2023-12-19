@@ -21,7 +21,7 @@ def profile():
         #    flash("Votre adresse mail a été modifiée avec succès.", 'success')
         return render_template(
             'user/profile.html.jinja',
-            title = "Mes infos",
+            title = "Mes liens",
             username = session['username'],
             mail = found_user.mail
         )
@@ -31,7 +31,13 @@ def profile():
 
 @user_bp.route('/links')
 def links():
-    if 'username' in session :
+    # Redirecting user if not connected
+    if not 'username' in session :
+        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
+        return redirect(url_for('main.login'))
+
+    # User's links page display
+    else :
         found_user = User.query.filter_by(username = session['username']).first()
         user_links = Link.query.filter_by(owner_id = found_user.id, attached_file_name = None).order_by(Link.id).all()
         return render_template(
@@ -40,11 +46,8 @@ def links():
             title = "Mes infos",
             links = user_links
         )
-    else:
-        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
-        return redirect(url_for('main.login'))
 
-@user_bp.route('/links/toggle/<int:link_id>')
+@user_bp.route('/links/<int:link_id>/toggle')
 def toggle_link(link_id : int):
     # Getting the link to toggle
     link = Link.query.filter_by(id = link_id, owner_id = session['user_id']).first()
@@ -57,9 +60,9 @@ def toggle_link(link_id : int):
         link = Link.query.filter_by(id = link_id).first()
         link.state = not link.state
         db.session.commit()
-        return redirect(url_for('user.index'))
+        return redirect(url_for('user.links'))
 
-@user_bp.route('/links/delete/<int:link_id>')
+@user_bp.route('/links/<int:link_id>/delete')
 def delete_link(link_id : int):
     # Getting the link to delete
     link = Link.query.filter_by(id = link_id, owner_id = session['user_id']).first()
@@ -71,4 +74,4 @@ def delete_link(link_id : int):
     else:
         link = Link.query.filter_by(id = link_id).delete()
         db.session.commit()
-        return redirect(url_for('user.index'))
+        return redirect(url_for('user.links'))
