@@ -33,7 +33,7 @@ def profile():
 def links():
     if 'username' in session :
         found_user = User.query.filter_by(username = session['username']).first()
-        user_links = Link.query.filter_by(owner_id = found_user.id).order_by(Link.id).all()
+        user_links = Link.query.filter_by(owner_id = found_user.id, attached_file_name = None).order_by(Link.id).all()
         return render_template(
             'user/links.html.jinja',
             domain_name = AppInfos.domain_name(),
