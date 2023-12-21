@@ -104,9 +104,12 @@ fieldset{
         border: none;
         background: none;
         outline: none;
-        padding: 1rem 2rem;
+        padding: 1rem 1rem;
     }
-    input::-webkit-input-placeholder{
+    input{
+        color: $input_main_color;
+    }
+    input::-webkit-input-placeholder, input[type="file"]{
         color: #616161;
         font-style: italic;
         padding-left: 20px;
@@ -143,6 +146,27 @@ fieldset{
         flex-direction: row;
     }
 }
+#file-or-link{
+    display: none;
+}
+label[for="file-or-link"]{
+    margin-left: 20px;
+    margin-bottom: 2px;
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    background-size: contain;
+    background-image: url('../images/link-icon.svg');
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+#file-or-link:checked + label[for="file-or-link"]{
+    background-image: url('../images/file-icon.svg');
+    margin-left: 25px;
+    margin-bottom: 5px;
+}
+#file-or-link:checked ~ #original-url{display: none;}
+#file-or-link:not(:checked) ~ #to-upload{display: none;}
 
 /* Custom classes */
 // Flash message boxes
