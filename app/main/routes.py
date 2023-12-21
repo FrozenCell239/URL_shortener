@@ -55,20 +55,26 @@ def index(requested_link : str = None):
                 not request.form.getlist('file_or_link') and
                 request.form['original_url']
             ):
+                # Extracting the original URL
+                original_url = request.form['original_url']
+
                 # Checking original link's validity
                 if(
-                    request.form['original_url'].startswith("http://") ==
-                    request.form['original_url'].startswith("https://") ==
-                    request.form['original_url'].startswith("www.") ==
+                    original_url.startswith("http://") ==
+                    original_url.startswith("https://") ==
+                    original_url.startswith("www.") ==
                     False
                 ): errors.append("Le lien saisi n'est pas un lien valide.")
+
+                # Adding "https://" to links starting with "www." in order to avoid a redirect bug
+                if original_url.startswith("www.") : original_url = "https://" + original_url
 
                 # Creating the new short link if no error occured
                 if errors == [] :
                     new_link = Link(
                         #//shortened_length = 8,
                         owner_id = session['user_id'],
-                        original = request.form['original_url']
+                        original = original_url
                     )
                     db.session.add(new_link)
                     db.session.commit()
