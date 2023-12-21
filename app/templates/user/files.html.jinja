@@ -1,0 +1,30 @@
+{% extends 'base.html.jinja' %}
+{% block main %}
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Raccourci</th>
+            <th>Nombre de clics</th>
+            <th>Statut</th>
+            <th>Nom du fichier attaché</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for file in files %}
+        <tr>
+            <td>{{ file.id }}</td>
+            <td><a href='{{ domain_name ~ "dl/" ~ file.short }}'>{{ domain_name ~ "dl/" ~ file.short }}</a></td>
+            <td>{{ file.clicks }}</td>
+            <td>{{ "Actif" if file.state else "Désactivé" }}</td>
+            <td>{{ file.attached_file_name }}</td>
+            <td>
+                <a href="/u/files/{{ file.id }}/toggle">{{ "Désactiver" if file.state else "Réactiver"}}</a>
+                <a href="/u/files/{{ file.id }}/delete">Supprimer</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

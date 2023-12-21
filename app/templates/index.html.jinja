@@ -1,13 +1,26 @@
 {% extends 'base.html.jinja' %}
 {% block main %}
 <h1>Fini la galère des liens longs comme l'histoire de l'univers !</h1>
-<p>Vous avez un lien à partager, mais il est bien trop long à retenir, réécrire, ou partager ? Alors ce raccourcisseur d'URL est la solution qu'il vous faut !</p>
-<form action="#" method="post" id="url_handle">
+<p>Vous avez un lien à partager, mais il est bien trop long à retenir, réécrire, ou partager ? Alors ce raccourcisseur d'URL est la solution qu'il vous faut ! Mais vous pouvez aussi déposer un fichier afin de le partager facilement avec un lien court. ;)</p>
+<form action="#" method="post" id="url_handle" enctype="multipart/form-data">
+    <input
+        type="checkbox"
+        name="file_or_link"
+        id="file-or-link"
+        onchange="fileOrLinkToggle()"
+    >
+    <label for="file-or-link"></label>
     <input
         type="text"
         name="original_url"
+        id="original-url"
         placeholder="Collez votre URL ici."
         required
+    >
+    <input
+        type="file"
+        name="to_upload"
+        id="to-upload"
     >
     <button type="submit" id="shorten_button">
         <svg fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330 330" xml:space="preserve">

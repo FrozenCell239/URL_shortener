@@ -19,14 +19,14 @@
             {% block header %}
             <nav>
                 <ul>
-                    <li id="logo"><a href="{{ url_for('main.index') }}">ShortThatLink!</a></li>
+                    <li id="logo"><a href="{{ url_for('main.index') }}">Easy Link</a></li>
                     {% if session.username %}
                     <li><a href="{{ url_for('main.logout') }}">Déconnexion</a></li>
                         {% if self._TemplateReference__context.name != "user/profile.html.jinja" %}
                         <li><a href="{{ url_for('user.profile') }}">Mes infos</a></li>
                         {% endif %}
                         {% if self._TemplateReference__context.name != "user/files.html.jinja" %}
-                        <li><a href="#">Mes fichiers</a></li>
+                        <li><a href="{{ url_for('user.files') }}">Mes fichiers</a></li>
                         {% endif %}
                         {% if self._TemplateReference__context.name != "user/links.html.jinja" %}
                         <li><a href="{{ url_for('user.links') }}">Mes liens</a></li>
