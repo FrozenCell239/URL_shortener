@@ -1,4 +1,4 @@
-import os
+from os import urandom, environ
 from datetime import timedelta
 
 class AppInfos:
@@ -43,9 +43,9 @@ class AppInfos:
         else : raise TypeError("Invalid requested type.")
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY')\
-        or os.urandom(32).hex()
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI')
+    SECRET_KEY = environ.get('SECRET_KEY')\
+        or urandom(32).hex()
+    SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=10)
     UPLOAD_FOLDER = AppInfos.upload_folder()

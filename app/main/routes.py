@@ -11,10 +11,10 @@ from app.extensions import db, bcrypt
 from app.models.user import User
 from app.models.link import Link
 from config import AppInfos
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename as sf
 from datetime import datetime
 from shutil import move
-import os
+from os import makedirs, stat, remove, path
 
 @main_bp.route('/', methods = ['POST', 'GET'])
 @main_bp.route('/<string:requested_link>')
@@ -91,7 +91,7 @@ def index(requested_link : str = None):
             ):
                 # Getting new upload file
                 new_upload = request.files['to_upload']
-                new_filename = datetime.now().strftime("[%d-%m-%Y_%H-%M-%S]_") + secure_filename(new_upload.filename)
+                new_filename = datetime.now().strftime("[%d-%m-%Y_%H-%M-%S]_") + sf(new_upload.filename)
 
                 # Checking if file's format is allowed
                 if(
@@ -100,24 +100,24 @@ def index(requested_link : str = None):
                 ): errors.append("Ce format de fichier n'est pas autorisé.")
 
                 # Saving first the file in a temp folder
-                if not os.path.exists(AppInfos.tmp_folder()) : os.makedirs(AppInfos.tmp_folder())
-                new_upload.save(os.path.join(AppInfos.tmp_folder(), new_filename))
+                if not path.exists(AppInfos.tmp_folder()) : makedirs(AppInfos.tmp_folder())
+                new_upload.save(path.join(AppInfos.tmp_folder(), new_filename))
 
                 # Checking if file size limit is exceeded
-                if os.stat(os.path.join(AppInfos.tmp_folder(), new_filename)).st_size > AppInfos.max_upload_size() :
+                if stat(path.join(AppInfos.tmp_folder(), new_filename)).st_size > AppInfos.max_upload_size() :
                     errors.append(f"Fichier trop volumineux. Taille max supportée : {AppInfos.max_upload_size(str)}.")
-                    os.remove(os.path.join(AppInfos.tmp_folder(), new_filename))
+                    remove(path.join(AppInfos.tmp_folder(), new_filename))
                 
                 # File upload if no error occured
                 if errors == [] :
                     # Creating the uploads directory if it doesn't exist
-                    if not os.path.exists(AppInfos.upload_folder()) :
-                        os.makedirs(AppInfos.upload_folder())
+                    if not path.exists(AppInfos.upload_folder()) :
+                        makedirs(AppInfos.upload_folder())
 
                     # Saving the file on the server
                     move(
-                        os.path.join(AppInfos.tmp_folder(), new_filename),
-                        os.path.join(AppInfos.upload_folder(), new_filename)
+                        path.join(AppInfos.tmp_folder(), new_filename),
+                        path.join(AppInfos.upload_folder(), new_filename)
                     )
 
                     # Registering the file in the database
