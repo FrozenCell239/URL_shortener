@@ -1,6 +1,6 @@
 from flask import Flask
 from config import Config
-from app.extensions import db, bcrypt
+from app.extensions import db, bcrypt, limiter
 
 def create_app(config_class = Config):
     # App initialisation
@@ -10,6 +10,7 @@ def create_app(config_class = Config):
     # Flask extensions initialisation
     db.init_app(app)
     bcrypt.init_app(app)
+    limiter.init_app(app)
 
     # Blueprints
     from app.main import main_bp

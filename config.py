@@ -42,6 +42,9 @@ class AppInfos:
         elif requested_type == str : return '16 Mo'
         else : raise TypeError("Invalid requested type.")
 
+    @staticmethod
+    def password_limits() -> str : return '200/day;100/hour;20/minute'
+
 class Config:
     SECRET_KEY = environ.get('SECRET_KEY')\
         or urandom(32).hex()

@@ -7,7 +7,7 @@ from flask import\
     request,\
     session
 from app.main import main_bp
-from app.extensions import db, bcrypt
+from app.extensions import db, bcrypt, limiter
 from app.models.user import User
 from app.models.link import Link
 from config import AppInfos
@@ -210,6 +210,7 @@ def register():
             return render_template('register.html.jinja', title = "Création de compte")
 
 @main_bp.route('/login', methods = ['POST', 'GET'])
+@limiter.limit(AppInfos.password_limits())
 def login():
     # Forbid an already connected user to access this route
     if 'username' in session : return redirect(url_for('main.index'))
