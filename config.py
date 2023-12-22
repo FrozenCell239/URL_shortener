@@ -2,6 +2,12 @@ from os import urandom, environ
 from datetime import timedelta
 
 class AppInfos:
+    @staticmethod
+    def link_lengths(key : str) -> int :
+        if key == 'default' : return 6
+        elif key == 'min' : return 5
+        elif key == 'max' : return 10
+        else : raise ValueError("Invalid key.")
 
     @staticmethod
     def web_app_name() -> str : return 'Easy Link'
