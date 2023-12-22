@@ -11,24 +11,25 @@ def index(): return redirect(url_for('user.links'))
 
 @user_bp.route('/profile')
 def profile():
-    if 'username' in session :
-        found_user = User.query.filter_by(username = session['username']).first()
-        #if request.method != 'POST' :
-        #    return render_template('user/index.html.jinja', title = "Mes infos")
-        #else:
-        #    session['mail'] = request.form['mail']
-        #    found_user.mail = session['mail']
-        #    db.session.commit()
-        #    flash("Votre adresse mail a été modifiée avec succès.", 'success')
-        return render_template(
-            'user/profile.html.jinja',
-            title = "Mes liens",
-            username = session['username'],
-            mail = found_user.mail
-        )
-    else:
+    # Redirecting user if not connected
+    if not 'username' in session :
         flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
         return redirect(url_for('main.login'))
+
+    found_user = User.query.filter_by(username = session['username']).first()
+    #if request.method != 'POST' :
+    #    return render_template('user/index.html.jinja', title = "Mes infos")
+    #else:
+    #    session['mail'] = request.form['mail']
+    #    found_user.mail = session['mail']
+    #    db.session.commit()
+    #    flash("Votre adresse mail a été modifiée avec succès.", 'success')
+    return render_template(
+        'user/profile.html.jinja',
+        title = "Mes liens",
+        username = session['username'],
+        mail = found_user.mail
+    )
 
 @user_bp.route('/links')
 def links():
@@ -38,18 +39,22 @@ def links():
         return redirect(url_for('main.login'))
 
     # User's links page display
-    else :
-        found_user = User.query.filter_by(username = session['username']).first()
-        user_links = Link.query.filter_by(owner_id = found_user.id, attached_file_name = None).order_by(Link.id).all()
-        return render_template(
-            'user/links.html.jinja',
-            domain_name = AppInfos.domain_name(),
-            title = "Mes liens",
-            links = user_links
-        )
+    found_user = User.query.filter_by(username = session['username']).first()
+    user_links = Link.query.filter_by(owner_id = found_user.id, attached_file_name = None).order_by(Link.id).all()
+    return render_template(
+        'user/links.html.jinja',
+        domain_name = AppInfos.domain_name(),
+        title = "Mes liens",
+        links = user_links
+    )
 
 @user_bp.route('/links/<int:link_id>/toggle')
 def toggle_link(link_id : int):
+    # Redirecting user if not connected
+    if not 'username' in session :
+        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
+        return redirect(url_for('main.login'))
+
     # Getting the link to toggle
     link = Link.query.filter_by(id = link_id, owner_id = session['user_id']).first()
 
@@ -65,6 +70,11 @@ def toggle_link(link_id : int):
 
 @user_bp.route('/links/<int:link_id>/delete')
 def delete_link(link_id : int):
+    # Redirecting user if not connected
+    if not 'username' in session :
+        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
+        return redirect(url_for('main.login'))
+
     # Getting the link to delete
     link = Link.query.filter_by(id = link_id, owner_id = session['user_id']).first()
 
@@ -85,18 +95,22 @@ def files():
         return redirect(url_for('main.login'))
 
     # User's files page display
-    else:
-        found_user = User.query.filter_by(username = session['username']).first()
-        user_files = Link.query.filter_by(owner_id = found_user.id, original = None).order_by(Link.id).all()
-        return render_template(
-            'user/files.html.jinja',
-            domain_name = AppInfos.domain_name(),
-            title = "Mes fichiers",
-            files = user_files
-        )
+    found_user = User.query.filter_by(username = session['username']).first()
+    user_files = Link.query.filter_by(owner_id = found_user.id, original = None).order_by(Link.id).all()
+    return render_template(
+        'user/files.html.jinja',
+        domain_name = AppInfos.domain_name(),
+        title = "Mes fichiers",
+        files = user_files
+    )
 
 @user_bp.route('/files/<int:file_id>/toggle')
 def toggle_file(file_id : int):
+    # Redirecting user if not connected
+    if not 'username' in session :
+        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
+        return redirect(url_for('main.login'))
+
     # Getting the file to toggle
     file = Link.query.filter_by(id = file_id, owner_id = session['user_id']).first()
 
@@ -112,6 +126,11 @@ def toggle_file(file_id : int):
 
 @user_bp.route('/files/<int:file_id>/delete')
 def delete_file(file_id : int):
+    # Redirecting user if not connected
+    if not 'username' in session :
+        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
+        return redirect(url_for('main.login'))
+
     # Getting the file to delete
     file = Link.query.filter_by(id = file_id, owner_id = session['user_id']).first()
 
@@ -131,4 +150,5 @@ def delete_file(file_id : int):
         file = Link.query.filter_by(id = file_id).delete()
         db.session.commit()
 
+        # User's files page display
         return redirect(url_for('user.files'))
