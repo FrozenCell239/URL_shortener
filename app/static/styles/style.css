@@ -214,13 +214,13 @@ label[for=file-or-link] {
   height: 40px;
   display: inline-block;
   background-size: contain;
-  background-image: url("../images/link-icon.svg");
+  background-image: url("../icons/link-icon.svg");
   background-repeat: no-repeat;
   cursor: pointer;
 }
 
 #file-or-link:checked + label[for=file-or-link] {
-  background-image: url("../images/file-icon.svg");
+  background-image: url("../icons/file-icon.svg");
   margin-left: 25px;
   margin-bottom: 5px;
 }
