@@ -178,7 +178,7 @@ def register():
     if request.method != 'POST' : return render_template('register.html.jinja', title = "S'inscrire")
 
     # Register form handling
-    else:
+    elif request.method == 'POST' :
         # Errors handling
         errors = []
         if request.form['password'] != request.form['password_confirm'] :
@@ -201,7 +201,7 @@ def register():
             )
             db.session.add(user)
             db.session.commit()
-            flash("Votre compte a été créé avec succès ! Vous pouvez vous connecter dès à présent.", 'success')
+            flash("Votre compte a été créé avec succès ! Connectez-vous dès à présent.", 'success')
             return redirect(url_for('main.login'))
         
         # Register page display with errors if some occured
@@ -216,14 +216,12 @@ def login():
     if 'username' in session : return redirect(url_for('main.index'))
 
     # Login page display
-    if request.method != 'POST': return render_template('login.html.jinja', title = "Connexion")
+    if request.method != 'POST' : return render_template('login.html.jinja', title = "Connexion")
 
     # Login form handling
-    else:
+    elif request.method == 'POST' :
         # Looking for the user into the database
-        found_user = User.query.filter_by(
-            username = request.form['username']
-        ).first()
+        found_user = User.query.filter_by(username = request.form['username']).first()
         if found_user :
             pw_check = bcrypt.check_password_hash(
                 found_user.password,
@@ -241,7 +239,6 @@ def login():
             session.permanent = True
             session['user_id'] = found_user.id
             session['username'] = found_user.username
-            session['mail'] = found_user.mail
             flash("Connexion réussie !", 'success')
             return redirect(url_for('main.index'))
 
