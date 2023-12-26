@@ -21,10 +21,25 @@
                 <ul>
                     <li id="logo"><a href="{{ url_for('main.index') }}">Easy Link</a></li>
                     {% if session.username %}
-                    <li><a href="{{ url_for('main.logout') }}">Déconnexion</a></li>
-                        {% if self._TemplateReference__context.name != "user/profile.html.jinja" %}
-                        <li><a href="{{ url_for('user.profile') }}">Mes infos</a></li>
-                        {% endif %}
+                        <li><a href="{{ url_for('main.logout') }}">Déconnexion</a></li>
+                        <li id="nav-dropdown">
+                            <a href="#" id="nav-drop-button">
+                                Mes infos&nbsp;
+                                <img
+                                    id="dropdown-icon"
+                                    src="{{ url_for('static', filename = 'icons/dropdown-icon.svg') }}"
+                                    alt="Dropdown icon."
+                                >
+                            </a>
+                            <div id="nav-dropdown-content">
+                                {% if self._TemplateReference__context.name != "user/profile.html.jinja" %}
+                                <a href="{{ url_for('user.profile') }}">Profil</a>
+                                {% endif %}
+                                {% if self._TemplateReference__context.name != "user/password.html.jinja" %}
+                                <a href="{{ url_for('user.password') }}">Mot de passe</a>
+                                {% endif %}
+                            </div>
+                        </li>
                         {% if self._TemplateReference__context.name != "user/files.html.jinja" %}
                         <li><a href="{{ url_for('user.files') }}">Mes fichiers</a></li>
                         {% endif %}

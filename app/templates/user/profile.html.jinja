@@ -1,10 +1,12 @@
 {% extends 'base.html.jinja' %}
 {% block main %}
 <h1>Vos informations</h1>
-<form action="#" method="post">
+<form action="#" method="post" class="form" id="profile-form">
     <label for="username">Nom d'utilisateur</label>
-    <input type="text" name="username" id="username" value="{{ username }}" disabled>
+    <input type="text" name="username" value="{{ user_infos.username }}">
     <label for="mail">Adresse mail</label>
-    <input type="email" name="mail" id="mail" value="{{ mail }}" disabled>
+    <input type="email" name="mail" value="{{ user_infos.mail }}">
+    <button type="submit">Modifier</button>
+    <a href="{{ url_for('main.index') }}">Annuler</a>
 </form>
 {% endblock %}

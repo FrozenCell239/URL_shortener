@@ -8,10 +8,7 @@
   font-weight: 300;
   font-size: 1rem;
   text-align: center;
-  padding-top: 0.6rem;
-  padding-bottom: 0.6rem;
-  padding-right: 2rem;
-  padding-left: 2rem;
+  padding: 0.6rem 2rem 0.6rem 2rem;
 }
 .success-flash button, .warning-flash button, .info-flash button, .danger-flash button {
   border: none;
@@ -24,26 +21,26 @@
   cursor: pointer;
 }
 
-#login-form, #register-form {
+.form {
   display: flex;
   font-size: 0.8rem;
   border: 2px solid whitesmoke;
   border-radius: 2rem;
   height: 200px;
-  padding: 50px 50px 50px 50px;
+  padding: 40px 50px 40px 50px;
 }
-#login-form input, #register-form input, #login-form button, #register-form button {
+.form input, .form button {
   border: 2px solid whitesmoke;
   border-radius: 2rem;
   color: whitesmoke;
 }
-#login-form button, #register-form button {
+.form button {
   font-size: 0.8rem;
   width: calc(100% - 50px);
   align-self: center;
   background-color: rgb(40, 50, 60);
 }
-#login-form input, #register-form input {
+.form input {
   margin-top: 5px;
   margin-bottom: 20px;
   background-color: rgb(40, 50, 60);
@@ -81,15 +78,41 @@ nav ul {
   padding: 0;
 }
 nav li {
-  display: inline;
   float: right;
 }
 nav a {
-  display: block;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
   color: whitesmoke;
+  padding: 10px 20px 10px 20px;
+}
+nav li a, nav #nav-drop-button {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+}
+nav li a:hover, nav #nav-dropdown:hover #nav-drop-button {
+  background-color: #616161;
+  border-radius: 2rem;
+}
+nav li #nav-dropdown {
+  display: inline-block;
+}
+nav #nav-dropdown-content {
+  display: none;
+  position: absolute;
+  z-index: 1;
+}
+nav #nav-dropdown-content a {
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  background-color: rgb(30, 40, 50);
+  border-radius: 2rem;
+}
+nav #nav-dropdown-content a:hover {
+  background-color: #616161;
+}
+nav #nav-dropdown:hover #nav-dropdown-content {
+  display: block;
 }
 
 main {
@@ -133,6 +156,18 @@ fieldset {
   flex-direction: column;
 }
 
+label[for=file-or-link] {
+  margin-left: 20px;
+  margin-bottom: 2px;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background-size: contain;
+  background-image: url("../icons/link-icon.svg");
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
 /* Single element customization */
 #logo {
   float: left;
@@ -160,8 +195,6 @@ fieldset {
   background: none;
   outline: none;
   padding: 1rem 1rem;
-}
-#url_handle input {
   color: whitesmoke;
 }
 #url_handle input::-webkit-input-placeholder, #url_handle input[type=file] {
@@ -189,9 +222,19 @@ fieldset {
   fill: whitesmoke;
 }
 
-#login-form {
+#login-form, #profile-form, #password-form {
   width: 300px;
   flex-direction: column;
+}
+
+#password-form {
+  height: 280px;
+}
+
+#profile-form > a, #password-form > a {
+  align-self: center;
+  color: whitesmoke;
+  margin-top: 10px;
 }
 
 #register-form {
@@ -205,18 +248,6 @@ fieldset {
 
 #file-or-link {
   display: none;
-}
-
-label[for=file-or-link] {
-  margin-left: 20px;
-  margin-bottom: 2px;
-  width: 40px;
-  height: 40px;
-  display: inline-block;
-  background-size: contain;
-  background-image: url("../icons/link-icon.svg");
-  background-repeat: no-repeat;
-  cursor: pointer;
 }
 
 #file-or-link:checked + label[for=file-or-link] {
@@ -233,6 +264,13 @@ label[for=file-or-link] {
   display: none;
 }
 
+#dropdown-icon {
+  display: inline;
+  padding-bottom: 4px;
+  width: 15px;
+  height: auto;
+}
+
 /* Custom classes */
 .flash-zone {
   display: flex;
@@ -240,7 +278,6 @@ label[for=file-or-link] {
   align-items: center;
   padding-left: 10rem;
   padding-right: 10rem;
-  min-height: 20px;
 }
 
 .danger-flash {

@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, session
 from app.user import user_bp
-from app.extensions import db
+from app.extensions import db, bcrypt, limiter
 from app.models.user import User
 from app.models.link import Link
 from config import AppInfos
@@ -9,27 +9,110 @@ from os import remove, path
 @user_bp.route('/')
 def index(): return redirect(url_for('user.links'))
 
-@user_bp.route('/profile')
+@user_bp.route('/profile', methods = ['POST', 'GET'])
 def profile():
     # Redirecting user if not connected
     if not 'username' in session :
         flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
         return redirect(url_for('main.login'))
 
+    # Getting user's informations
     found_user = User.query.filter_by(username = session['username']).first()
-    #if request.method != 'POST' :
-    #    return render_template('user/index.html.jinja', title = "Mes infos")
-    #else:
-    #    session['mail'] = request.form['mail']
-    #    found_user.mail = session['mail']
-    #    db.session.commit()
-    #    flash("Votre adresse mail a été modifiée avec succès.", 'success')
-    return render_template(
-        'user/profile.html.jinja',
-        title = "Mes liens",
-        username = session['username'],
-        mail = found_user.mail
-    )
+
+    # Register form handling
+    if request.method == 'POST' :
+       # Errors handling
+        errors = []
+        if User.query.filter_by(username = request.form['username']).first():
+            errors.append("Un autre compte possède déjà le nom d'utilisateur que vous avez saisi.")
+        if User.query.filter_by(mail = request.form['mail']).first():
+            errors.append("Un autre compte possède déjà l'adresse mail que vous avez saisie.")
+
+        # New user's informations registering if no error occured
+        if errors == [] :
+            found_user.username = request.form['username']
+            found_user.mail = request.form['mail']
+            db.session.commit()
+            session['username'] = request.form['username']
+            flash("Vos informations ont été modifiées avec succès.", 'success')
+            return redirect(url_for('main.index'))
+
+        # Profile page display with errors if some occured
+        else:
+            for error in errors : flash(error, 'danger')
+            return render_template(
+            'user/profile.html.jinja',
+            title = "Mon profil",
+            user_infos = {
+                'mail' : found_user.mail,
+                'username' : found_user.username
+            }
+        )
+
+    # Profile page display
+    else:
+        return render_template(
+            'user/profile.html.jinja',
+            title = "Mon profil",
+            user_infos = {
+                'mail' : found_user.mail,
+                'username' : found_user.username
+            }
+        )
+
+@user_bp.route('/password', methods = ['POST', 'GET'])
+@limiter.limit(AppInfos.password_limits())
+def password():
+    # Redirecting user if not connected
+    if not 'username' in session :
+        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
+        return redirect(url_for('main.login'))
+
+    # Register form handling
+    if request.method == 'POST' :
+        # Getting user
+        found_user = User.query.filter_by(id = session['user_id']).first()
+
+       # Errors handling
+        errors = []
+        if request.form['new_password'] != request.form['new_password_confirm'] :
+            errors.append("Les mots de passes ne sont pas identiques.")
+        if found_user :
+            pw_check = bcrypt.check_password_hash(
+                found_user.password,
+                request.form['old_password']
+            )
+        else: pw_check = None
+        if not pw_check :
+            errors.append("L'ancien mot de passe saisi est incorrect.")
+        if not found_user :
+            redirect(url_for('error.index'))
+
+        # New user's informations registering if no error occured
+        if errors == [] :
+            found_user.setPassword(
+                bcrypt
+                    .generate_password_hash(request.form['new_password'])
+                    .decode('utf-8')
+            )
+            db.session.commit()
+            flash("Votre mot de passe a été modifié avec succès.", 'success')
+            return redirect(url_for('main.index'))
+
+        # Profile page display with errors if some occured
+        else:
+            for error in errors : flash(error, 'danger')
+            return render_template(
+                'user/password.html.jinja',
+                title = "Modification mot de passe"
+            )
+
+    # Profile page display
+    else:
+        return render_template(
+            'user/password.html.jinja',
+            title = "Modification mot de passe"
+        )
 
 @user_bp.route('/links')
 def links():
