@@ -9,4 +9,7 @@
     <button type="submit">Modifier</button>
     <a href="{{ url_for('main.index') }}">Annuler</a>
 </form>
+<aside>
+    Vous êtes membre depuis le {{ user_infos.created_at.date }}.
+</aside>
 {% endblock %}

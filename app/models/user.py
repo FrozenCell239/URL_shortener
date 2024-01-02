@@ -6,6 +6,11 @@ class User(db.Model):
     username = db.Column(db.String(42), nullable = False, unique = True)
     password = db.Column(db.String(255), nullable = False)
     mail = db.Column(db.String(42), nullable = False)
+    created_at = db.Column(
+        db.DateTime(timezone = True),
+        nullable = False,
+        server_default = func.current_timestamp()
+    )
 
     def __init__(self, username : str, mail : str) -> None :
         self.setUsername(username)
@@ -35,3 +40,11 @@ class User(db.Model):
     def setMail(self, new_mail : str) -> None :
         if new_mail == '' : raise ValueError('Mail cannot be empty.')
         self.mail = new_mail
+
+    # Creation date getter
+    def getCreatedAt(self) -> dict :
+        return {
+            'date' : str(self.created_at)[:10],
+            'time' : str(self.created_at)[10:-13],
+            'timezone' : str(self.created_at)[-6:]
+        }

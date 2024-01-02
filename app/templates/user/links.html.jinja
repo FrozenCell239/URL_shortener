@@ -8,6 +8,7 @@
             <th>Nombre de clics</th>
             <th>Statut</th>
             <th>Original</th>
+            <th>Créé le</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -19,6 +20,7 @@
             <td>{{ link.clicks }}</td>
             <td>{{ "Actif" if link.state else "Désactivé" }}</td>
             <td><a href='{{ link.original }}'>{{ link.original }}</a></td>
+            <td>{{ links_dates[loop.index0].date ~ ", " ~ links_dates[loop.index0].time ~ '.'}}</td>
             <td>
                 <a href="/u/links/{{ link.id }}/toggle">{{ "Désactiver" if link.state else "Réactiver"}}</a>
                 <a href="/u/links/{{ link.id }}/delete">Supprimer</a>

@@ -9,6 +9,11 @@ class AbstractShortcut():
     short = db.Column(db.String(100), nullable = False)
     clicks = db.Column(db.Integer, nullable = False)
     state = db.Column(db.Boolean, nullable = False)
+    created_at = db.Column(
+        db.DateTime(timezone = True),
+        nullable = False,
+        server_default = func.current_timestamp()
+    )
 
     def __init__(
         self,
@@ -52,6 +57,14 @@ class AbstractShortcut():
     # State getter/toggler
     def getState(self) -> bool : return self.state
     def toggleState(self) -> None : self.state = not self.state
+
+    # Creation date getter
+    def getCreatedAt(self) -> dict :
+        return {
+            'date' : str(self.created_at)[:10],
+            'time' : str(self.created_at)[10:-13],
+            'timezone' : str(self.created_at)[-6:]
+        }
 
 class Link(db.Model, AbstractShortcut):
     original = db.Column(db.String(255), nullable = False)

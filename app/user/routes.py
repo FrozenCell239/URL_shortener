@@ -45,7 +45,8 @@ def profile():
             title = "Mon profil",
             user_infos = {
                 'mail' : found_user.getMail(),
-                'username' : found_user.getUsername()
+                'username' : found_user.getUsername(),
+                'created_at' : found_user.getCreatedAt()
             }
         )
 
@@ -56,7 +57,8 @@ def profile():
             title = "Mon profil",
             user_infos = {
                 'mail' : found_user.getMail(),
-                'username' : found_user.getUsername()
+                'username' : found_user.getUsername(),
+                'created_at' : found_user.getCreatedAt()
             }
         )
 
@@ -110,14 +112,21 @@ def links():
         flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
         return redirect(url_for('main.login'))
 
-    # User's links page display
+    # Getting user's links
     found_user = User.query.filter_by(username = session['username']).first()
     user_links = Link.query.filter_by(owner_id = found_user.getID()).order_by(Link.id).all()
+    
+    # Getting user's links' creation datetime
+    user_links_dates = []
+    for link in user_links : user_links_dates.append(link.getCreatedAt())
+
+    # User's links page display
     return render_template(
         'user/links.html.jinja',
         domain_name = AppInfos.domain_name(),
         title = "Mes liens",
-        links = user_links
+        links = user_links,
+        links_dates = user_links_dates
     )
 
 @user_bp.route('/links/<int:link_id>/toggle')
@@ -166,14 +175,21 @@ def files():
         flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
         return redirect(url_for('main.login'))
 
-    # User's files page display
+    # Getting user's files
     found_user = User.query.filter_by(username = session['username']).first()
     user_files = File.query.filter_by(owner_id = found_user.getID()).order_by(File.id).all()
+
+    # Getting user's files' creation datetime
+    user_files_dates = []
+    for link in user_files : user_files_dates.append(link.getCreatedAt())
+
+    # User's files page display
     return render_template(
         'user/files.html.jinja',
         domain_name = AppInfos.domain_name(),
         title = "Mes fichiers",
-        files = user_files
+        files = user_files,
+        files_dates = user_files_dates
     )
 
 @user_bp.route('/files/<int:file_id>/toggle')

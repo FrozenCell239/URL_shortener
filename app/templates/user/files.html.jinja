@@ -7,7 +7,8 @@
             <th>Raccourci</th>
             <th>Nombre de clics</th>
             <th>Statut</th>
-            <th>Nom du fichier attaché</th>
+            <th>Fichier attaché</th>
+            <th>Créé le</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -19,6 +20,7 @@
             <td>{{ file.clicks }}</td>
             <td>{{ "Actif" if file.state else "Désactivé" }}</td>
             <td>{{ file.attached_file_name }}</td>
+            <td>{{ files_dates[loop.index0].date ~ ", " ~ files_dates[loop.index0].time ~ '.'}}</td>
             <td>
                 <a href="/u/files/{{ file.id }}/toggle">{{ "Désactiver" if file.state else "Réactiver"}}</a>
                 <a href="/u/files/{{ file.id }}/delete">Supprimer</a>
