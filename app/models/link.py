@@ -1,44 +1,107 @@
 from app.extensions import db
 from random import choice
 from config import AppInfos
+from sqlalchemy.sql import func
 
-class Link(db.Model):
+class AbstractShortcut():
     id = db.Column(db.Integer, primary_key = True)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    original = db.Column(db.String(255), nullable = True)
     short = db.Column(db.String(100), nullable = False)
     clicks = db.Column(db.Integer, nullable = False)
     state = db.Column(db.Boolean, nullable = False)
-    attached_file_name = db.Column(db.String(255), nullable = True)
-    
+
     def __init__(
-        self, owner_id : int,
-        shortened_length : int = AppInfos.link_lengths('default'),
-        original : str = None,
-        attached_file_name : str = None
-    ):
-        if shortened_length < AppInfos.link_lengths('min') :
+        self,
+        owner_id : int,
+        short_length : int = AppInfos.link_lengths('default')
+    ) -> None :
+        if short_length < AppInfos.link_lengths('min') :
             raise ValueError(
                 f'Too short length. Minimum is {AppInfos.link_lengths('min')}.'
             )
-        if shortened_length > AppInfos.link_lengths('max') :
+        if short_length > AppInfos.link_lengths('max') :
             raise ValueError(
                 f'Too long length. Maximum is {AppInfos.link_lengths('max')}.'
             )
         self.owner_id = owner_id
-        self.short = self.shorten(shortened_length)
-        self.original = original
-        self.attached_file_name = attached_file_name
+        self.short = self.__shorten(short_length)
         self.clicks = 0
         self.state = True
-        
 
-    def __repr__(self) -> str :
-        return f'<Link "{self.short}">'
-    
-    def shorten(self, length) -> str :
+    # Short link creation
+    def __shorten(self, length : int) -> str :
         characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        short = ""
+        short = ''
         for _ in range(length):
             short += choice(characters)
         return short
+    
+    # ID getter
+    def getID(self) -> int : return self.id
+
+    # Owner ID getter
+    def getOwnerID(self) -> int : return self.owner_id
+    
+    # Short getter
+    def getShort(self) -> str : return self.short
+
+    # Clicks getter/incrementer
+    def getClicks(self) -> int : return self.clicks
+    def incrementClicks(self) -> None : self.clicks += 1
+
+    # State getter/toggler
+    def getState(self) -> bool : return self.state
+    def toggleState(self) -> None : self.state = not self.state
+
+class Link(db.Model, AbstractShortcut):
+    original = db.Column(db.String(255), nullable = False)
+
+    def __init__(
+        self,
+        owner_id : int,
+        original : str,
+        short_length : int = AppInfos.link_lengths('default')
+    ) -> None :
+        AbstractShortcut.__init__(self, owner_id, short_length)
+        self.setOriginal(original)
+
+    def __repr__(self) -> str : return f'<Link "{self.short}">'
+
+    # Original checker/getter/setter
+    @staticmethod
+    def checkOriginal(original : str) -> bool :
+        if(
+            original.startswith("http://") ==
+            original.startswith("https://") ==
+            original.startswith("www.") ==
+            False
+        ): return False
+        else: return True
+    def getOriginal(self) -> str : return self.original
+    def setOriginal(self, new_original : str) -> None :
+        # Adding "https://" to links starting with "www." in order to avoid a redirect bug
+        if new_original.startswith("www.") : new_original = "https://" + new_original
+        self.original = new_original
+
+class File(db.Model, AbstractShortcut):
+    attached_file_name = db.Column(db.String(255), nullable = False)
+
+    def __init__(
+        self,
+        owner_id : int,
+        attached_file_name : str,
+        short_length : int = AppInfos.link_lengths('default'),
+    ) -> None :
+        AbstractShortcut.__init__(self, owner_id, short_length)
+        self.attached_file_name = attached_file_name
+
+    def __repr__(self) -> str : return f'<File "{self.short}">'
+
+    # Attached file name getter
+    def getAttachedFileName(self) -> str : return self.attached_file_name
+
+    # File format checker
+    @staticmethod
+    def isFileFormatAllowed(filename : str) -> bool :
+        return '.' in filename and \
+            filename.rsplit('.', 1)[1].lower() in AppInfos.allowed_extensions()

@@ -7,9 +7,9 @@ from flask import\
     request,\
     session
 from app.main import main_bp
-from app.extensions import db, bcrypt, limiter
+from app.extensions import db, limiter
 from app.models.user import User
-from app.models.link import Link
+from app.models.link import Link, File
 from config import AppInfos
 from werkzeug.utils import secure_filename as sf
 from datetime import datetime
@@ -25,13 +25,13 @@ def index(requested_link : str = None):
         link = Link.query.filter_by(short = requested_link).first()
 
         # Redirecting to the original link if the short one exists and is valid
-        if link and link.state == True :
-            link.clicks += 1
+        if link and link.getState() == True :
+            link.incrementClicks()
             db.session.commit()
-            return redirect(link.original, code = 301)
+            return redirect(link.getOriginal(), code = 301)
 
         # Redirecting to an error page if the short link is not active
-        elif link and link.state == False :
+        elif link and link.getState() == False :
             return redirect(url_for('error.index', error_type = 'DISABLED'))
 
         # Redirecting to an error page if the short link doesn't exist
@@ -59,15 +59,8 @@ def index(requested_link : str = None):
                 original_url = request.form['original_url']
 
                 # Checking original link's validity
-                if(
-                    original_url.startswith("http://") ==
-                    original_url.startswith("https://") ==
-                    original_url.startswith("www.") ==
-                    False
-                ): errors.append("Le lien saisi n'est pas un lien valide.")
-
-                # Adding "https://" to links starting with "www." in order to avoid a redirect bug
-                if original_url.startswith("www.") : original_url = "https://" + original_url
+                if(not Link.checkOriginal(original_url)):
+                    errors.append("Le lien saisi n'est pas un lien valide.")
 
                 # Creating the new short link if no error occured
                 if errors == [] :
@@ -94,10 +87,8 @@ def index(requested_link : str = None):
                 new_filename = datetime.now().strftime("[%d-%m-%Y_%H-%M-%S]_") + sf(new_upload.filename)
 
                 # Checking if file's format is allowed
-                if(
-                    '.' in new_upload.filename and
-                    not new_upload.filename.rsplit('.', 1)[1].lower() in AppInfos.allowed_extensions()
-                ): errors.append("Ce format de fichier n'est pas autorisé.")
+                if not File.isFileFormatAllowed(new_upload.filename) :
+                    errors.append("Ce format de fichier n'est pas autorisé.")
 
                 # Saving first the file in a temp folder
                 if not path.exists(AppInfos.tmp_folder()) : makedirs(AppInfos.tmp_folder())
@@ -105,14 +96,15 @@ def index(requested_link : str = None):
 
                 # Checking if file size limit is exceeded
                 if stat(path.join(AppInfos.tmp_folder(), new_filename)).st_size > AppInfos.max_upload_size() :
-                    errors.append(f"Fichier trop volumineux. Taille max supportée : {AppInfos.max_upload_size(str)}.")
+                    errors.append(
+                        f"Fichier trop volumineux. Taille max supportée : {AppInfos.max_upload_size(str)}."
+                    )
                     remove(path.join(AppInfos.tmp_folder(), new_filename))
                 
                 # File upload if no error occured
                 if errors == [] :
                     # Creating the uploads directory if it doesn't exist
-                    if not path.exists(AppInfos.upload_folder()) :
-                        makedirs(AppInfos.upload_folder())
+                    if not path.exists(AppInfos.upload_folder()) : makedirs(AppInfos.upload_folder())
 
                     # Saving the file on the server
                     move(
@@ -121,12 +113,12 @@ def index(requested_link : str = None):
                     )
 
                     # Registering the file in the database
-                    new_link = Link(
+                    new_file_link = File(
                         #//shortened_length = 8,
                         owner_id = session['user_id'],
                         attached_file_name = new_filename
                     )
-                    db.session.add(new_link)
+                    db.session.add(new_file_link)
                     db.session.commit()
 
                     # Success message
@@ -149,20 +141,20 @@ def download(requested_file : str = None):
     # File download
     else :
         # Getting the file name from database
-        file = Link.query.filter_by(short = requested_file).first()
+        file = File.query.filter_by(short = requested_file).first()
 
         # Redirecting to the original file if the short one exists and is valid
-        if file and file.state == True :
-            file.clicks += 1
+        if file and file.getState() :
+            file.incrementClicks()
             db.session.commit()
             return send_from_directory(
                 '../' + AppInfos.upload_folder(),
-                file.attached_file_name,
+                file.getAttachedFileName(),
                 as_attachment = True
             )
 
         # Redirecting to an error page if the short file is not active
-        elif file and file.state == False :
+        elif file and not file.getState() :
             return redirect(url_for('error.index', error_type = 'DISABLED'))
 
         # Redirecting to an error page if the short file doesn't exist
@@ -200,11 +192,7 @@ def register():
                 request.form['username'],
                 request.form['mail']
             )
-            user.setPassword(
-                bcrypt
-                    .generate_password_hash(request.form['password'])
-                    .decode('utf-8')
-            )
+            user.setPassword(request.form['password'])
             db.session.add(user)
             db.session.commit()
             flash("Votre compte a été créé avec succès ! Connectez-vous dès à présent.", 'success')
@@ -228,12 +216,7 @@ def login():
     elif request.method == 'POST' :
         # Looking for the user into the database
         found_user = User.query.filter_by(username = request.form['username']).first()
-        if found_user :
-            pw_check = bcrypt.check_password_hash(
-                found_user.password,
-                request.form['password']
-            )
-        else: pw_check = None
+        if found_user : pw_check = found_user.checkPassword(request.form['password'])
 
         # Login page display if the user doesn't exist in the database
         if not found_user or not pw_check :
@@ -243,8 +226,8 @@ def login():
         # Connecting the user if found in the database
         else:
             session.permanent = True
-            session['user_id'] = found_user.id
-            session['username'] = found_user.username
+            session['user_id'] = found_user.getID()
+            session['username'] = found_user.getUsername()
             flash("Connexion réussie !", 'success')
             return redirect(url_for('main.index'))
 
