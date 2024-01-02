@@ -16,12 +16,14 @@ class AppInfos:
     def domain_name() -> str : return 'http://localhost:8052/'
 
     @staticmethod
-    def allowed_extensions() -> str :
-        return {
+    def allowed_extensions() -> tuple :
+        return (
             # Allowed document file formats
-            'txt', 'md', 'pdf', 'csv',
-            'ods', 'odt', 'odp',
-            'xlsx', 'ppt', 'pptx',
+            'xml', 'json', 'csv', 'toml', 'yaml',
+            'txt', 'md', 'pdf', 'rtf', 'epub',
+            'odt', 'odp', 'ods', 'odg',
+            'doc', 'ppt', 'xls',
+            'docx', 'pptx', 'xlsx', 'pub',
 
             # Allowed image file formats
             'png', 'jpg', 'jpeg', 'webp', 'gif',
@@ -34,7 +36,7 @@ class AppInfos:
 
             # Allowed zipped file formats
             'zip', 'rar', 'tar', 'gz'
-        }
+        )
     
     @staticmethod
     def upload_folder() -> str : return "app/static/uploads"
