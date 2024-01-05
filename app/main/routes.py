@@ -174,11 +174,11 @@ def register():
         # Errors handling
         errors = []
         if request.form['username'] == '' :
-            error.append["Le nom d'utilisateur ne peut pas être vide."]
+            errors.append("Le nom d'utilisateur ne peut pas être vide.")
         if request.form['mail'] == '' :
-            error.append["L'adresse mail ne peut pas être vide."]
+            errors.append("L'adresse mail ne peut pas être vide.")
         if request.form['password'] == '' :
-            error.append["Le mot de passe ne peut pas être vide."]
+            errors.append("Le mot de passe ne peut pas être vide.")
         if request.form['password'] != request.form['password_confirm'] :
             errors.append("Les mots de passes ne sont pas identiques.")
         if User.query.filter_by(username = request.form['username']).first():

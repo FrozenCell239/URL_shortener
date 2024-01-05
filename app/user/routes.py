@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, session
 from app.user import user_bp
-from app.extensions import db, bcrypt, limiter
+from app.extensions import db, limiter
 from app.models.user import User
 from app.models.link import Link, File
 from config import AppInfos
@@ -21,19 +21,31 @@ def profile():
 
     # Register form handling
     if request.method == 'POST' :
-       # Errors handling
+        # Errors handling
         errors = []
-        if User.query.filter_by(username = request.form['username']).first():
+        if request.form['username'] == '' :
+            errors.append("Le nom d'utilisateur ne peut pas être vide.")
+        if request.form['mail'] == '' :
+            errors.append("L'adresse mail ne peut pas être vide.")
+        if(
+            found_user.getUsername() != request.form['username'] and
+            User.query.filter_by(username = request.form['username']).first()
+        ):
             errors.append("Un autre compte possède déjà le nom d'utilisateur que vous avez saisi.")
-        if User.query.filter_by(mail = request.form['mail']).first():
+        if(
+            found_user.getMail() != request.form['mail'] and
+            User.query.filter_by(mail = request.form['mail']).first()
+        ):
             errors.append("Un autre compte possède déjà l'adresse mail que vous avez saisie.")
 
         # New user's informations registering if no error occured
         if errors == [] :
-            found_user.setUsername(request.form['username'])
-            found_user.setMail(request.form['mail'])
+            if found_user.getUsername() != request.form['username'] :
+                found_user.setUsername(request.form['username'])
+                session['username'] = request.form['username']
+            if found_user.getMail() != request.form['mail'] :
+                found_user.setMail(request.form['mail'])
             db.session.commit()
-            session['username'] = request.form['username']
             flash("Vos informations ont été modifiées avec succès.", 'success')
             return redirect(url_for('main.index'))
 
@@ -82,6 +94,8 @@ def password():
             errors.append("L'ancien mot de passe saisi est incorrect.")
         if request.form['new_password'] != request.form['new_password_confirm'] :
             errors.append("Les mots de passes ne sont pas identiques.")
+        if request.form['new_password'] == '' :
+            errors.append("Le mot de passe ne peut pas être vide.")
 
         # New user's informations registering if no error occured
         if errors == [] :
