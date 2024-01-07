@@ -2,6 +2,7 @@ from app.extensions import db
 from random import choice
 from config import AppInfos
 from sqlalchemy.sql import func
+from validators import url
 
 class AbstractShortcut():
     id = db.Column(db.Integer, primary_key = True)
@@ -59,7 +60,7 @@ class AbstractShortcut():
     def toggleState(self) -> None : self.state = not self.state
 
     # Creation date getter
-    def getCreatedAt(self) -> dict :
+    def getCreatedAt(self) -> dict[str, str] :
         return {
             'date' : str(self.created_at)[:10],
             'time' : str(self.created_at)[10:-13],
@@ -80,21 +81,17 @@ class Link(db.Model, AbstractShortcut):
 
     def __repr__(self) -> str : return f'<Link "{self.short}">'
 
-    # Original checker/getter/setter
-    @staticmethod
-    def checkOriginal(original : str) -> bool :
-        if(
-            original.startswith("http://") ==
-            original.startswith("https://") ==
-            original.startswith("www.") ==
-            False
-        ): return False
-        else: return True
+    # Original link getter/setter
     def getOriginal(self) -> str : return self.original
     def setOriginal(self, new_original : str) -> None :
         # Adding "https://" to links starting with "www." in order to avoid a redirect bug
         if new_original.startswith("www.") : new_original = "https://" + new_original
         self.original = new_original
+        
+    # Original link's validity checker
+    @staticmethod
+    def checkOriginal(original : str) -> bool :
+        return True if url(original) else False
 
 class File(db.Model, AbstractShortcut):
     attached_file_name = db.Column(db.String(255), nullable = False)
