@@ -85,17 +85,22 @@ def index(requested_link : str = None):
                 # Getting new upload file
                 new_upload = request.files['to_upload']
                 new_filename = datetime.now().strftime("[%d-%m-%Y_%H-%M-%S]_") + sf(new_upload.filename)
+                no_tmp_file = False
 
                 # Checking if file's format is allowed
                 if not File.isFileFormatAllowed(new_upload.filename) :
                     errors.append("Ce format de fichier n'est pas autorisé.")
+                    no_tmp_file = True
 
                 # Saving first the file in a temp folder
                 if not path.exists(AppInfos.tmp_folder()) : makedirs(AppInfos.tmp_folder())
-                new_upload.save(path.join(AppInfos.tmp_folder(), new_filename))
+                if not no_tmp_file : new_upload.save(path.join(AppInfos.tmp_folder(), new_filename))
 
                 # Checking if file size limit is exceeded
-                if stat(path.join(AppInfos.tmp_folder(), new_filename)).st_size > AppInfos.max_upload_size() :
+                if(
+                    not no_tmp_file and
+                    stat(path.join(AppInfos.tmp_folder(), new_filename)).st_size > AppInfos.max_upload_size()
+                ):
                     errors.append(
                         f"Fichier trop volumineux. Taille max supportée : {AppInfos.max_upload_size(str)}."
                     )
