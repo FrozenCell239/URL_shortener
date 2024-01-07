@@ -89,6 +89,7 @@ def password():
 
        # Errors handling
         errors = []
+        password_strength_check = User.checkPasswordStrength(request.form['new_password'])
         if not found_user :return redirect(url_for('error.index'))
         if not found_user.checkPassword(request.form['old_password']) :
             errors.append("L'ancien mot de passe saisi est incorrect.")
@@ -96,6 +97,17 @@ def password():
             errors.append("Les mots de passes ne sont pas identiques.")
         if request.form['new_password'] == '' :
             errors.append("Le mot de passe ne peut pas être vide.")
+        if not password_strength_check['password_ok'] :
+            strength_errors = "Le mot de passe ne respecte pas les conditions de sécurité suivantes. :"
+            for criteria, check_value in password_strength_check.items() :
+                if check_value :
+                    match criteria :
+                        case 'length_error' : strength_errors += '<br>- 8 caractères ou plus.'
+                        case 'digit_error' : strength_errors += '<br>- 1 chiffre ou plus.'
+                        case 'uppercase_error' : strength_errors += '<br>- 1 lettre minuscule ou plus.'
+                        case 'lowercase_error' : strength_errors += '<br>- 1 lettre majuscule ou plus.'
+                        case 'symbol_error' : strength_errors += '<br>- 1 caractère spécial ou plus.'
+            errors.append(strength_errors)
 
         # New user's informations registering if no error occured
         if errors == [] :

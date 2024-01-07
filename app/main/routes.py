@@ -173,6 +173,7 @@ def register():
     elif request.method == 'POST' :
         # Errors handling
         errors = []
+        password_strength_check = User.checkPasswordStrength(request.form['password'])
         if request.form['username'] == '' :
             errors.append("Le nom d'utilisateur ne peut pas être vide.")
         if request.form['mail'] == '' :
@@ -185,7 +186,18 @@ def register():
             errors.append("Un autre compte possède déjà le nom d'utilisateur que vous avez saisi.")
         if User.query.filter_by(mail = request.form['mail']).first():
             errors.append("Un autre compte possède déjà l'adresse mail que vous avez saisie.")
-        
+        if not password_strength_check['password_ok'] :
+            strength_errors = "Le mot de passe ne respecte pas les conditions de sécurité suivantes. :"
+            for criteria, check_value in password_strength_check.items() :
+                if check_value :
+                    match criteria :
+                        case 'length_error' : strength_errors += '<br>- 8 caractères ou plus.'
+                        case 'digit_error' : strength_errors += '<br>- 1 chiffre ou plus.'
+                        case 'uppercase_error' : strength_errors += '<br>- 1 lettre minuscule ou plus.'
+                        case 'lowercase_error' : strength_errors += '<br>- 1 lettre majuscule ou plus.'
+                        case 'symbol_error' : strength_errors += '<br>- 1 caractère spécial ou plus.'
+            errors.append(strength_errors)
+
         # New user registering if no error occured
         if errors == [] :
             user = User(
