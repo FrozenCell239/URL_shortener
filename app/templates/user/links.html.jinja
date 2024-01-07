@@ -1,5 +1,8 @@
 {% extends 'base.html.jinja' %}
 {% block main %}
+{% if links == [] %}
+Vous n'avez aucun raccourci pour le moment.
+{% else %}
 <table>
     <thead>
         <tr>
@@ -29,4 +32,5 @@
         {% endfor %}
     </tbody>
 </table>
+{% endif %}
 {% endblock %}

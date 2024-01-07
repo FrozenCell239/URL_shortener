@@ -1,5 +1,8 @@
 {% extends 'base.html.jinja' %}
 {% block main %}
+{% if files == [] %}
+Vous n'avez aucun fichier pour le moment.
+{% else %}
 <table>
     <thead>
         <tr>
@@ -29,4 +32,5 @@
         {% endfor %}
     </tbody>
 </table>
+{% endif %}
 {% endblock %}
