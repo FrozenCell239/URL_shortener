@@ -3,6 +3,8 @@
 {% if files == [] %}
 Vous n'avez aucun fichier pour le moment.
 {% else %}
+{% set toggle_message = "Êtes-vous sûr(e) de vouloir désactiver/réactiver le lien de téléchargement de ce fichier ?" %}
+{% set delete_message = "Êtes-vous sûr(e) de vouloir supprimer ce fichier et son lien de téléchargement ? Cette action est irréversible !" %}
 <table>
     <thead>
         <tr>
@@ -25,12 +27,17 @@ Vous n'avez aucun fichier pour le moment.
             <td>{{ file.attached_file_name }}</td>
             <td>{{ files_dates[loop.index0].date ~ ", " ~ files_dates[loop.index0].time ~ '.'}}</td>
             <td>
-                <a href="/u/files/{{ file.id }}/toggle">{{ "Désactiver" if file.state else "Réactiver"}}</a>
-                <a href="/u/files/{{ file.id }}/delete">Supprimer</a>
+                <a href="#" onclick="openDialog('/u/files/{{ file.id }}/toggle', '{{ toggle_message }}')">
+                    {{ "Désactiver" if file.state else "Réactiver"}}
+                </a>
+                <a href="#" onclick="openDialog('/u/files/{{ file.id }}/delete', '{{ delete_message }}')">
+                    Supprimer
+                </a>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% include './_partials/_dialog.html.jinja' %}
 {% endif %}
 {% endblock %}

@@ -3,6 +3,8 @@
 {% if links == [] %}
 Vous n'avez aucun raccourci pour le moment.
 {% else %}
+{% set toggle_message = "Êtes-vous sûr(e) de vouloir désactiver/réactiver ce raccourci ?" %}
+{% set delete_message = "Êtes-vous sûr(e) de vouloir supprimer ce raccourci ? Cette action est irréversible !" %}
 <table>
     <thead>
         <tr>
@@ -25,12 +27,17 @@ Vous n'avez aucun raccourci pour le moment.
             <td><a href='{{ link.original }}'>{{ link.original }}</a></td>
             <td>{{ links_dates[loop.index0].date ~ ", " ~ links_dates[loop.index0].time ~ '.'}}</td>
             <td>
-                <a href="/u/links/{{ link.id }}/toggle">{{ "Désactiver" if link.state else "Réactiver"}}</a>
-                <a href="/u/links/{{ link.id }}/delete">Supprimer</a>
+                <a href="#" onclick="openDialog('/u/links/{{ link.id }}/toggle', '{{ toggle_message }}')">
+                    {{ "Désactiver" if link.state else "Réactiver"}}
+                </a>
+                <a href="#" onclick="openDialog('/u/links/{{ link.id }}/delete', '{{ delete_message }}')">
+                    Supprimer
+                </a>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% include './_partials/_dialog.html.jinja' %}
 {% endif %}
 {% endblock %}

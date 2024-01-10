@@ -1,6 +1,6 @@
 // Flash dismiss
 function flashDismiss(id){
-    document.getElementById('flash-' + id).setAttribute('hidden', true);
+    document.getElementById(`flash-${id}`).setAttribute('hidden', true);
 };
 
 // Toggling required field
@@ -17,4 +17,14 @@ function fileOrLinkToggle(){
         link_input.setAttribute('required', true);
         file_input.removeAttribute('required');
     };
+};
+
+// Dialogs handling
+function openDialog(route, message){
+    document.getElementById('dialog').showModal();
+    document.getElementById('dialog-message').innerText = message;
+    document.getElementById('dialog-confirm').setAttribute('href', route);
+};
+function closeDialog(){
+    document.getElementById('dialog').close();
 };
