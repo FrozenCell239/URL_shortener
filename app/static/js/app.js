@@ -22,9 +22,11 @@ function fileOrLinkToggle(){
 // Dialogs handling
 function openDialog(route, message){
     document.getElementById('dialog').showModal();
+    document.getElementById('dialog').style.display = 'flex';
     document.getElementById('dialog-message').innerText = message;
     document.getElementById('dialog-confirm').setAttribute('href', route);
 };
 function closeDialog(){
     document.getElementById('dialog').close();
+    document.getElementById('dialog').style.display = 'none';
 };

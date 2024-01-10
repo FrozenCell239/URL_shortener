@@ -41,8 +41,8 @@ nav{
         text-decoration: none;
     }
     li a:hover, #nav-dropdown:hover #nav-drop-button{
-        background-color: #616161;
-        border-radius: $default-rounding;
+        background-color: $default_hover_color;
+        border-radius: $default_rounding;
     }
     li #nav-dropdown{
         display: inline-block;
@@ -57,10 +57,10 @@ nav{
         display: block;
         text-align: left;
         background-color: $background_color;
-        border-radius: $default-rounding;
+        border-radius: $default_rounding;
     }
     #nav-dropdown-content a:hover{
-        background-color: #616161;
+        background-color: $default_hover_color;
     }
     #nav-dropdown:hover #nav-dropdown-content{
         display: block;
@@ -119,9 +119,9 @@ label[for="file-or-link"]{
 /* Single element customization */
 #logo{
     float: left;
-    border: 2px solid whitesmoke;
-    border-radius: 1rem;
-    padding: 0 15px 0 15px;
+    border: $default_border;
+    border-radius: $default_rounding;
+    padding: 0 10px 0 10px;
 }
 #url_handle{
     height: 80px;
@@ -131,8 +131,8 @@ label[for="file-or-link"]{
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    border: 2px solid $input_main_color;
-    border-radius: $default-rounding;
+    border: $default_border;
+    border-radius: $default_rounding;
     input{
         height: auto;
         font-size: 1rem;
@@ -144,13 +144,13 @@ label[for="file-or-link"]{
         color: $input_main_color;
     }
     input::-webkit-input-placeholder, input[type="file"]{
-        color: #616161;
+        color: $default_hover_color;
         font-style: italic;
         padding-left: 20px;
     }
     button{
-        border-radius: $default-rounding;
-        border: 2px solid $input_main_color;
+        border-radius: $default_rounding;
+        border: $default_border;
         background: none;
         aspect-ratio: 1;
         position: absolute;
@@ -206,6 +206,36 @@ label[for="file-or-link"]{
     padding-bottom: 4px;
     width: 15px;
     height: auto;
+}
+dialog{
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: $background_color;
+    color: $font_main_color;
+    border: $default_border;
+    border-radius: $default_rounding;
+    height: min-content;
+    width: 40%;
+    a{
+        color: $font_main_color;
+    }
+}
+dialog::backdrop{
+    background-color: rgb(50, 63, 75);
+    opacity: 0.75;
+}
+#dialog-message{
+    font-weight: bold;
+}
+#dialog-confirm{
+    border: $default_border;
+    border-radius: $default_rounding;
+    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+    text-decoration: none;
+    background-color: $button_main_color;
+}
+#dialog-confirm:hover, #dialog-confirm:focus{
+    background-color: $default_hover_color;
 }
 
 /* Custom classes */

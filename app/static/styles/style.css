@@ -172,8 +172,8 @@ label[for=file-or-link] {
 #logo {
   float: left;
   border: 2px solid whitesmoke;
-  border-radius: 1rem;
-  padding: 0 15px 0 15px;
+  border-radius: 2rem;
+  padding: 0 10px 0 10px;
 }
 
 #url_handle {
@@ -269,6 +269,41 @@ label[for=file-or-link] {
   padding-bottom: 4px;
   width: 15px;
   height: auto;
+}
+
+dialog {
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: rgb(30, 40, 50);
+  color: whitesmoke;
+  border: 2px solid whitesmoke;
+  border-radius: 2rem;
+  height: min-content;
+  width: 40%;
+}
+dialog a {
+  color: whitesmoke;
+}
+
+dialog::backdrop {
+  background-color: rgb(50, 63, 75);
+  opacity: 0.75;
+}
+
+#dialog-message {
+  font-weight: bold;
+}
+
+#dialog-confirm {
+  border: 2px solid whitesmoke;
+  border-radius: 2rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+  text-decoration: none;
+  background-color: rgb(40, 50, 60);
+}
+
+#dialog-confirm:hover, #dialog-confirm:focus {
+  background-color: #616161;
 }
 
 /* Custom classes */
