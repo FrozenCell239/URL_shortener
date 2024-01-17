@@ -15,7 +15,7 @@ from werkzeug.utils import secure_filename as sf
 from datetime import datetime
 from shutil import move
 from os import makedirs, stat, remove
-from os.path import join, isdir
+from os.path import join, isdir, isfile
 
 @main_bp.route('/', methods = ['POST', 'GET'])
 @main_bp.route('/<string:requested_link>')
@@ -140,6 +140,11 @@ def download(requested_file : str = None):
 
     # Sending the file if it exists and is not disabled
     if file and file.getState() :
+        # Checking if the file still exists on the server
+        if not isfile(f'{AppInfos.upload_folder()}/{file.getAttachedFileName()}') :
+            return redirect(url_for('error.index', error_type = 'FILE_NOT_FOUND'))
+
+        # Sending the file to the user
         file.incrementClicks()
         db.session.commit()
         return send_from_directory(
