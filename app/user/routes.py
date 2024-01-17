@@ -4,7 +4,8 @@ from app.extensions import db, limiter
 from app.models.user import User
 from app.models.link import Link, File
 from config import AppInfos
-from os import remove, path
+from os import remove
+from os.path import join, isfile
 
 @user_bp.route('/')
 def index(): return redirect(url_for('user.links'))
@@ -233,11 +234,11 @@ def delete_file(file_id : int):
     # Deleting file
     else:
         # Deleting from the server
-        file_path = path.join(
+        file_path = join(
             AppInfos.upload_folder(),
             file.getAttachedFileName()
         )
-        if path.exists(file_path) : remove(file_path)
+        if isfile(file_path) : remove(file_path)
 
         # Unregistering from the database
         file = File.query.filter_by(id = file_id).delete()

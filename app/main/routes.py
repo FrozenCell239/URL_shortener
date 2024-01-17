@@ -14,7 +14,8 @@ from config import AppInfos
 from werkzeug.utils import secure_filename as sf
 from datetime import datetime
 from shutil import move
-from os import makedirs, stat, remove, path
+from os import makedirs, stat, remove
+from os.path import join, isdir
 
 @main_bp.route('/', methods = ['POST', 'GET'])
 @main_bp.route('/<string:requested_link>')
@@ -86,28 +87,28 @@ def index(requested_link : str = None):
                 no_tmp_file = True
 
             # Saving first the file in a temp folder
-            if not path.exists(AppInfos.tmp_folder()) : makedirs(AppInfos.tmp_folder())
-            if not no_tmp_file : new_upload.save(path.join(AppInfos.tmp_folder(), new_filename))
+            if not isdir(AppInfos.tmp_folder()) : makedirs(AppInfos.tmp_folder())
+            if not no_tmp_file : new_upload.save(join(AppInfos.tmp_folder(), new_filename))
 
             # Checking if file size limit is exceeded
             if(
                 not no_tmp_file and
-                stat(path.join(AppInfos.tmp_folder(), new_filename)).st_size > AppInfos.max_upload_size()
+                stat(join(AppInfos.tmp_folder(), new_filename)).st_size > AppInfos.max_upload_size()
             ):
                 errors.append(
                     f"Fichier trop volumineux. Taille max supportée : {AppInfos.max_upload_size(str)}."
                 )
-                remove(path.join(AppInfos.tmp_folder(), new_filename))
+                remove(join(AppInfos.tmp_folder(), new_filename))
             
             # File upload if no error occured
             if errors == [] :
                 # Creating the uploads directory if it doesn't exist
-                if not path.exists(AppInfos.upload_folder()) : makedirs(AppInfos.upload_folder())
+                if not isdir(AppInfos.upload_folder()) : makedirs(AppInfos.upload_folder())
 
                 # Saving the file on the server
                 move(
-                    path.join(AppInfos.tmp_folder(), new_filename),
-                    path.join(AppInfos.upload_folder(), new_filename)
+                    join(AppInfos.tmp_folder(), new_filename),
+                    join(AppInfos.upload_folder(), new_filename)
                 )
 
                 # Registering the file in the database
