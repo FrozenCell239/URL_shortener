@@ -1,5 +1,6 @@
 /* Colors */
-/* Others */
+/* Box borders */
+/* Flash message boxes */
 .success-flash, .warning-flash, .info-flash, .danger-flash {
   border: 2px solid;
   border-radius: 2rem;
@@ -21,6 +22,7 @@
   cursor: pointer;
 }
 
+/* Forms */
 .form {
   display: flex;
   font-size: 0.8rem;
@@ -64,7 +66,18 @@ body {
   margin: 0;
 }
 
-/* HTML tags customization */
+main {
+  display: flex;
+  flex-direction: column;
+  padding: 0 100px 0 100px;
+  align-items: center;
+}
+main p, main h1 {
+  text-align: center;
+  width: 80%;
+}
+
+/* Navigation bar */
 nav {
   padding-left: 50px;
   padding-right: 50px;
@@ -115,17 +128,21 @@ nav #nav-dropdown:hover #nav-dropdown-content {
   display: block;
 }
 
-main {
-  display: flex;
-  flex-direction: column;
-  padding: 0 100px 0 100px;
-  align-items: center;
-}
-main p, main h1 {
-  text-align: center;
-  width: 80%;
+#logo {
+  float: left;
+  border: 2px solid whitesmoke;
+  border-radius: 2rem;
+  padding: 0 10px 0 10px;
 }
 
+#dropdown-icon {
+  display: inline;
+  padding-bottom: 4px;
+  width: 15px;
+  height: auto;
+}
+
+/* Footer */
 footer {
   position: absolute;
   bottom: 0;
@@ -150,6 +167,7 @@ footer a {
   color: whitesmoke;
 }
 
+/* Main feature input bar */
 fieldset {
   border: none;
   display: flex;
@@ -166,14 +184,6 @@ label[for=file-or-link] {
   background-image: url("../icons/link-icon.svg");
   background-repeat: no-repeat;
   cursor: pointer;
-}
-
-/* Single element customization */
-#logo {
-  float: left;
-  border: 2px solid whitesmoke;
-  border-radius: 2rem;
-  padding: 0 10px 0 10px;
 }
 
 #url_handle {
@@ -222,6 +232,33 @@ label[for=file-or-link] {
   fill: whitesmoke;
 }
 
+#file-or-link {
+  display: none;
+}
+
+#file-or-link:checked + label[for=file-or-link] {
+  background-image: url("../icons/file-icon.svg");
+  margin-left: 25px;
+  margin-bottom: 5px;
+}
+
+#file-or-link:checked ~ #original-url {
+  display: none;
+}
+
+#file-or-link:not(:checked) ~ #to-upload {
+  display: none;
+}
+
+/* Forms */
+.separator {
+  flex-basis: 0;
+  height: 80%;
+  align-self: center;
+  margin: 0 20px 20px 30px;
+  border: 1px solid whitesmoke;
+}
+
 #login-form, #profile-form, #password-form {
   width: 300px;
   flex-direction: column;
@@ -246,31 +283,7 @@ label[for=file-or-link] {
   flex-direction: row;
 }
 
-#file-or-link {
-  display: none;
-}
-
-#file-or-link:checked + label[for=file-or-link] {
-  background-image: url("../icons/file-icon.svg");
-  margin-left: 25px;
-  margin-bottom: 5px;
-}
-
-#file-or-link:checked ~ #original-url {
-  display: none;
-}
-
-#file-or-link:not(:checked) ~ #to-upload {
-  display: none;
-}
-
-#dropdown-icon {
-  display: inline;
-  padding-bottom: 4px;
-  width: 15px;
-  height: auto;
-}
-
+/* Modals/dialog boxes */
 dialog {
   flex-wrap: wrap;
   justify-content: center;
@@ -306,7 +319,7 @@ dialog::backdrop {
   background-color: #616161;
 }
 
-/* Custom classes */
+/* Flash message boxes */
 .flash-zone {
   display: flex;
   flex-direction: column;
@@ -333,14 +346,6 @@ dialog::backdrop {
 .success-flash {
   border-color: #2e882e;
   background-color: #004400;
-}
-
-.separator {
-  flex-basis: 0;
-  height: 80%;
-  align-self: center;
-  margin: 0 20px 20px 30px;
-  border: 1px solid whitesmoke;
 }
 
 /*# sourceMappingURL=style.css.map */
