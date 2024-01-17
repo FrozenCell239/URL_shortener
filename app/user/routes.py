@@ -20,9 +20,9 @@ def profile():
     found_user = User.query.filter_by(username = session['username']).first()
 
     # Register form handling
+    errors = []
     if request.method == 'POST' :
         # Errors handling
-        errors = []
         if request.form['username'] == '' :
             errors.append("Le nom d'utilisateur ne peut pas être vide.")
         if request.form['mail'] == '' :
@@ -49,30 +49,17 @@ def profile():
             flash("Vos informations ont été modifiées avec succès.", 'success')
             return redirect(url_for('main.index'))
 
-        # Profile page display with errors if some occured
-        else:
-            for error in errors : flash(error, 'danger')
-            return render_template(
-            'user/profile.html.jinja',
-            title = "Mon profil",
-            user_infos = {
-                'mail' : found_user.getMail(),
-                'username' : found_user.getUsername(),
-                'created_at' : found_user.getCreatedAt()
-            }
-        )
-
-    # Profile page display
-    else:
-        return render_template(
-            'user/profile.html.jinja',
-            title = "Mon profil",
-            user_infos = {
-                'mail' : found_user.getMail(),
-                'username' : found_user.getUsername(),
-                'created_at' : found_user.getCreatedAt()
-            }
-        )
+    # Profile page display with errors if some occured
+    for error in errors : flash(error, 'danger')
+    return render_template(
+        'user/profile.html.jinja',
+        title = "Mon profil",
+        user_infos = {
+            'mail' : found_user.getMail(),
+            'username' : found_user.getUsername(),
+            'created_at' : found_user.getCreatedAt()
+        }
+    )
 
 @user_bp.route('/password', methods = ['POST', 'GET'])
 @limiter.limit(AppInfos.password_limits())
@@ -83,24 +70,24 @@ def password():
         return redirect(url_for('main.login'))
 
     # Register form handling
+    errors = []
     if request.method == 'POST' :
         # Getting user
         found_user = User.query.filter_by(id = session['user_id']).first()
 
        # Errors handling
-        errors = []
         password_strength_check = User.checkPasswordStrength(request.form['new_password'])
-        if not found_user :return redirect(url_for('error.index'))
+        if not found_user : return redirect(url_for('error.index'))
         if not found_user.checkPassword(request.form['old_password']) :
             errors.append("L'ancien mot de passe saisi est incorrect.")
         if request.form['new_password'] != request.form['new_password_confirm'] :
-            errors.append("Les mots de passes ne sont pas identiques.")
+            errors.append("Les mots de passe ne sont pas identiques.")
         if request.form['new_password'] == '' :
-            errors.append("Le mot de passe ne peut pas être vide.")
+            errors.append("Le nouveau mot de passe ne peut pas être vide.")
         if not password_strength_check['password_ok'] :
-            strength_errors = "Le mot de passe ne respecte pas les conditions de sécurité suivantes. :"
-            for criteria, check_value in password_strength_check.items() :
-                if check_value :
+            strength_errors = "Le nouveau mot de passe ne respecte pas les conditions de sécurité suivantes. :"
+            for criteria, checked in password_strength_check.items() :
+                if checked :
                     match criteria :
                         case 'length_error' : strength_errors += '<br>- 8 caractères ou plus.'
                         case 'digit_error' : strength_errors += '<br>- 1 chiffre ou plus.'
@@ -116,20 +103,12 @@ def password():
             flash("Votre mot de passe a été modifié avec succès.", 'success')
             return redirect(url_for('main.index'))
 
-        # Profile page display with errors if some occured
-        else:
-            for error in errors : flash(error, 'danger')
-            return render_template(
-                'user/password.html.jinja',
-                title = "Modification mot de passe"
-            )
-
-    # Profile page display
-    else:
-        return render_template(
-            'user/password.html.jinja',
-            title = "Modification mot de passe"
-        )
+    # Profile page display with errors if some occured
+    for error in errors : flash(error, 'danger')
+    return render_template(
+        'user/password.html.jinja',
+        title = "Modification mot de passe"
+    )
 
 @user_bp.route('/links')
 def links():
