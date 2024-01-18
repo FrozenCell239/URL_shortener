@@ -86,16 +86,16 @@ def password():
         if request.form['new_password'] == '' :
             errors.append("Le nouveau mot de passe ne peut pas être vide.")
         if not password_strength_check['password_ok'] :
-            strength_errors = "Le nouveau mot de passe ne respecte pas les conditions de sécurité suivantes. :"
+            strength_errors = "Le nouveau mot de passe ne respecte pas la/les condition(s) de sécurité suivante(s) : "
             for criteria, checked in password_strength_check.items() :
                 if checked :
                     match criteria :
-                        case 'length_error' : strength_errors += '<br>- 8 caractères ou plus.'
-                        case 'digit_error' : strength_errors += '<br>- 1 chiffre ou plus.'
-                        case 'uppercase_error' : strength_errors += '<br>- 1 lettre minuscule ou plus.'
-                        case 'lowercase_error' : strength_errors += '<br>- 1 lettre majuscule ou plus.'
-                        case 'symbol_error' : strength_errors += '<br>- 1 caractère spécial ou plus.'
-            errors.append(strength_errors)
+                        case 'length_error' : strength_errors += "8 caractères ou plus, "
+                        case 'digit_error' : strength_errors += "1 chiffre ou plus, "
+                        case 'uppercase_error' : strength_errors += "1 lettre majuscule ou plus, "
+                        case 'lowercase_error' : strength_errors += "1 lettre minuscule ou plus, "
+                        case 'symbol_error' : strength_errors += "1 caractère spécial ou plus, "
+            errors.append(strength_errors[:-2] + ".")
 
         # New user's informations registering if no error occured
         if errors == [] :
