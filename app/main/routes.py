@@ -58,6 +58,7 @@ def index(requested_link : str = None):
 
             # Creating the new short link if no error occured
             if errors == [] :
+                # Registering the link in the database
                 new_link = Link(
                     #//shortened_length = 8,
                     owner_id = session['user_id'],
@@ -65,8 +66,19 @@ def index(requested_link : str = None):
                 )
                 db.session.add(new_link)
                 db.session.commit()
+
+                # Success message
                 flash(
-                    f"""Raccourci créé avec succès !&nbsp;<a href="{ url_for('user.links') }" >Tout voir</a>""",
+                    f"""
+                    Raccourci créé avec succès !
+                    <a
+                        href="#"
+                        id="new-link"
+                        onclick="toClipboard('{ AppInfos.domain_name() + new_link.getShort() }')"
+                    >
+                        Copier
+                    </a>
+                    """,
                     'success'
                 )
 
@@ -122,7 +134,16 @@ def index(requested_link : str = None):
 
                 # Success message
                 flash(
-                    f"""Votre fichier a bien été enregistré !&nbsp;<a href="{ url_for('user.files') }" >Tout voir</a>""",
+                    f"""
+                    Votre fichier a bien été enregistré !
+                    <a
+                        href="#"
+                        id="new-link"
+                        onclick="toClipboard('{ AppInfos.domain_name()}dl/{new_file_link.getShort() }')"
+                    >
+                        Copier le lien
+                    </a>
+                    """,
                     'success'
                 )
 
