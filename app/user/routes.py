@@ -1,5 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, session
 from app.user import user_bp
+from app.utils import login_required
 from app.extensions import db, limiter
 from app.models.user import User
 from app.models.link import Link, File
@@ -11,12 +12,8 @@ from os.path import join, isfile
 def index(): return redirect(url_for('user.links'))
 
 @user_bp.route('/profile', methods = ['POST', 'GET'])
+@login_required
 def profile():
-    # Redirecting user if not connected
-    if not 'username' in session :
-        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
-        return redirect(url_for('main.login'))
-
     # Getting user's informations
     found_user = User.query.filter_by(username = session['username']).first()
 
@@ -64,12 +61,8 @@ def profile():
 
 @user_bp.route('/password', methods = ['POST', 'GET'])
 @limiter.limit(AppInfos.password_limits())
+@login_required
 def password():
-    # Redirecting user if not connected
-    if not 'username' in session :
-        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
-        return redirect(url_for('main.login'))
-
     # Register form handling
     errors = []
     if request.method == 'POST' :
@@ -112,12 +105,8 @@ def password():
     )
 
 @user_bp.route('/links')
+@login_required
 def links():
-    # Redirecting user if not connected
-    if not 'username' in session :
-        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
-        return redirect(url_for('main.login'))
-
     # Getting user's links
     found_user = User.query.filter_by(username = session['username']).first()
     user_links = Link.query.filter_by(owner_id = found_user.getID()).order_by(Link.id).all()
@@ -136,12 +125,8 @@ def links():
     )
 
 @user_bp.route('/links/<int:link_id>/toggle')
+@login_required
 def toggle_link(link_id : int):
-    # Redirecting user if not connected
-    if not 'username' in session :
-        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
-        return redirect(url_for('main.login'))
-
     # Getting the link to toggle
     link = Link.query.filter_by(id = link_id, owner_id = session['user_id']).first()
 
@@ -156,12 +141,8 @@ def toggle_link(link_id : int):
         return redirect(url_for('user.links'))
 
 @user_bp.route('/links/<int:link_id>/delete')
+@login_required
 def delete_link(link_id : int):
-    # Redirecting user if not connected
-    if not 'username' in session :
-        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
-        return redirect(url_for('main.login'))
-
     # Getting the link to delete
     link = Link.query.filter_by(id = link_id, owner_id = session['user_id']).first()
 
@@ -175,12 +156,8 @@ def delete_link(link_id : int):
         return redirect(url_for('user.links'))
 
 @user_bp.route('/files')
+@login_required
 def files():
-    # Redirecting user if not connected
-    if not 'username' in session :
-        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
-        return redirect(url_for('main.login'))
-
     # Getting user's files
     found_user = User.query.filter_by(username = session['username']).first()
     user_files = File.query.filter_by(owner_id = found_user.getID()).order_by(File.id).all()
@@ -199,12 +176,8 @@ def files():
     )
 
 @user_bp.route('/files/<int:file_id>/toggle')
+@login_required
 def toggle_file(file_id : int):
-    # Redirecting user if not connected
-    if not 'username' in session :
-        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
-        return redirect(url_for('main.login'))
-
     # Getting the file to toggle
     file = File.query.filter_by(id = file_id, owner_id = session['user_id']).first()
 
@@ -219,12 +192,8 @@ def toggle_file(file_id : int):
         return redirect(url_for('user.files'))
 
 @user_bp.route('/files/<int:file_id>/delete')
+@login_required
 def delete_file(file_id : int):
-    # Redirecting user if not connected
-    if not 'username' in session :
-        flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
-        return redirect(url_for('main.login'))
-
     # Getting the file to delete
     file = File.query.filter_by(id = file_id, owner_id = session['user_id']).first()
 
