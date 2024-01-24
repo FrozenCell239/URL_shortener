@@ -87,11 +87,17 @@ main p, main h1 {
   width: 80%;
 }
 
+h1 {
+  margin: 20px 0 0 0;
+}
+
+a {
+  color: whitesmoke;
+}
+
 /* Navigation bar */
 nav {
-  padding-left: 50px;
-  padding-right: 50px;
-  padding: 10px 50px 0 50px;
+  padding: 20px 50px 0 50px;
   margin-bottom: 30px;
 }
 nav ul {
@@ -104,7 +110,6 @@ nav li {
   float: right;
 }
 nav a {
-  color: whitesmoke;
   padding: 10px 20px 10px 20px;
 }
 nav li a, nav #nav-drop-button {
@@ -128,7 +133,7 @@ nav #nav-dropdown-content a {
   text-decoration: none;
   display: block;
   text-align: left;
-  background-color: rgb(30, 40, 50);
+  background-color: red;
   border-radius: 2rem;
 }
 nav #nav-dropdown-content a:hover {
@@ -152,29 +157,8 @@ nav #nav-dropdown:hover #nav-dropdown-content {
   height: auto;
 }
 
-/* Footer */
-footer {
-  position: absolute;
-  bottom: 0;
-  width: 100vw;
-  height: 2.5rem;
-  padding-bottom: 15px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-footer p {
-  display: inline;
-  font-size: 0.8rem;
-}
-footer img {
-  width: 1rem;
-  height: auto;
-  position: relative;
-  top: 5px;
-}
-footer a {
-  color: whitesmoke;
+.navbar .menu-icon {
+  display: none;
 }
 
 /* Main feature input bar */
@@ -185,8 +169,7 @@ fieldset {
 }
 
 label[for=file-or-link] {
-  margin-left: 20px;
-  margin-bottom: 2px;
+  margin: 0 0 4px 20px;
   width: 40px;
   height: 40px;
   display: inline-block;
@@ -248,8 +231,7 @@ label[for=file-or-link] {
 
 #file-or-link:checked + label[for=file-or-link] {
   background-image: url("../icons/file-icon.svg");
-  margin-left: 25px;
-  margin-bottom: 5px;
+  margin: 0 0 5px 25px;
 }
 
 #file-or-link:checked ~ #original-url {
@@ -280,7 +262,6 @@ label[for=file-or-link] {
 
 #profile-form > a, #password-form > a {
   align-self: center;
-  color: whitesmoke;
   margin-top: 10px;
 }
 
@@ -303,9 +284,6 @@ dialog {
   border-radius: 2rem;
   height: min-content;
   width: 40%;
-}
-dialog a {
-  color: whitesmoke;
 }
 
 dialog::backdrop {
@@ -334,8 +312,8 @@ dialog::backdrop {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-left: 10rem;
-  padding-right: 10rem;
+  padding: 0 10rem 0 10rem;
+  min-height: 20px;
 }
 
 .danger-flash {
@@ -356,6 +334,79 @@ dialog::backdrop {
 .success-flash {
   border-color: #2e882e;
   background-color: #004400;
+}
+
+/* Links tables */
+table {
+  text-align: center;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #061639;
+}
+
+tr:hover td:first-child, th:first-child {
+  border-radius: 2rem 0 0 2rem;
+}
+
+tr:hover td:last-child, th:last-child {
+  border-radius: 0 2rem 2rem 0;
+}
+
+td, th {
+  padding: 10px 15px 10px 15px;
+}
+
+tbody tr:hover {
+  background-color: #616161;
+}
+
+.delete-action {
+  color: #aa3939;
+}
+
+.td-original-filename {
+  max-width: 200px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.td-date {
+  min-width: 150px;
+}
+
+::-webkit-scrollbar {
+  height: 6px;
+  background-color: rgb(40, 50, 60);
+  border-radius: 2rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: whitesmoke;
+  border-radius: 2rem;
+}
+
+/* Footer */
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100vw;
+  height: 2.5rem;
+  padding-bottom: 15px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+footer p {
+  display: inline;
+  font-size: 0.8rem;
+}
+footer img {
+  width: 1rem;
+  height: auto;
+  position: relative;
+  top: 5px;
 }
 
 /*# sourceMappingURL=style.css.map */

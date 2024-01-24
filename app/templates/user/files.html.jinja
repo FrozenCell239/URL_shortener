@@ -8,7 +8,6 @@ Vous n'avez aucun fichier pour le moment.
 <table>
     <thead>
         <tr>
-            <th>ID</th>
             <th>Raccourci</th>
             <th>Nombre de clics</th>
             <th>Statut</th>
@@ -19,18 +18,21 @@ Vous n'avez aucun fichier pour le moment.
     </thead>
     <tbody>
         {% for file in files %}
-        <tr>
-            <td>{{ file.id }}</td>
-            <td><a href='{{ domain_name ~ "dl/" ~ file.short }}'>{{ domain_name ~ "dl/" ~ file.short }}</a></td>
-            <td>{{ file.clicks }}</td>
-            <td>{{ "Actif" if file.state else "Désactivé" }}</td>
-            <td>{{ file.attached_file_name }}</td>
-            <td>{{ files_dates[loop.index0].date ~ ", " ~ files_dates[loop.index0].time ~ '.'}}</td>
-            <td>
+        <tr class="tr">
+            <td class="td-short"><a href='{{ domain_name ~ "dl/" ~ file.short }}'>{{ domain_name ~ "dl/" ~ file.short }}</a></td>
+            <td class="td-clicks">{{ file.clicks }}</td>
+            <td class="td-state">{{ "Actif" if file.state else "Désactivé" }}</td>
+            <td class="td-original-filename">{{ file.attached_file_name }}</td>
+            <td class="td-date">{{ files_dates[loop.index0].date ~ ", " ~ files_dates[loop.index0].time[:-3] ~ '.'}}</td>
+            <td class="td-actions">
                 <a href="#" onclick="openDialog('/u/files/{{ file.id }}/toggle', '{{ toggle_message }}')">
                     {{ "Désactiver" if file.state else "Réactiver"}}
                 </a>
-                <a href="#" onclick="openDialog('/u/files/{{ file.id }}/delete', '{{ delete_message }}')">
+                <a
+                    href="#"
+                    onclick="openDialog('/u/files/{{ file.id }}/delete', '{{ delete_message }}')"
+                    class="delete-action"
+                >
                     Supprimer
                 </a>
             </td>
