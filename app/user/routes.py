@@ -107,9 +107,18 @@ def password():
 @user_bp.route('/links')
 @login_required
 def links():
+    # Getting selected page number from GET
+    selected_page = request.args.get('page', 1, int)
+    if selected_page < 1 : selected_page = 1
+
     # Getting user's links
-    found_user = User.query.filter_by(username = session['username']).first()
-    user_links = Link.query.filter_by(owner_id = found_user.getID()).order_by(Link.id).all()
+    user_links = Link.query\
+        .filter_by(owner_id = session['user_id'])\
+        .order_by(Link.id)\
+        .paginate(
+            page = selected_page,
+            per_page = AppInfos.default_per_page()
+        )
     
     # Getting user's links' creation datetime
     user_links_dates = []
@@ -158,9 +167,18 @@ def delete_link(link_id : int):
 @user_bp.route('/files')
 @login_required
 def files():
+    # Getting selected page number from GET
+    selected_page = request.args.get('page', 1, int)
+    if selected_page < 1 : selected_page = 1
+
     # Getting user's files
-    found_user = User.query.filter_by(username = session['username']).first()
-    user_files = File.query.filter_by(owner_id = found_user.getID()).order_by(File.id).all()
+    user_files = File.query\
+        .filter_by(owner_id = session['user_id'])\
+        .order_by(File.id)\
+        .paginate(
+            page = selected_page,
+            per_page = AppInfos.default_per_page()
+        )
 
     # Getting user's files' creation datetime
     user_files_dates = []

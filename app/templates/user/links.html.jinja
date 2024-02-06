@@ -1,7 +1,7 @@
 {% extends 'base.html.jinja' %}
 {% block main %}
 {% if links == [] %}
-Vous n'avez aucun raccourci pour le moment.
+<p>Vous n'avez aucun raccourci pour le moment.</p>
 {% else %}
 {% set toggle_message = "Êtes-vous sûr(e) de vouloir désactiver/réactiver ce raccourci ?" %}
 {% set delete_message = "Êtes-vous sûr(e) de vouloir supprimer ce raccourci ? Cette action est irréversible !" %}
@@ -40,6 +40,11 @@ Vous n'avez aucun raccourci pour le moment.
         {% endfor %}
     </tbody>
 </table>
+{% if links.pages > 1 %}
+    {% with pagination_infos = {'pagination' : links, 'pagination_for' : 'links'} %}
+        {% include "./_partials/_pagination.html.jinja" %}
+    {% endwith %}
+{% endif %}
 {% include './_partials/_dialog.html.jinja' %}
 {% endif %}
 {% endblock %}

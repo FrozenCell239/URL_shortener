@@ -1,5 +1,6 @@
 /* Colors */
 /* Box borders */
+/* Paddings */
 /* Flash message boxes */
 .success-flash, .warning-flash, .info-flash, .danger-flash {
   display: grid;
@@ -61,7 +62,7 @@
   width: 100%;
 }
 
-/* General */
+/* Generals */
 :root {
   font-size: 24px;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
@@ -133,7 +134,7 @@ nav #nav-dropdown-content a {
   text-decoration: none;
   display: block;
   text-align: left;
-  background-color: red;
+  background-color: rgb(30, 40, 50);
   border-radius: 2rem;
 }
 nav #nav-dropdown-content a:hover {
@@ -385,6 +386,29 @@ tbody tr:hover {
 ::-webkit-scrollbar-thumb {
   background: whitesmoke;
   border-radius: 2rem;
+}
+
+/* Pagination bar */
+#pagination-bar {
+  position: absolute;
+  bottom: 90px;
+}
+
+#pagination-bar a {
+  text-decoration: none;
+}
+
+#pagination-bar span, #pagination-bar a {
+  border-radius: 2rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+}
+
+#pagination-bar a:hover {
+  background-color: #616161;
+}
+
+#current-page {
+  border: 2px solid whitesmoke;
 }
 
 /* Footer */
