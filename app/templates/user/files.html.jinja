@@ -25,12 +25,15 @@
             <td class="td-original-filename">{{ file.attached_file_name }}</td>
             <td class="td-date">{{ files_dates[loop.index0].date ~ ", " ~ files_dates[loop.index0].time[:-3] ~ '.'}}</td>
             <td class="td-actions">
-                <a href="#" onclick="openDialog('/u/files/{{ file.id }}/toggle', '{{ toggle_message }}')">
+                <a
+                    href="#"
+                    onclick="openDialog('/u/files/{{ file.id }}/toggle?back_to={{ files.page }}', '{{ toggle_message }}')"
+                >
                     {{ "Désactiver" if file.state else "Réactiver"}}
                 </a>
                 <a
                     href="#"
-                    onclick="openDialog('/u/files/{{ file.id }}/delete', '{{ delete_message }}')"
+                    onclick="openDialog('/u/files/{{ file.id }}/delete?back_to={{ files.page }}', '{{ delete_message }}')"
                     class="delete-action"
                 >
                     Supprimer
