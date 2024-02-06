@@ -6,6 +6,7 @@
     <input type="text" name="username" id="username" required>
     <label for="password">Mot de passe</label>
     <input type="password" name="password" id="password" required>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <button type="submit">Connexion</button>
 </form>
 {% endblock %}

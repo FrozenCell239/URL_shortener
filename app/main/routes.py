@@ -16,9 +16,11 @@ from datetime import datetime
 from shutil import move
 from os import makedirs, stat, remove
 from os.path import join, isdir, isfile
+from app import csrf
 
 @main_bp.route('/', methods = ['POST', 'GET'])
 @main_bp.route('/<string:requested_link>')
+@csrf.exempt
 def index(requested_link : str = None):
     # Redirecting short links to original ones
     if requested_link :

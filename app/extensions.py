@@ -10,3 +10,7 @@ bcrypt = Bcrypt()
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 limiter = Limiter(get_remote_address)
+
+# Flask-WTF for CSRF tokens
+from flask_wtf.csrf import CSRFProtect
+csrf = CSRFProtect()
