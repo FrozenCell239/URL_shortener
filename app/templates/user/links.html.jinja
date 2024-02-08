@@ -1,6 +1,6 @@
 {% extends 'base.html.jinja' %}
 {% block main %}
-{% if links == [] %}
+{% if links.items == [] %}
 <p>Vous n'avez aucun raccourci pour le moment.</p>
 {% else %}
 {% set toggle_message = "Êtes-vous sûr(e) de vouloir désactiver/réactiver ce raccourci ?" %}

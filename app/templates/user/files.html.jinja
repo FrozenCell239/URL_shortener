@@ -1,6 +1,6 @@
 {% extends 'base.html.jinja' %}
 {% block main %}
-{% if files == [] %}
+{% if files.items == [] %}
 <p>Vous n'avez aucun fichier pour le moment.</p>
 {% else %}
 {% set toggle_message = "Êtes-vous sûr(e) de vouloir désactiver/réactiver le lien de téléchargement de ce fichier ?" %}
