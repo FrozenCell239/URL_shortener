@@ -6,7 +6,9 @@ from flask import\
     send_from_directory,\
     request,\
     session
+from app import csrf
 from app.main import main_bp
+from app.utils import logout_required
 from app.extensions import db, limiter
 from app.models.user import User
 from app.models.link import Link, File
@@ -16,7 +18,6 @@ from datetime import datetime
 from shutil import move
 from os import makedirs, stat, remove
 from os.path import join, isdir, isfile
-from app import csrf
 
 @main_bp.route('/', methods = ['POST', 'GET'])
 @main_bp.route('/<string:requested_link>')
@@ -182,10 +183,8 @@ def download(requested_file : str = None):
     return redirect(url_for('error.index', error_type = error_type))
 
 @main_bp.route('/register', methods = ['POST', 'GET'])
+@logout_required
 def register():
-    # Forbid an already connected user to access this route
-    if 'username' in session : return redirect(url_for('main.index'))
-
     # Register form handling
     errors = []
     if request.method == 'POST' :
@@ -233,10 +232,8 @@ def register():
 
 @main_bp.route('/login', methods = ['POST', 'GET'])
 @limiter.limit(AppInfos.password_limits())
+@logout_required
 def login():
-    # Forbid an already connected user to access this route
-    if 'username' in session : return redirect(url_for('main.index'))
-
     # Login form handling
     if request.method == 'POST' :
         # Looking for the user into the database
