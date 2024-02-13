@@ -21,7 +21,7 @@
                 <ul>
                     <li id="logo"><a href="{{ url_for('main.index') }}">Easy Link</a></li>
                     {% if session.username %}
-                        <li><a href="{{ url_for('main.logout') }}">Déconnexion</a></li>
+                        <li><a href="{{ url_for('security.logout') }}">Déconnexion</a></li>
                         <li id="nav-dropdown">
                             <a href="#" id="nav-drop-button">
                                 Mes infos&nbsp;
@@ -48,10 +48,10 @@
                         {% endif %}
                     {% else %}
                         {% if self._TemplateReference__context.name != "login.html.jinja" %}
-                        <li><a href="{{ url_for('main.login') }}">Se connecter</a></li>
+                        <li><a href="{{ url_for('security.login') }}">Se connecter</a></li>
                         {% endif %}
                         {% if self._TemplateReference__context.name != "register.html.jinja" %}
-                        <li><a href="{{ url_for('main.register') }}">S'inscrire</a></li>
+                        <li><a href="{{ url_for('registration.index') }}">S'inscrire</a></li>
                         {% endif %}
                     {% endif %}
                 </ul>

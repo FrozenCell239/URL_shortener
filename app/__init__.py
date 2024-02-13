@@ -16,9 +16,13 @@ def create_app(config_class = Config):
     # Blueprints
     from app.main import main_bp
     app.register_blueprint(main_bp)
+    from app.security import security_bp
+    app.register_blueprint(security_bp)
     from app.user import user_bp
-    app.register_blueprint(user_bp, url_prefix='/u')
+    app.register_blueprint(user_bp, url_prefix = '/u')
     from app.error import error_bp
-    app.register_blueprint(error_bp, url_prefix='/error')
+    app.register_blueprint(error_bp, url_prefix = '/error')
+    from app.registration import registration_bp
+    app.register_blueprint(registration_bp)
 
     return app

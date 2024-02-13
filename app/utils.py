@@ -10,7 +10,7 @@ def login_required(route):
     def decorated_route(*args, **kwargs):
         if not 'username' in session :
             flash("Vous devez être connecté pour accéder à cette page/fonctionnalité.", 'danger')
-            return redirect(url_for('main.login'))
+            return redirect(url_for('security.login'))
 
         return route(*args, **kwargs)
 

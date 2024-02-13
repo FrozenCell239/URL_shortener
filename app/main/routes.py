@@ -7,17 +7,16 @@ from flask import\
     request,\
     session
 from app import csrf
+from app.extensions import db
 from app.main import main_bp
-from app.utils import logout_required
-from app.extensions import db, limiter
-from app.models.user import User
 from app.models.link import Link, File
+from app.models.user import User
 from config import AppInfos
-from werkzeug.utils import secure_filename as sf
 from datetime import datetime
-from shutil import move
 from os import makedirs, stat, remove
 from os.path import join, isdir, isfile
+from shutil import move
+from werkzeug.utils import secure_filename as sf
 
 @main_bp.route('/', methods = ['POST', 'GET'])
 @main_bp.route('/<string:requested_link>')
@@ -45,7 +44,7 @@ def index(requested_link : str = None):
         # Redirect to login page if no user is connected
         if not 'username' in session : 
             flash("Vous devez être connecté(e) pour accéder à cette page/fonctionnalité.", 'danger')
-            return redirect(url_for('main.login'))
+            return redirect(url_for('security.login'))
 
         # Link shortening
         if(
@@ -181,85 +180,3 @@ def download(requested_file : str = None):
     elif file and not file.getState() : error_type = 'DISABLED'
     elif not file : error_type = 'DELETED'
     return redirect(url_for('error.index', error_type = error_type))
-
-@main_bp.route('/register', methods = ['POST', 'GET'])
-@logout_required
-def register():
-    # Register form handling
-    errors = []
-    if request.method == 'POST' :
-        # Errors handling
-        if request.form['username'] == '' :
-            errors.append("Le nom d'utilisateur ne peut pas être vide.")
-        if request.form['mail'] == '' :
-            errors.append("L'adresse mail ne peut pas être vide.")
-        if request.form['password'] == '' :
-            errors.append("Le mot de passe ne peut pas être vide.")
-        if request.form['password'] != request.form['password_confirm'] :
-            errors.append("Les mots de passes ne sont pas identiques.")
-        if User.query.filter_by(username = request.form['username']).first():
-            errors.append("Un autre compte possède déjà le nom d'utilisateur que vous avez saisi.")
-        if User.query.filter_by(mail = request.form['mail']).first():
-            errors.append("Un autre compte possède déjà l'adresse mail que vous avez saisie.")
-        password_strength_check = User.checkPasswordStrength(request.form['password'])
-        if not password_strength_check['password_ok'] :
-            strength_errors = "Le mot de passe ne respecte pas la/les condition(s) de sécurité suivante(s) : "
-            for criteria, checked in password_strength_check.items() :
-                if checked :
-                    match criteria :
-                        case 'length_error' : strength_errors += "8 caractères ou plus, "
-                        case 'digit_error' : strength_errors += "1 chiffre ou plus, "
-                        case 'uppercase_error' : strength_errors += "1 lettre majuscule ou plus, "
-                        case 'lowercase_error' : strength_errors += "1 lettre minuscule ou plus, "
-                        case 'symbol_error' : strength_errors += "1 caractère spécial ou plus, "
-            errors.append(strength_errors[:-2] + ".")
-
-        # New user registering if no error occured
-        if errors == [] :
-            user = User(
-                request.form['username'],
-                request.form['mail']
-            )
-            user.setPassword(request.form['password'])
-            db.session.add(user)
-            db.session.commit()
-            flash("Votre compte a été créé avec succès ! Connectez-vous dès à présent.", 'success')
-            return redirect(url_for('main.login'))
-        
-    # Register page display with errors if some occured
-    for error in errors : flash(error, 'danger')
-    return render_template('register.html.jinja', title = "Inscription")
-
-@main_bp.route('/login', methods = ['POST', 'GET'])
-@limiter.limit(AppInfos.password_limits())
-@logout_required
-def login():
-    # Login form handling
-    if request.method == 'POST' :
-        # Looking for the user into the database
-        found_user = User.query.filter_by(username = request.form['username']).first()
-        if found_user : pw_check = found_user.checkPassword(request.form['password'])
-
-        # Login page display if the user doesn't exist in the database
-        if not found_user or not pw_check :
-            flash("Nom d'utilisateur et/ou mot de passe incorrect(s).", 'danger')
-        
-        # Connecting the user if found in the database
-        else:
-            # Getting user's informations
-            session.permanent = True
-            session['user_id'] = found_user.getID()
-            session['username'] = found_user.getUsername()
-
-            # Main page display
-            flash("Connexion réussie !", 'success')
-            return redirect(url_for('main.index'))
-
-    # Login page display
-    return render_template('login.html.jinja', title = "Connexion")
-
-@main_bp.route('/logout')
-def logout():
-    session.clear()
-    flash("Vous avez été déconnecté(e) avec succès.", 'info')
-    return redirect(url_for('main.login'))
