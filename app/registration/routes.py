@@ -70,13 +70,17 @@ def index():
                 )
                 return redirect(url_for('registration.index'))
             else:
+                # Automatically log-in the user
+                session.permanent = True
+                session['user_id'] = (User.query.filter_by(mail = user.getMail()).first()).getID()
+                session['username'] = user.getUsername()
+
+                # Redirecting user to main page
                 flash(
-                    "Votre compte a été créé avec succès ! Connectez-vous dès à présent.",
+                    "Votre compte a été créé avec succès. Nous vous souhaitons la bienvenue !",
                     'success'
                 )
-
-            # Redirecting user to login page
-            return redirect(url_for('security.login'))
+                return redirect(url_for('main.index'))
         
     # Register page display with errors if some occured
     for error in errors : flash(error, 'danger')
