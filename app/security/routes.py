@@ -1,7 +1,7 @@
 from app.extensions import limiter
 from app.security import security_bp
 from app.models.user import User
-from app.utils import logout_required
+from app.utils import logout_required, login_required
 from config import AppInfos
 from flask import render_template, redirect, url_for, flash, request, session
 
@@ -19,7 +19,7 @@ def login():
         if not found_user or not pw_check :
             flash("Nom d'utilisateur et/ou mot de passe incorrect(s).", 'danger')
         
-        # Connecting the user if found in the database
+        # Log-in the user if found in the database
         else:
             # Getting user's informations
             session.permanent = True
@@ -34,6 +34,7 @@ def login():
     return render_template('login.html.jinja', title = "Connexion")
 
 @security_bp.route('/logout')
+@login_required
 def logout():
     session.clear()
     flash("Vous avez été déconnecté(e) avec succès.", 'info')
