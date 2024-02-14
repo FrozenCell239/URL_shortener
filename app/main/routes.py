@@ -149,6 +149,23 @@ def index(requested_link : str = None):
                     'success'
                 )
 
+    # Remind user to verify its mail address if it's still not verified
+    if(
+        'user_id' in session and not
+        (User.query.filter_by(id = session['user_id']).first()).getIsVerified()
+    ) :
+        flash(
+            f"""
+            Veuillez vérifier l'adresse mail de votre compte dès que possible.
+            <a
+                href="{ url_for('registration.resend_verification') }"
+            >
+                Renvoyer le lien
+            </a>
+            """,
+            'warning'
+        )
+
     # Main page display with errors if some occured
     for error in errors : flash(error, 'danger')
     return render_template('index.html.jinja', title = AppInfos.web_app_name())

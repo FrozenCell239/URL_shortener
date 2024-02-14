@@ -7,6 +7,7 @@ class User(db.Model):
     username = db.Column(db.String(42), nullable = False, unique = True)
     password = db.Column(db.String(255), nullable = False)
     mail = db.Column(db.String(42), nullable = False)
+    is_verified = db.Column(db.Boolean, nullable = False)
     created_at = db.Column(
         db.DateTime(timezone = True),
         nullable = False,
@@ -16,6 +17,7 @@ class User(db.Model):
     def __init__(self, username : str, mail : str) -> None :
         self.setUsername(username)
         self.setMail(mail)
+        self.is_verified = False
 
     def __repr__(self) -> str :
         return f'<User "{self.username}">'
@@ -41,6 +43,10 @@ class User(db.Model):
     def setMail(self, new_mail : str) -> None :
         if new_mail == '' : raise ValueError('Mail cannot be empty.')
         self.mail = new_mail
+
+    # Verification getter/setter
+    def getIsVerified(self) -> bool : return self.is_verified
+    def verifyMail(self) -> None : self.is_verified = True
 
     # Creation date getter
     def getCreatedAt(self) -> dict[str, str] :
@@ -81,7 +87,6 @@ class User(db.Model):
 
         # Overall result
         password_ok = not (length_error or digit_error or uppercase_error or lowercase_error or symbol_error)
-
         return {
             'password_ok' : password_ok,
             'length_error' : length_error,

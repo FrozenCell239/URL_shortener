@@ -14,3 +14,7 @@ limiter = Limiter(get_remote_address)
 # Flask-WTF for CSRF tokens
 from flask_wtf.csrf import CSRFProtect
 csrf = CSRFProtect()
+
+# Flask-Mail for mailing
+from flask_mail import Mail
+mailer = Mail()

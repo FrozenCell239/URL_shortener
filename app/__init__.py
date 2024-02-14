@@ -1,6 +1,6 @@
-from flask import Flask
+from app.extensions import db, bcrypt, limiter, csrf, mailer
 from config import Config
-from app.extensions import db, bcrypt, limiter, csrf
+from flask import Flask
 
 def create_app(config_class = Config):
     # App initialisation
@@ -12,6 +12,7 @@ def create_app(config_class = Config):
     bcrypt.init_app(app)
     limiter.init_app(app)
     csrf.init_app(app)
+    mailer.init_app(app)
 
     # Blueprints
     from app.main import main_bp

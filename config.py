@@ -104,10 +104,24 @@ class Config :
             "You must NOT create an instance of Config class since it contains app's configuration."
         )
 
+    # Security config
     SECRET_KEY = environ.get('SECRET_KEY')\
         or urandom(32).hex()
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=10)
+
+    # Database config
     SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    PERMANENT_SESSION_LIFETIME = timedelta(minutes=10)
+
+    # File upload feature config
     UPLOAD_FOLDER = AppInfos.upload_folder()
-    # MAX_CONTENT_LENGTH = AppInfos.max_upload_size()
+    #//MAX_CONTENT_LENGTH = AppInfos.max_upload_size()
+
+    # Mail config
+    MAIL_SERVER = environ.get('MAIL_SERVER')
+    MAIL_PORT = environ.get('MAIL_PORT')
+    MAIL_DEFAULT_SENDER = environ.get('MAIL_DEFAULT_SENDER')
+    MAIL_USE_TLS = environ.get('MAIL_USE_TLS')
+    MAIL_USE_SSL = environ.get('MAIL_USE_SSL')
+    #//MAIL_USERNAME = environ.get('MAIL_USERNAME')
+    #//MAIL_PASSWORD = environ.get('MAIL_PASSWORD')

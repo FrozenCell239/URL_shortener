@@ -1,8 +1,8 @@
-from flask import render_template, redirect, url_for, flash, request
-from app.extensions import db
-from app.registration import registration_bp
+from app.extensions import db, limiter
 from app.models.user import User
-from app.utils import JWT, sendMail, logout_required
+from app.registration import registration_bp
+from app.utils import JWT, sendMail, logout_required, login_required
+from flask import render_template, redirect, url_for, flash, request, session
 
 @registration_bp.route('/register', methods = ['POST', 'GET'])
 @logout_required
@@ -38,7 +38,7 @@ def index():
 
         # New user registering if no error occured
         if errors == [] :
-            try :
+            try:
                 # Register user into the database
                 user = User(
                     request.form['username'],
@@ -51,25 +51,25 @@ def index():
                 # Sending verification mail to user
                 token_validity_time = 24
                 sendMail(
-                    to = request.form['mail'],
-                    subject = "EasyLink : activation de votre compte",
+                    to = user.getMail(),
+                    subject = "EasyLink : Activation de votre compte",
                     template_path = 'emails/register_mail.html.jinja',
                     infos = {
-                        'username' : request.form['username'].title(),
-                        'token_validity_time' : str(token_validity_time),
+                        'username' : user.getUsername().title(),
+                        'token_validity_time' : token_validity_time,
                         'token' : JWT.generate(
                             validity_time = token_validity_time,
                             payload = {'user_id' : user.getID()}
                         )
                     }
                 )
-            except :
+            except:
                 flash(
                     "Un problème est survenu lors de la création de votre compte. Veuillez réessayer ultérieurement.",
                     'danger'
                 )
                 return redirect(url_for('registration.index'))
-            else :
+            else:
                 flash(
                     "Votre compte a été créé avec succès ! Connectez-vous dès à présent.",
                     'success'
@@ -81,3 +81,64 @@ def index():
     # Register page display with errors if some occured
     for error in errors : flash(error, 'danger')
     return render_template('register.html.jinja', title = "Inscription")
+
+@registration_bp.route('/verify/<string:token>')
+@limiter.limit('200/day;100/hour;20/minute')
+def verify_user(token : str = None):
+    # Checking token's validity, expiration, and integrity
+    try: token = JWT(token)
+    
+    # Invalid or expired token case
+    except: flash("Jeton de vérification invalide.", 'danger')
+
+    # Getting user from its ID and verify its mail address
+    else:
+        verified_user_id = token.getPayload()['user_id']
+        user = User.query.filter_by(id = verified_user_id).first()
+        if user.getIsVerified() :
+            flash("Votre adresse mail a déjà été vérifiée.", 'info')
+        else:
+            user.verifyMail()
+            db.session.commit()
+            flash("Votre adresse mail a été vérifiée avec succès !", 'success')
+
+    return redirect(url_for('main.index'))
+
+@registration_bp.route('/resend_verification')
+@limiter.limit('30/day;20/hour;10/minute')
+@login_required
+def resend_verification():
+    # Getting user's mail address
+    user = User.query.filter_by(id = session['user_id']).first()
+
+    # Sending verification mail to user if still not verified
+    if not user.getIsVerified() :
+        try:
+            # Sending verification mail to user
+            token_validity_time : float = 24
+            sendMail(
+                to = user.getMail(),
+                subject = "EasyLink : activation de votre compte",
+                template_path = 'emails/register_mail.html.jinja',
+                infos = {
+                    'username' : user.getUsername().title(),
+                    'token_validity_time' : str(token_validity_time),
+                    'token' : JWT.generate(
+                        validity_time = token_validity_time,
+                        payload = {'user_id' : user.getID()}
+                    )
+                }
+            )
+        except:
+            flash(
+                "Un problème est survenu lors du renvoi du mail. Veuillez réessayer ultérieurement.",
+                'danger'
+            )
+            return redirect(url_for('registration.index'))
+        else:
+            flash(
+                "Un nouveau mail de vérification vient de vous être envoyé.",
+                'info'
+            )
+
+    return redirect(url_for('main.index'))
