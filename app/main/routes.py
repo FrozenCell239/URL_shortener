@@ -6,7 +6,6 @@ from flask import\
     send_from_directory,\
     request,\
     session
-from app import csrf
 from app.extensions import db
 from app.main import main_bp
 from app.models.link import Link, File
@@ -20,7 +19,6 @@ from werkzeug.utils import secure_filename as sf
 
 @main_bp.route('/', methods = ['POST', 'GET'])
 @main_bp.route('/<string:requested_link>')
-@csrf.exempt
 def index(requested_link : str = None):
     # Redirecting short links to original ones
     if requested_link :

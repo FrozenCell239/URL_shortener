@@ -14,9 +14,10 @@ def create_app(config_class = Config):
     csrf.init_app(app)
     mailer.init_app(app)
 
-    # Blueprints
+    # Blueprints initialisation
     from app.main import main_bp
     app.register_blueprint(main_bp)
+    csrf.exempt(main_bp)
     from app.security import security_bp
     app.register_blueprint(security_bp)
     from app.user import user_bp
@@ -26,4 +27,5 @@ def create_app(config_class = Config):
     from app.registration import registration_bp
     app.register_blueprint(registration_bp)
 
+    # App ready
     return app
