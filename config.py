@@ -66,9 +66,6 @@ class AppInfos :
     def upload_folder() -> str : return 'app/static/uploads'
 
     @staticmethod
-    def tmp_folder() -> str : return AppInfos.upload_folder() + '/tmp'
-
-    @staticmethod
     def max_upload_size(requested_type : type = int) -> (int | str) :
         """
         Returns the maximum size for uploaded files.\n
@@ -115,13 +112,14 @@ class Config :
 
     # File upload feature config
     UPLOAD_FOLDER = AppInfos.upload_folder()
-    #//MAX_CONTENT_LENGTH = AppInfos.max_upload_size()
+    UPLOAD_EXTENSIONS = AppInfos.allowed_extensions()
+    MAX_CONTENT_LENGTH = AppInfos.max_upload_size()
 
-    # Mail config
+    # Mail service config
     MAIL_SERVER = environ.get('MAIL_SERVER')
     MAIL_PORT = environ.get('MAIL_PORT')
     MAIL_DEFAULT_SENDER = environ.get('MAIL_DEFAULT_SENDER')
     MAIL_USE_TLS = environ.get('MAIL_USE_TLS')
     MAIL_USE_SSL = environ.get('MAIL_USE_SSL')
-    #//MAIL_USERNAME = environ.get('MAIL_USERNAME')
-    #//MAIL_PASSWORD = environ.get('MAIL_PASSWORD')
+    MAIL_USERNAME =  environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD =  environ.get('MAIL_PASSWORD')

@@ -12,9 +12,9 @@ from app.models.link import Link, File
 from app.models.user import User
 from config import AppInfos
 from datetime import datetime
-from os import makedirs, stat, remove
+from os import makedirs
 from os.path import join, isdir, isfile
-from shutil import move
+from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.utils import secure_filename as sf
 
 @main_bp.route('/', methods = ['POST', 'GET'])
@@ -60,7 +60,6 @@ def index(requested_link : str = None):
             if errors == [] :
                 # Registering the link in the database
                 new_link = Link(
-                    #//shortened_length = 8,
                     owner_id = session['user_id'],
                     original = original_url
                 )
@@ -91,41 +90,21 @@ def index(requested_link : str = None):
             # Getting new upload file
             new_upload = request.files['to_upload']
             new_filename = datetime.now().strftime("[%d-%m-%Y_%H-%M-%S]_") + sf(new_upload.filename)
-            no_tmp_file = False
 
             # Checking if file's format is allowed
             if not File.isFileFormatAllowed(new_upload.filename) :
                 errors.append("Ce format de fichier n'est pas autorisé.")
-                no_tmp_file = True
 
-            # Saving first the file in a temp folder
-            if not isdir(AppInfos.tmp_folder()) : makedirs(AppInfos.tmp_folder())
-            if not no_tmp_file : new_upload.save(join(AppInfos.tmp_folder(), new_filename))
-
-            # Checking if file size limit is exceeded
-            if(
-                not no_tmp_file and
-                stat(join(AppInfos.tmp_folder(), new_filename)).st_size > AppInfos.max_upload_size()
-            ):
-                errors.append(
-                    f"Fichier trop volumineux. Taille max supportée : {AppInfos.max_upload_size(str)}."
-                )
-                remove(join(AppInfos.tmp_folder(), new_filename))
-            
             # File upload if no error occured
             if errors == [] :
                 # Creating the uploads directory if it doesn't exist
                 if not isdir(AppInfos.upload_folder()) : makedirs(AppInfos.upload_folder())
 
                 # Saving the file on the server
-                move(
-                    join(AppInfos.tmp_folder(), new_filename),
-                    join(AppInfos.upload_folder(), new_filename)
-                )
+                new_upload.save(join(AppInfos.upload_folder(), new_filename))
 
                 # Registering the file in the database
                 new_file_link = File(
-                    #//shortened_length = 8,
                     owner_id = session['user_id'],
                     attached_file_name = new_filename
                 )
@@ -195,3 +174,11 @@ def download(requested_file : str = None):
     elif file and not file.getState() : error_type = 'DISABLED'
     elif not file : error_type = 'DELETED'
     return redirect(url_for('error.index', error_type = error_type))
+
+@main_bp.errorhandler(RequestEntityTooLarge)
+def max_upload_size_exceeded(e):
+    flash(
+        f"Fichier trop volumineux. Taille max supportée : {AppInfos.max_upload_size(str)}.",
+        'danger'
+    )
+    return redirect(url_for('main.index'))
