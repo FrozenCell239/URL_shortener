@@ -147,7 +147,9 @@ def toggle_link(link_id : int):
         link = Link.query.filter_by(id = link_id).first()
         link.toggleState()
         db.session.commit()
-        return redirect(url_for('user.links', page = request.args.get('back_to', 1, int)))
+
+    # User's links page display
+    return redirect(url_for('user.links', page = request.args.get('back_to', 1, int)))
 
 @user_bp.route('/links/<int:link_id>/delete')
 @login_required
@@ -162,7 +164,9 @@ def delete_link(link_id : int):
     else:
         link = Link.query.filter_by(id = link_id).delete()
         db.session.commit()
-        return redirect(url_for('user.links', page = request.args.get('back_to', 1, int)))
+
+    # User's links page display
+    return redirect(url_for('user.links', page = request.args.get('back_to', 1, int)))
 
 @user_bp.route('/files')
 @login_required
@@ -207,7 +211,9 @@ def toggle_file(file_id : int):
         file = File.query.filter_by(id = file_id).first()
         file.toggleState()
         db.session.commit()
-        return redirect(url_for('user.files', page = request.args.get('back_to', 1, int)))
+
+    # User's files page display
+    return redirect(url_for('user.files', page = request.args.get('back_to', 1, int)))
 
 @user_bp.route('/files/<int:file_id>/delete')
 @login_required
@@ -231,5 +237,5 @@ def delete_file(file_id : int):
         file = File.query.filter_by(id = file_id).delete()
         db.session.commit()
 
-        # User's files page display
-        return redirect(url_for('user.files', page = request.args.get('back_to', 1, int)))
+    # User's files page display
+    return redirect(url_for('user.files', page = request.args.get('back_to', 1, int)))
