@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* Colors */
 /* Box borders */
 /* Paddings */
@@ -98,70 +99,142 @@ a {
 
 /* Navigation bar */
 nav {
-  padding: 20px 50px 0 50px;
-  margin-bottom: 30px;
-}
-nav ul {
-  list-style-type: none;
   overflow: hidden;
-  margin: 0;
-  padding: 0;
-}
-nav li {
-  float: right;
-}
-nav a {
   padding: 10px 20px 10px 20px;
 }
-nav li a, nav #nav-drop-button {
-  display: inline-block;
+
+nav a {
+  float: left;
+  display: block;
   text-align: center;
   text-decoration: none;
 }
-nav li a:hover, nav #nav-dropdown:hover #nav-drop-button {
-  background-color: #616161;
+
+nav a,
+.nav-dropbtn,
+.nav-dropdown-content a {
+  padding: 14px 20px;
   border-radius: 2rem;
 }
-nav li #nav-dropdown {
-  display: inline-block;
+
+nav #nav-menu-icon {
+  display: none;
 }
-nav #nav-dropdown-content {
+
+.nav-dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.nav-dropbtn {
+  color: whitesmoke;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.nav-dropdown-content {
   display: none;
   position: absolute;
+  min-width: 160px;
   z-index: 1;
 }
-nav #nav-dropdown-content a {
+
+.nav-dropdown-content a {
+  float: none;
   text-decoration: none;
   display: block;
   text-align: left;
   background-color: rgb(30, 40, 50);
-  border-radius: 2rem;
 }
-nav #nav-dropdown-content a:hover {
+
+nav a:hover,
+.nav-dropdown:hover .nav-dropbtn,
+.nav-dropdown-content a:hover {
   background-color: #616161;
 }
-nav #nav-dropdown:hover #nav-dropdown-content {
+
+.nav-dropdown:hover .nav-dropdown-content {
   display: block;
 }
 
-#logo {
-  float: left;
-  border: 2px solid whitesmoke;
-  border-radius: 2rem;
-  padding: 0 10px 0 10px;
-}
-
-#dropdown-icon {
+.nav-dropdown-icon {
   display: inline;
-  padding-bottom: 4px;
+  padding: 0 0 3px 2px;
   width: 15px;
   height: auto;
 }
 
-.navbar .menu-icon {
-  display: none;
+#logo {
+  border: 2px solid whitesmoke;
+  padding: 10px 30px 10px 30px;
 }
 
+@media screen and (min-width: 600px) {
+  .nav-dropdown, nav a {
+    float: right;
+  }
+  #logo {
+    float: left;
+  }
+}
+@media screen and (max-width: 600px) {
+  nav a:not(:first-child), .nav-dropdown .nav-dropbtn {
+    display: none;
+  }
+  nav.responsive {
+    overflow: visible;
+    position: relative;
+    top: 70px;
+    margin-bottom: 40px;
+    background-color: rgb(20, 30, 40);
+  }
+  nav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  nav.responsive .nav-dropdown {
+    float: none;
+  }
+  nav.responsive .nav-dropdown-content {
+    position: relative;
+  }
+  nav.responsive .nav-dropdown .nav-dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+  .nav-dropdown-content a::before {
+    content: "• ";
+  }
+  nav a#nav-menu-icon,
+  nav.responsive a#nav-menu-icon {
+    display: block;
+    position: absolute;
+    right: 22px;
+    top: 21px;
+    z-index: 1;
+  }
+  nav.responsive a#nav-menu-icon {
+    top: -49px;
+  }
+  #logo {
+    z-index: 0;
+    display: block;
+    position: absolute;
+    text-align: center;
+    right: 20px;
+    left: 20px;
+    top: 20px;
+  }
+  nav.responsive #logo {
+    top: -50px;
+  }
+}
 /* Main feature input bar */
 fieldset {
   border: none;

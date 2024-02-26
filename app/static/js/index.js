@@ -36,3 +36,18 @@ function toClipboard(new_link){
     navigator.clipboard.writeText(new_link);
     document.getElementById('new-link').innerText = "Copié !";
 };
+
+// Responsive navbar button handling
+function responsiveMenuDisplay(){
+    const navbar = document.getElementsByTagName('nav')[0];
+    const header = document.getElementsByTagName('header')[0];
+
+    if(navbar.className === 'navbar'){
+        navbar.className += ' responsive';
+        header.style.backgroundColor = 'rgb(20, 30, 40)';
+    }
+    else{
+        navbar.className = 'navbar';
+        header.style.backgroundColor = 'rgb(30, 40, 50)';
+    };
+};

@@ -17,47 +17,53 @@
     <body>
         <header>
             {% block header %}
-            <nav>
-                <ul>
-                    <li id="logo"><a href="{{ url_for('main.index') }}">Easy Link</a></li>
-                    {% if session.username %}
-                        <li><a href="{{ url_for('security.logout') }}">Déconnexion</a></li>
-                        <li id="nav-dropdown">
-                            <a href="#" id="nav-drop-button">
-                                Mes infos&nbsp;
-                                <img
-                                    id="dropdown-icon"
-                                    src="{{ url_for('static', filename = 'icons/dropdown-icon.svg') }}"
-                                    alt="Dropdown icon."
-                                >
-                            </a>
-                            <div id="nav-dropdown-content">
-                                {% if self._TemplateReference__context.name != "user/profile.html.jinja" %}
-                                <a href="{{ url_for('user.profile') }}">Profil</a>
-                                {% endif %}
-                                {% if self._TemplateReference__context.name != "user/password.html.jinja" %}
-                                <a href="{{ url_for('user.password') }}">Mot de passe</a>
-                                {% endif %}
-                            </div>
-                        </li>
-                        {% if self._TemplateReference__context.name != "user/files.html.jinja" %}
-                        <li><a href="{{ url_for('user.files') }}">Mes fichiers</a></li>
-                        {% endif %}
-                        {% if self._TemplateReference__context.name != "user/links.html.jinja" %}
-                        <li><a href="{{ url_for('user.links') }}">Mes liens</a></li>
-                        {% endif %}
-                    {% else %}
-                        {% if self._TemplateReference__context.name != "login.html.jinja" %}
-                        <li><a href="{{ url_for('security.login') }}">Se connecter</a></li>
-                        {% endif %}
-                        {% if self._TemplateReference__context.name != "register.html.jinja" %}
-                        <li><a href="{{ url_for('registration.index') }}">S'inscrire</a></li>
-                        {% endif %}
+            <nav class="navbar">
+                <a href="{{ url_for('main.index') }}" id="logo">Easy Link</a>
+                {% if session.username %}
+                    <a href="{{ url_for('security.logout') }}">Déconnexion</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-dropbtn">
+                            Mes infos
+                            <img
+                                class="nav-dropdown-icon"
+                                src="{{ url_for('static', filename = 'icons/dropdown-icon.svg') }}"
+                                alt="Dropdown icon."
+                            >
+                        </button>
+                        <div class="nav-dropdown-content">
+                            {% if self._TemplateReference__context.name != "user/profile.html.jinja" %}
+                            <a href="{{ url_for('user.profile') }}">Profil</a>
+                            {% endif %}
+                            {% if self._TemplateReference__context.name != "user/password.html.jinja" %}
+                            <a href="{{ url_for('user.password') }}">Mot de passe</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if self._TemplateReference__context.name != "user/files.html.jinja" %}
+                    <a href="{{ url_for('user.files') }}">Mes fichiers</a>
                     {% endif %}
-                </ul>
+                    {% if self._TemplateReference__context.name != "user/links.html.jinja" %}
+                    <a href="{{ url_for('user.links') }}">Mes liens</a>
+                    {% endif %}
+                {% else %}
+                    {% if self._TemplateReference__context.name != "login.html.jinja" %}
+                    <a href="{{ url_for('security.login') }}">Se connecter</a>
+                    {% endif %}
+                    {% if self._TemplateReference__context.name != "register.html.jinja" %}
+                    <a href="{{ url_for('registration.index') }}">S'inscrire</a>
+                    {% endif %}
+                {% endif %}
+                <a
+                    href="#"
+                    style="font-size:15px;"
+                    id="nav-menu-icon"
+                    onclick="responsiveMenuDisplay()"
+                >
+                    &#9776;
+                </a>
             </nav>
             {% endblock %}
-            <div class="flash-zone">
+            <div id="flash-zone">
             {% with messages = get_flashed_messages(with_categories = true) %}
                 {% if messages %}
                     {% for category, message in messages %}
