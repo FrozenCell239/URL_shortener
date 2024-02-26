@@ -1,7 +1,6 @@
 // Flash dismiss
 function flashDismiss(id){
-    document.getElementById(`flash-${id}`).style.display = 'none';
-    document.getElementById(`flash-${id}`).setAttribute('hidden', true);
+    document.getElementById(`flash-${id}`).remove();
 };
 
 // Toggling required field
@@ -22,14 +21,14 @@ function fileOrLinkToggle(){
 
 // Dialogs handling
 function openDialog(route, message){
-    document.getElementById('dialog').showModal();
-    document.getElementById('dialog').style.display = 'flex';
+    document.getElementsByTagName('dialog')[0].showModal();
+    document.getElementsByTagName('dialog')[0].style.display = 'flex';
     document.getElementById('dialog-message').innerText = message;
     document.getElementById('dialog-confirm').setAttribute('href', route);
 };
 function closeDialog(){
-    document.getElementById('dialog').close();
-    document.getElementById('dialog').style.display = 'none';
+    document.getElementsByTagName('dialog')[0].close();
+    document.getElementsByTagName('dialog')[0].style.display = 'none';
 };
 
 // Exporting the new link to user's clipboard
