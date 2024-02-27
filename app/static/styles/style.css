@@ -182,6 +182,9 @@ nav a:hover,
   }
 }
 @media screen and (max-width: 600px) {
+  nav {
+    margin-bottom: 120px;
+  }
   nav a:not(:first-child), .nav-dropdown .nav-dropbtn {
     display: none;
   }
@@ -207,6 +210,9 @@ nav a:hover,
     display: block;
     width: 100%;
     text-align: left;
+  }
+  .nav-dropdown-content a {
+    background: none;
   }
   .nav-dropdown-content a::before {
     content: "• ";
@@ -382,12 +388,13 @@ dialog::backdrop {
 }
 
 /* Flash message boxes */
-.flash-zone {
+#flash-zone {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0 10rem 0 10rem;
-  min-height: 20px;
+  min-height: 5vh;
+  background-color: rgb(30, 40, 50);
 }
 
 .danger-flash {
@@ -410,6 +417,21 @@ dialog::backdrop {
   background-color: #004400;
 }
 
+@media screen and (max-width: 600px) {
+  #flash-zone {
+    padding: 0;
+  }
+}
+@media screen and (max-height: 750px) {
+  #flash-zone {
+    min-height: 1vh;
+  }
+}
+@media screen and (min-height: 900px) {
+  #flash-zone {
+    min-height: 6vh;
+  }
+}
 /* Links tables */
 table {
   text-align: center;
