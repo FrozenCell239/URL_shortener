@@ -45,7 +45,7 @@ def profile():
                 found_user.setMail(request.form['mail'])
             db.session.commit()
             flash("Vos informations ont été modifiées avec succès.", 'success')
-            return redirect(url_for('main.index'))
+            return redirect(url_for('user.profile'))
 
     # Profile page display with errors if some occured
     for error in errors : flash(error, 'danger')

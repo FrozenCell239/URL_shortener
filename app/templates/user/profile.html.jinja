@@ -3,17 +3,18 @@
 <h1>Vos informations</h1>
 <form action="#" method="post" class="form" id="profile-form">
     <label for="username">Nom d'utilisateur</label>
-    <input type="text" name="username" value="{{ user_infos.username }}">
+    <input type="text" name="username" value="{{ user_infos.username }}" disabled>
     <label for="mail">Adresse mail</label>
-    <input type="email" name="mail" value="{{ user_infos.mail }}">
+    <input type="email" name="mail" value="{{ user_infos.mail }}" disabled>
     <p>
-        <a href="{{ url_for('main.index') }}">Annuler</a>
-        <span id="buttons-separator">&nbsp;|&nbsp;</span>
-        <button type="submit">Modifier</button>
+        <button type="button" onclick="enableUserEditForm()" id="edit">Éditer</button>
+        <a href="#" onclick="disableUserEditForm()" id="cancel" hidden>Annuler</a>
+        <span id="buttons-separator" hidden>&nbsp;|&nbsp;</span>
+        <button type="submit" id="submit" hidden>Modifier</button>
     </p>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 </form>
-<aside style="margin-top: 5px;">
+<aside>
     Vous êtes membre depuis le {{ user_infos.created_at.date }}.
 </aside>
 {% endblock %}
