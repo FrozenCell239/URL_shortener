@@ -10,6 +10,11 @@ class AbstractShortcut():
     short = db.Column(db.String(100), nullable = False)
     clicks = db.Column(db.Integer, nullable = False)
     state = db.Column(db.Boolean, nullable = False)
+    last_visit_at = db.Column(
+        db.DateTime(timezone = True),
+        nullable = False,
+        server_default = func.current_timestamp()
+    )
     created_at = db.Column(
         db.DateTime(timezone = True),
         nullable = False,

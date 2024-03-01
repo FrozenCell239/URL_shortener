@@ -1,21 +1,22 @@
-from flask import\
-    render_template,\
-    redirect,\
-    url_for,\
-    flash,\
-    send_from_directory,\
-    request,\
-    session
 from app.extensions import db
 from app.main import main_bp
 from app.models.link import Link, File
 from app.models.user import User
 from config import AppInfos
-from datetime import datetime
+from datetime import datetime, timezone
 from os import makedirs
 from os.path import join, isdir, isfile
 from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.utils import secure_filename as sf
+from flask import (
+    render_template,
+    redirect,
+    url_for,
+    flash,
+    send_from_directory,
+    request,
+    session
+)
 
 @main_bp.route('/', methods = ['POST', 'GET'])
 @main_bp.route('/<string:requested_link>')
@@ -28,6 +29,7 @@ def index(requested_link : str = None):
         # Redirecting to the original link if the short one exists and is not disabled
         if link and link.getState() == True :
             link.incrementClicks()
+            link.last_visit_at = datetime.now(tz = timezone.utc)
             db.session.commit()
             return redirect(link.getOriginal(), code = 301)
 

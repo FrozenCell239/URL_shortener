@@ -12,12 +12,13 @@
 <table>
     <thead>
         <tr>
-            <th>Raccourci</th>
-            <th>Nombre de clics</th>
-            <th>Statut</th>
-            <th>Fichier attaché</th>
-            <th>Créé le</th>
-            <th>Action</th>
+            <th class="th-short">Raccourci</th>
+            <th class="th-clicks">Nombre de clics</th>
+            <th class="th-state">Statut</th>
+            <th class="th-original">Fichier attaché</th>
+            <th class="th-date">Créé le</th>
+            <th class="th-last-visit">Dernière visite</th>
+            <th class="th-actions">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -26,8 +27,11 @@
             <td class="td-short"><a href='{{ domain_name ~ "dl/" ~ file.short }}'>{{ domain_name ~ "dl/" ~ file.short }}</a></td>
             <td class="td-clicks">{{ file.clicks }}</td>
             <td class="td-state">{{ "Actif" if file.state else "Désactivé" }}</td>
-            <td class="td-original-filename">{{ file.attached_file_name }}</td>
-            <td class="td-date">{{ files_dates[loop.index0].date ~ ", " ~ files_dates[loop.index0].time[:-3] ~ '.'}}</td>
+            <td class="td-original">{{ file.attached_file_name }}</td>
+            <td class="td-date">{{ files_dates[loop.index0].date ~ ", " ~ files_dates[loop.index0].time[:-3]}}</td>
+            <td class="td-last-visit">
+                {{ file.last_visit_at[:10] ~ ", " ~ file.last_visit_at[10:-16] if file.clicks != 0 else "/" }}
+            </td>
             <td class="td-actions">
                 <a
                     href="#"

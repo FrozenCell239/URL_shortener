@@ -119,10 +119,10 @@ def links():
             page = selected_page,
             per_page = AppInfos.default_per_page()
         )
-    
-    # Getting user's links' creation datetime
     user_links_dates = []
-    for link in user_links : user_links_dates.append(link.getCreatedAt())
+    for link in user_links :
+        user_links_dates.append(link.getCreatedAt())
+        link.last_visit_at = str(link.last_visit_at)
 
     # User's links page display
     return render_template(
@@ -183,10 +183,10 @@ def files():
             page = selected_page,
             per_page = AppInfos.default_per_page()
         )
-
-    # Getting user's files' creation datetime
     user_files_dates = []
-    for link in user_files : user_files_dates.append(link.getCreatedAt())
+    for file in user_files :
+        user_files_dates.append(file.getCreatedAt())
+        file.last_visit_at = str(file.last_visit_at)
 
     # User's files page display
     return render_template(
