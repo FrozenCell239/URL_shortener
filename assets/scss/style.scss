@@ -311,26 +311,10 @@ dialog::backdrop{
     min-height: 5vh;
     background-color: $background_color;
 }
-.danger-flash{
-    @extend %flash;
-    border-color: #aa3939;
-    background-color: #550000;
-}
-.info-flash{
-    @extend %flash;
-    border-color: #2e4372;
-    background-color: #061639;
-}
-.warning-flash{
-    @extend %flash;
-    border-color: #aa8439;
-    background-color: #553900;
-}
-.success-flash{
-    @extend %flash;
-    border-color: #2e882e;
-    background-color: #004400;
-}
+.danger-flash{@include flash-box(#aa3939, #550000);}
+.info-flash{@include flash-box(#2e4372, #061639);}
+.warning-flash{@include flash-box(#aa8439, #553900);}
+.success-flash{@include flash-box(#2e882e, #004400);}
 @media screen and (max-width: 600px){
     #flash-zone{padding: 0;}
 }

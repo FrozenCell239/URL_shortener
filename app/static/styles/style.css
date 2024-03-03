@@ -2,38 +2,7 @@
 /* Colors */
 /* Box borders */
 /* Paddings */
-/* Flash message boxes */
-.success-flash, .warning-flash, .info-flash, .danger-flash {
-  display: grid;
-  grid-template-columns: 5% 90% 5%;
-  border: 2px solid;
-  border-radius: 2rem;
-  min-height: 30px;
-  width: 100%;
-  font-weight: 300;
-  font-size: 1rem;
-  text-align: center;
-  padding: 0.5rem;
-  margin-bottom: 5px;
-}
-.success-flash p, .warning-flash p, .info-flash p, .danger-flash p {
-  margin: 0;
-  padding: 0;
-  grid-column: 2;
-}
-.success-flash button, .warning-flash button, .info-flash button, .danger-flash button {
-  justify-self: end;
-  grid-column: 3;
-  border: none;
-  background: none;
-  text-decoration: none;
-  font-size: 2rem;
-  color: rgb(222, 66, 66);
-  float: right;
-  line-height: 0.6;
-  cursor: pointer;
-}
-
+/* Flash message box */
 /* Forms */
 .form {
   display: flex;
@@ -398,23 +367,183 @@ dialog::backdrop {
 }
 
 .danger-flash {
-  border-color: #aa3939;
   background-color: #550000;
+  display: grid;
+  grid-template-columns: 5% 90% 5%;
+  border: 2px solid;
+  border-radius: 2rem;
+  border-color: #aa3939;
+  min-height: 30px;
+  width: 100%;
+  font-weight: 300;
+  font-size: 1rem;
+  text-align: center;
+  padding: 0.5rem;
+  margin-bottom: 5px;
+}
+.danger-flash p {
+  margin: 0;
+  padding: 0;
+  grid-column: 2;
+}
+.danger-flash button {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  grid-column: 3;
+  border: none;
+  background: none;
+  text-decoration: none;
+  font-size: 2rem;
+  color: rgb(222, 66, 66);
+  float: right;
+  line-height: 0.6;
+  cursor: pointer;
+  border-radius: 2rem;
+}
+.danger-flash button:hover {
+  color: rgb(172, 16, 16);
+}
+@-moz-document url-prefix() {
+  .danger-flash button {
+    font-size: 1.55rem;
+    font-weight: bold;
+  }
 }
 
 .info-flash {
-  border-color: #2e4372;
   background-color: #061639;
+  display: grid;
+  grid-template-columns: 5% 90% 5%;
+  border: 2px solid;
+  border-radius: 2rem;
+  border-color: #2e4372;
+  min-height: 30px;
+  width: 100%;
+  font-weight: 300;
+  font-size: 1rem;
+  text-align: center;
+  padding: 0.5rem;
+  margin-bottom: 5px;
+}
+.info-flash p {
+  margin: 0;
+  padding: 0;
+  grid-column: 2;
+}
+.info-flash button {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  grid-column: 3;
+  border: none;
+  background: none;
+  text-decoration: none;
+  font-size: 2rem;
+  color: rgb(222, 66, 66);
+  float: right;
+  line-height: 0.6;
+  cursor: pointer;
+  border-radius: 2rem;
+}
+.info-flash button:hover {
+  color: rgb(172, 16, 16);
+}
+@-moz-document url-prefix() {
+  .info-flash button {
+    font-size: 1.55rem;
+    font-weight: bold;
+  }
 }
 
 .warning-flash {
-  border-color: #aa8439;
   background-color: #553900;
+  display: grid;
+  grid-template-columns: 5% 90% 5%;
+  border: 2px solid;
+  border-radius: 2rem;
+  border-color: #aa8439;
+  min-height: 30px;
+  width: 100%;
+  font-weight: 300;
+  font-size: 1rem;
+  text-align: center;
+  padding: 0.5rem;
+  margin-bottom: 5px;
+}
+.warning-flash p {
+  margin: 0;
+  padding: 0;
+  grid-column: 2;
+}
+.warning-flash button {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  grid-column: 3;
+  border: none;
+  background: none;
+  text-decoration: none;
+  font-size: 2rem;
+  color: rgb(222, 66, 66);
+  float: right;
+  line-height: 0.6;
+  cursor: pointer;
+  border-radius: 2rem;
+}
+.warning-flash button:hover {
+  color: rgb(172, 16, 16);
+}
+@-moz-document url-prefix() {
+  .warning-flash button {
+    font-size: 1.55rem;
+    font-weight: bold;
+  }
 }
 
 .success-flash {
-  border-color: #2e882e;
   background-color: #004400;
+  display: grid;
+  grid-template-columns: 5% 90% 5%;
+  border: 2px solid;
+  border-radius: 2rem;
+  border-color: #2e882e;
+  min-height: 30px;
+  width: 100%;
+  font-weight: 300;
+  font-size: 1rem;
+  text-align: center;
+  padding: 0.5rem;
+  margin-bottom: 5px;
+}
+.success-flash p {
+  margin: 0;
+  padding: 0;
+  grid-column: 2;
+}
+.success-flash button {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  grid-column: 3;
+  border: none;
+  background: none;
+  text-decoration: none;
+  font-size: 2rem;
+  color: rgb(222, 66, 66);
+  float: right;
+  line-height: 0.6;
+  cursor: pointer;
+  border-radius: 2rem;
+}
+.success-flash button:hover {
+  color: rgb(172, 16, 16);
+}
+@-moz-document url-prefix() {
+  .success-flash button {
+    font-size: 1.55rem;
+    font-weight: bold;
+  }
 }
 
 @media screen and (max-width: 600px) {
