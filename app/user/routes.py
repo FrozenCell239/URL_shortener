@@ -126,9 +126,10 @@ def links():
 
     # User's links page display
     return render_template(
-        'user/links.html.jinja',
+        'user/dashboard.html.jinja',
         domain_name = AppInfos.domain_name(),
         title = "Mes liens",
+        type = 'links',
         links = user_links,
         links_dates = user_links_dates
     )
@@ -190,11 +191,12 @@ def files():
 
     # User's files page display
     return render_template(
-        'user/files.html.jinja',
+        'user/dashboard.html.jinja',
         domain_name = AppInfos.domain_name(),
         title = "Mes fichiers",
-        files = user_files,
-        files_dates = user_files_dates
+        type = 'files',
+        links = user_files,
+        links_dates = user_files_dates
     )
 
 @user_bp.route('/files/<int:file_id>/toggle')
