@@ -3,7 +3,7 @@ Create the database manually then use these lines in `flask shell` to create the
 ```python
 >>> from app.extensions import db
 >>> from app.models.user import User
->>> from app.models.link import Link, File
+>>> from app.models.link import Link
 >>> db.create_all()
 >>> exit()
 ```
