@@ -23,8 +23,8 @@ def login():
         else:
             # Getting user's informations
             session.permanent = True
-            session['user_id'] = found_user.getID()
-            session['username'] = found_user.getUsername()
+            session['user_id'] = found_user.id
+            session['username'] = found_user.username
 
             # Main page display
             flash("Connexion réussie !", 'success')

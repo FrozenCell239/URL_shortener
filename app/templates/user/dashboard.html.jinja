@@ -38,9 +38,9 @@
                 {{ link.original or link.attached_file_name }}
                 {{ "</a>" if link. original else "" }}
             </td>
-            <td class="td-date">{{ links_dates[loop.index0].date ~ ", " ~ links_dates[loop.index0].time[:-3] }}</td>
+            <td class="td-date">{{ links_created_at[loop.index0].date ~ ", " ~ links_created_at[loop.index0].time[:-3] }}</td>
             <td class="td-last-visit">
-                {{ link.last_visit_at[:10] ~ ", " ~ link.last_visit_at[10:-16] if link.clicks != 0 else "/" }}
+                {{ links_last_visit_at[loop.index0].date ~ ", " ~ links_last_visit_at[loop.index0].time[:-3] if link.clicks != 0 else "/" }}
             </td>
             <td class="td-actions">
                 <a

@@ -51,15 +51,15 @@ def index():
                 # Sending verification mail to user
                 token_validity_time = 24
                 sendMail(
-                    to = user.getMail(),
+                    to = user.mail,
                     subject = "EasyLink : Activation de votre compte",
                     template_path = 'emails/register_mail.html.jinja',
                     infos = {
-                        'username' : user.getUsername().title(),
+                        'username' : user.username.title(),
                         'token_validity_time' : token_validity_time,
                         'token' : JWT.generate(
                             validity_time = token_validity_time,
-                            payload = {'user_id' : user.getID()}
+                            payload = {'user_id' : user.id}
                         )
                     }
                 )
@@ -72,14 +72,10 @@ def index():
             else:
                 # Automatically log-in the user
                 session.permanent = True
-                session['user_id'] = (User.query.filter_by(mail = user.getMail()).first()).getID()
-                session['username'] = user.getUsername()
+                session['user_id'] = (User.query.filter_by(mail = user.mail).first()).id
+                session['username'] = user.username
 
                 # Redirecting user to main page
-                flash(
-                    "Votre compte a été créé avec succès. Nous vous souhaitons la bienvenue !",
-                    'success'
-                )
                 return redirect(url_for('main.index'))
         
     # Register page display with errors if some occured
@@ -99,10 +95,10 @@ def verify_user(token : str = None):
     else:
         verified_user_id = token.getPayload()['user_id']
         user = User.query.filter_by(id = verified_user_id).first()
-        if user.getIsVerified() :
+        if user.is_verified :
             flash("Votre adresse mail a déjà été vérifiée.", 'info')
         else:
-            user.verifyMail()
+            user.is_verified = True
             db.session.commit()
             flash("Votre adresse mail a été vérifiée avec succès !", 'success')
 
@@ -116,20 +112,20 @@ def resend_verification():
     user = User.query.filter_by(id = session['user_id']).first()
 
     # Sending verification mail to user if still not verified
-    if not user.getIsVerified() :
+    if not user.is_verified :
         try:
             # Sending verification mail to user
             token_validity_time : float = 24
             sendMail(
-                to = user.getMail(),
+                to = user.mail,
                 subject = "EasyLink : activation de votre compte",
                 template_path = 'emails/register_mail.html.jinja',
                 infos = {
-                    'username' : user.getUsername().title(),
+                    'username' : user.username.title(),
                     'token_validity_time' : str(token_validity_time),
                     'token' : JWT.generate(
                         validity_time = token_validity_time,
-                        payload = {'user_id' : user.getID()}
+                        payload = {'user_id' : user.id}
                     )
                 }
             )

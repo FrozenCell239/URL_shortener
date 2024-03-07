@@ -15,21 +15,13 @@ class User(db.Model):
     )
 
     def __init__(self, username : str, mail : str) -> None :
-        self.setUsername(username)
-        self.setMail(mail)
+        if username == '' : raise ValueError('Username cannot be empty.')
+        if mail == '' : raise ValueError('Mail cannot be empty.')
+        self.username = username
+        self.mail = mail
         self.is_verified = False
 
-    def __repr__(self) -> str :
-        return f'<User "{self.username}">'
-
-    # ID getter
-    def getID(self) -> int : return self.id
-
-    # Username getter/setter
-    def getUsername(self) -> str : return self.username
-    def setUsername(self, new_username : str) -> None :
-        if new_username == '' : raise ValueError('Username cannot be empty.')
-        self.username = new_username
+    def __repr__(self) -> str : return f'<User "{self.username}">'
 
     # Password checker/setter
     def checkPassword(self, password_to_check : str) -> bool :
@@ -37,16 +29,6 @@ class User(db.Model):
     def setPassword(self, new_password) -> None :
         if new_password == '' : raise ValueError('Password cannot be empty.')
         self.password = bcrypt.generate_password_hash(new_password).decode('utf-8')
-
-    # Mail getter/setter
-    def getMail(self) -> str : return self.mail
-    def setMail(self, new_mail : str) -> None :
-        if new_mail == '' : raise ValueError('Mail cannot be empty.')
-        self.mail = new_mail
-
-    # Verification getter/setter
-    def getIsVerified(self) -> bool : return self.is_verified
-    def verifyMail(self) -> None : self.is_verified = True
 
     # Creation date getter
     def getCreatedAt(self) -> dict[str, str] :

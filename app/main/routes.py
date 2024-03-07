@@ -1,6 +1,6 @@
 from app.extensions import db
 from app.main import main_bp
-from app.models.link import Link, File
+from app.models.link import Link
 from app.models.user import User
 from config import AppInfos
 from datetime import datetime, timezone
@@ -27,14 +27,15 @@ def index(requested_link : str = None):
         link = Link.query.filter_by(short = requested_link).first()
 
         # Redirecting to the original link if the short one exists and is not disabled
-        if link and link.getState() == True :
-            link.incrementClicks()
+        if link and link.link_type == 'link' and link.state == True :
+            link.clicks += 1
             link.last_visit_at = datetime.now(tz = timezone.utc)
             db.session.commit()
-            return redirect(link.getOriginal(), code = 301)
+            return redirect(link.original, code = 301)
 
         # Redirecting to an error page if the short link is not active or doesn't exist
-        elif link and not link.getState() : error_type = 'DISABLED'
+        elif link and not link.state : error_type = 'DISABLED'
+        elif link and link.link_type != 'link' : error_type = None
         elif not link : error_type = 'DELETED'
         return redirect(url_for('error.index', error_type = error_type))
 
@@ -63,7 +64,8 @@ def index(requested_link : str = None):
                 # Registering the link in the database
                 new_link = Link(
                     owner_id = session['user_id'],
-                    original = original_url
+                    original = original_url,
+                    link_type = 'link'
                 )
                 db.session.add(new_link)
                 db.session.commit()
@@ -75,7 +77,7 @@ def index(requested_link : str = None):
                     <a
                         href="#"
                         id="new-link"
-                        onclick="toClipboard('{ AppInfos.domain_name() + new_link.getShort() }')"
+                        onclick="toClipboard('{AppInfos.domain_name() + new_link.short}')"
                     >
                         Copier
                     </a>
@@ -94,7 +96,7 @@ def index(requested_link : str = None):
             new_filename = datetime.now().strftime("[%d-%m-%Y_%H-%M-%S]_") + sf(new_upload.filename)
 
             # Checking if file's format is allowed
-            if not File.isFileFormatAllowed(new_upload.filename) :
+            if not Link.isFileFormatAllowed(new_upload.filename) :
                 errors.append("Ce format de fichier n'est pas autorisé.")
 
             # File upload if no error occured
@@ -106,9 +108,10 @@ def index(requested_link : str = None):
                 new_upload.save(join(AppInfos.upload_folder(), new_filename))
 
                 # Registering the file in the database
-                new_file_link = File(
+                new_file_link = Link(
                     owner_id = session['user_id'],
-                    attached_file_name = new_filename
+                    original = new_filename,
+                    link_type = 'file'
                 )
                 db.session.add(new_file_link)
                 db.session.commit()
@@ -120,7 +123,7 @@ def index(requested_link : str = None):
                     <a
                         href="#"
                         id="new-link"
-                        onclick="toClipboard('{ AppInfos.domain_name()}dl/{new_file_link.getShort() }')"
+                        onclick="toClipboard('{AppInfos.domain_name()}dl/{new_file_link.short}')"
                     >
                         Copier le lien
                     </a>
@@ -131,7 +134,7 @@ def index(requested_link : str = None):
     # Remind user to verify its mail address if it's still not verified
     if(
         'user_id' in session and not
-        (User.query.filter_by(id = session['user_id']).first()).getIsVerified()
+        (User.query.filter_by(id = session['user_id']).first()).is_verified
     ) :
         flash(
             f"""
@@ -155,25 +158,26 @@ def download(requested_file : str = None):
     if not requested_file : return redirect(url_for('main.index'))
     
     # Getting the file name from database
-    file = File.query.filter_by(short = requested_file).first()
+    file = Link.query.filter_by(short = requested_file).first()
 
     # Sending the file if it exists and is not disabled
-    if file and file.getState() :
+    if file and file.link_type == 'file' and file.state :
         # Checking if the file still exists on the server
-        if not isfile(f'{AppInfos.upload_folder()}/{file.getAttachedFileName()}') :
+        if not isfile(f'{AppInfos.upload_folder()}/{file.original}') :
             return redirect(url_for('error.index', error_type = 'FILE_NOT_FOUND'))
 
         # Sending the file to the user
-        file.incrementClicks()
+        file.clicks += 1
         db.session.commit()
         return send_from_directory(
             '../' + AppInfos.upload_folder(),
-            file.getAttachedFileName(),
+            file.original,
             as_attachment = True
         )
 
     # Redirecting to an error page if the short file is not active or doesn't exist
-    elif file and not file.getState() : error_type = 'DISABLED'
+    elif file and not file.state : error_type = 'DISABLED'
+    elif file and file.link_type != 'file' : error_type = None
     elif not file : error_type = 'DELETED'
     return redirect(url_for('error.index', error_type = error_type))
 

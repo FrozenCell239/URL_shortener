@@ -3,7 +3,7 @@ from app.user import user_bp
 from app.utils import login_required
 from app.extensions import db, limiter
 from app.models.user import User
-from app.models.link import Link, File
+from app.models.link import Link
 from config import AppInfos
 from os import remove
 from os.path import join, isfile
@@ -26,23 +26,23 @@ def profile():
         if request.form['mail'] == '' :
             errors.append("L'adresse mail ne peut pas être vide.")
         if(
-            found_user.getUsername() != request.form['username'] and
+            found_user.username != request.form['username'] and
             User.query.filter_by(username = request.form['username']).first()
         ):
             errors.append("Un autre compte possède déjà le nom d'utilisateur que vous avez saisi.")
         if(
-            found_user.getMail() != request.form['mail'] and
+            found_user.mail != request.form['mail'] and
             User.query.filter_by(mail = request.form['mail']).first()
         ):
             errors.append("Un autre compte possède déjà l'adresse mail que vous avez saisie.")
 
         # New user's informations registering if no error occured
         if errors == [] :
-            if found_user.getUsername() != request.form['username'] :
-                found_user.setUsername(request.form['username'])
+            if found_user.username != request.form['username'] :
+                found_user.username = request.form['username']
                 session['username'] = request.form['username']
-            if found_user.getMail() != request.form['mail'] :
-                found_user.setMail(request.form['mail'])
+            if found_user.mail != request.form['mail'] :
+                found_user.mail = request.form['mail']
             db.session.commit()
             flash("Vos informations ont été modifiées avec succès.", 'success')
             return redirect(url_for('user.profile'))
@@ -53,8 +53,8 @@ def profile():
         'user/profile.html.jinja',
         title = "Mon profil",
         user_infos = {
-            'mail' : found_user.getMail(),
-            'username' : found_user.getUsername(),
+            'mail' : found_user.mail,
+            'username' : found_user.username,
             'created_at' : found_user.getCreatedAt()
         }
     )
@@ -112,17 +112,19 @@ def links():
     if selected_page < 1 : selected_page = 1
 
     # Getting user's links
-    user_links = Link.query\
-        .filter_by(owner_id = session['user_id'])\
-        .order_by(Link.id)\
+    user_links = (Link.query
+        .filter_by(owner_id = session['user_id'])
+        .order_by(Link.id)
         .paginate(
             page = selected_page,
             per_page = AppInfos.default_per_page()
         )
-    user_links_dates = []
+    )
+    user_links_created_at = []
+    user_links_last_visit_at = []
     for link in user_links :
-        user_links_dates.append(link.getCreatedAt())
-        link.last_visit_at = str(link.last_visit_at)
+        user_links_created_at.append(link.getCreatedAt())
+        user_links_last_visit_at.append(link.getLastVisitAt())
 
     # User's links page display
     return render_template(
@@ -131,7 +133,8 @@ def links():
         title = "Mes liens",
         type = 'links',
         links = user_links,
-        links_dates = user_links_dates
+        links_created_at = user_links_created_at,
+        links_last_visit_at = user_links_last_visit_at
     )
 
 @user_bp.route('/links/<int:link_id>/toggle')
@@ -146,7 +149,7 @@ def toggle_link(link_id : int):
     # Toggling link state
     else:
         link = Link.query.filter_by(id = link_id).first()
-        link.toggleState()
+        link.state = not link.state
         db.session.commit()
 
     # User's links page display
@@ -177,17 +180,19 @@ def files():
     if selected_page < 1 : selected_page = 1
 
     # Getting user's files
-    user_files = File.query\
-        .filter_by(owner_id = session['user_id'])\
-        .order_by(File.id)\
+    user_files = (Link.query
+        .filter_by(owner_id = session['user_id'])
+        .order_by(Link.id)
         .paginate(
             page = selected_page,
             per_page = AppInfos.default_per_page()
         )
-    user_files_dates = []
+    )
+    user_files_created_at = []
+    user_files_last_visit_at = []
     for file in user_files :
-        user_files_dates.append(file.getCreatedAt())
-        file.last_visit_at = str(file.last_visit_at)
+        user_files_created_at.append(file.getCreatedAt())
+        user_files_last_visit_at.append(file.getLastVisitAt())
 
     # User's files page display
     return render_template(
@@ -196,22 +201,23 @@ def files():
         title = "Mes fichiers",
         type = 'files',
         links = user_files,
-        links_dates = user_files_dates
+        links_created_at = user_files_created_at,
+        links_last_visit_at = user_files_last_visit_at
     )
 
 @user_bp.route('/files/<int:file_id>/toggle')
 @login_required
 def toggle_file(file_id : int):
     # Getting the file to toggle
-    file = File.query.filter_by(id = file_id, owner_id = session['user_id']).first()
+    file = Link.query.filter_by(id = file_id, owner_id = session['user_id']).first()
 
     # Redirecting to error page if user try to toggle a file they don't own
     if not file : return redirect(url_for('error.index'))
 
     # Toggling file state
     else:
-        file = File.query.filter_by(id = file_id).first()
-        file.toggleState()
+        file = Link.query.filter_by(id = file_id).first()
+        file.state = not file.state
         db.session.commit()
 
     # User's files page display
@@ -221,7 +227,7 @@ def toggle_file(file_id : int):
 @login_required
 def delete_file(file_id : int):
     # Getting the file to delete
-    file = File.query.filter_by(id = file_id, owner_id = session['user_id']).first()
+    file = Link.query.filter_by(id = file_id, owner_id = session['user_id']).first()
 
     # Redirecting to error page if user try to delete a file they don't own
     if not file : return redirect(url_for('error.index'))
@@ -231,12 +237,12 @@ def delete_file(file_id : int):
         # Deleting from the server
         file_path = join(
             AppInfos.upload_folder(),
-            file.getAttachedFileName()
+            file.original
         )
         if isfile(file_path) : remove(file_path)
 
         # Unregistering from the database
-        file = File.query.filter_by(id = file_id).delete()
+        file = Link.query.filter_by(id = file_id).delete()
         db.session.commit()
 
     # User's files page display
