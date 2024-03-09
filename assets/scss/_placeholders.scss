@@ -2,26 +2,34 @@
 %form{
     display: flex;
     font-size: 0.8rem;
-    border: 2px solid whitesmoke;
-    border-radius: 2rem;
+    border: $default_border;
+    border-radius: $default_rounding;
     height: 200px;
-    padding: 40px 50px 40px 50px;
+    padding: 50px 50px 45px 50px;
+    justify-content: center;
     input, button{
-        border: 2px solid whitesmoke;
-        border-radius: 2rem;
+        border: $default_border;
+        border-radius: $default_rounding;
         color: whitesmoke;
     }
-    button{
-        font-size: 0.8rem;
-        width: calc(100% - 50px);
+    p, button{
         align-self: center;
-        background-color: rgb(40, 50, 60);
+    }
+    button{
+        padding: $default_button_padding;
+        font-size: 0.8rem;
+        width: auto;
+        background-color: $button_main_color;
+    }
+    p{
+        padding: 0;
+        margin: 0;
     }
     input{
-        margin-top: 5px;
-        margin-bottom: 20px;
-        background-color: rgb(40, 50, 60);
-        height: 40px;
+        margin: 5px 0 20px 0;
+        background-color: $input_background_main_color;
+        min-height: 32px;
+        max-height: 32px;
         font-size: 0.8rem;
         width: 100%;
     }

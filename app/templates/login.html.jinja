@@ -1,7 +1,7 @@
 {% extends 'base.html.jinja' %}
 {% block main %}
 <h1>{{ title }}</h1>
-<form action="#" method="post" class="form" id="login-form">
+<form action="#" method="post" id="login-form">
     <label for="username">Nom d'utilisateur</label>
     <input type="text" name="username" id="username" required>
     <label for="password">Mot de passe</label>
@@ -9,4 +9,7 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <button type="submit">Connexion</button>
 </form>
+<aside>
+    Pas encore de compte ? <a href="{{ url_for('registration.index') }}">Inscrivez-vous !</a>
+</aside>
 {% endblock %}

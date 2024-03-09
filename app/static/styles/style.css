@@ -4,30 +4,38 @@
 /* Paddings */
 /* Flash message box */
 /* Forms */
-.form {
+form:not(#url_handle) {
   display: flex;
   font-size: 0.8rem;
   border: 2px solid whitesmoke;
   border-radius: 2rem;
   height: 200px;
-  padding: 40px 50px 40px 50px;
+  padding: 50px 50px 45px 50px;
+  justify-content: center;
 }
-.form input, .form button {
+form:not(#url_handle) input, form:not(#url_handle) button {
   border: 2px solid whitesmoke;
   border-radius: 2rem;
   color: whitesmoke;
 }
-.form button {
-  font-size: 0.8rem;
-  width: calc(100% - 50px);
+form:not(#url_handle) p, form:not(#url_handle) button {
   align-self: center;
-  background-color: rgb(40, 50, 60);
 }
-.form input {
-  margin-top: 5px;
-  margin-bottom: 20px;
+form:not(#url_handle) button {
+  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  width: auto;
+  background-color: rgb(22, 32, 42);
+}
+form:not(#url_handle) p {
+  padding: 0;
+  margin: 0;
+}
+form:not(#url_handle) input {
+  margin: 5px 0 20px 0;
   background-color: rgb(40, 50, 60);
-  height: 40px;
+  min-height: 32px;
+  max-height: 32px;
   font-size: 0.8rem;
   width: 100%;
 }
@@ -39,12 +47,15 @@
   color: whitesmoke;
 }
 
-body {
+html, body {
   height: 100vh;
   width: 100vw;
+  margin: 0;
+}
+
+body {
   background-color: rgb(30, 40, 50);
   position: absolute;
-  margin: 0;
 }
 
 main {
@@ -59,13 +70,33 @@ main p, main h1 {
 }
 
 h1 {
-  margin: 20px 0 0 0;
+  font-size: 2.15rem;
+  margin: 10px 0 10px 0;
 }
 
 a {
   color: whitesmoke;
 }
 
+button:hover {
+  background-color: #616161;
+}
+
+aside {
+  margin-top: 5px;
+}
+
+@media screen and (max-width: 600px) {
+  main {
+    padding: 0;
+  }
+  main h1 {
+    font-size: 0.9rem;
+  }
+  main p {
+    font-size: 0.8rem;
+  }
+}
 /* Navigation bar */
 nav {
   overflow: hidden;
@@ -257,7 +288,7 @@ label[for=file-or-link] {
 #url_handle button {
   border-radius: 2rem;
   border: 2px solid whitesmoke;
-  background: none;
+  background: rgb(30, 40, 50);
   aspect-ratio: 1;
   position: absolute;
   right: 0;
@@ -291,10 +322,21 @@ label[for=file-or-link] {
   display: none;
 }
 
+@media screen and (max-width: 600px) {
+  #url_handle input {
+    padding: 0;
+    width: 20px;
+  }
+  #url_handle button {
+    bottom: -100px;
+    left: 0;
+    margin: auto;
+  }
+}
 /* Forms */
 .separator {
   flex-basis: 0;
-  height: 80%;
+  height: 79%;
   align-self: center;
   margin: 0 20px 20px 30px;
   border: 1px solid whitesmoke;
@@ -306,23 +348,50 @@ label[for=file-or-link] {
 }
 
 #password-form {
-  height: 280px;
-}
-
-#profile-form > a, #password-form > a {
-  align-self: center;
-  margin-top: 10px;
+  height: 270px !important;
 }
 
 #register-form {
   width: 600px;
   flex-wrap: wrap;
 }
-#register-form #inputs-box {
+
+#inputs-container {
+  padding: 0;
+  margin: 0 0 -10px 0;
   display: flex;
   flex-direction: row;
 }
 
+@media screen and (max-width: 600px) {
+  form:not(#url_handle),
+  form:not(#url_handle) ~ aside {
+    max-width: 65vw;
+  }
+  form:not(#url_handle) ~ aside {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  #register-form {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: 400px !important;
+  }
+  #inputs-container {
+    padding: 0;
+    margin: 0;
+    display: inherit;
+    flex-direction: inherit;
+  }
+  .separator {
+    height: 0;
+    width: 89%;
+    margin: 0 0 15px 6px !important;
+    align-self: center;
+    margin: 0;
+    border: 1px solid whitesmoke;
+  }
+}
 /* Modals/dialog boxes */
 dialog {
   flex-wrap: wrap;
@@ -349,7 +418,7 @@ dialog::backdrop {
   border-radius: 2rem;
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
   text-decoration: none;
-  background-color: rgb(40, 50, 60);
+  background-color: rgb(22, 32, 42);
 }
 
 #dialog-confirm:hover, #dialog-confirm:focus {
@@ -551,12 +620,12 @@ dialog::backdrop {
     padding: 0;
   }
 }
-@media screen and (max-height: 750px) {
+@media screen and (max-height: 750px) and (max-width: 600px) {
   #flash-zone {
     min-height: 1vh;
   }
 }
-@media screen and (min-height: 900px) {
+@media screen and (min-height: 900px) and (max-width: 600px) {
   #flash-zone {
     min-height: 6vh;
   }
@@ -591,8 +660,8 @@ tbody tr:hover {
   color: #aa3939;
 }
 
-.td-original-filename {
-  max-width: 200px;
+.td-original {
+  max-width: 150px;
   overflow-x: auto;
   white-space: nowrap;
 }
@@ -603,7 +672,7 @@ tbody tr:hover {
 
 ::-webkit-scrollbar {
   height: 6px;
-  background-color: rgb(40, 50, 60);
+  background-color: rgb(22, 32, 42);
   border-radius: 2rem;
 }
 
@@ -612,6 +681,20 @@ tbody tr:hover {
   border-radius: 2rem;
 }
 
+@-moz-document url-prefix() {
+  tr:hover td:first-child, th:first-child {
+    border-radius: 2rem 0 0 2rem;
+  }
+  .td-short, .th-short {
+    min-width: 300px;
+  }
+  .td-original {
+    height: 50px;
+    display: block;
+    scrollbar-width: auto;
+    scrollbar-color: whitesmoke #616161;
+  }
+}
 /* Pagination bar */
 #pagination-bar {
   position: absolute;
@@ -655,6 +738,20 @@ footer img {
   height: auto;
   position: relative;
   top: 5px;
+}
+
+@media screen and (max-width: 600px) {
+  footer {
+    display: grid;
+    justify-items: center;
+  }
+  footer p {
+    font-size: 0.7rem;
+    display: inline-block;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

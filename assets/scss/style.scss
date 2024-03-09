@@ -8,12 +8,14 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     color: $font_main_color;
 }
-body{
+html, body{
     height: 100vh;
-    width: 100vw;  
+    width: 100vw;
+    margin: 0;
+}
+body{
     background-color: $background_color;
     position: absolute;
-    margin: 0;
 }
 main{
     display: flex;
@@ -26,10 +28,28 @@ main{
     }
 }
 h1{
-    margin: 20px 0 0 0;
+    font-size: 2.15rem;
+    margin: 10px 0 10px 0;
 }
 a{
     color: $font_main_color;
+}
+button:hover{
+    background-color: $default_hover_color;
+}
+aside{
+    margin-top: 5px;
+}
+@media screen and (max-width: 600px){
+    main{
+        padding: 0;
+        h1{
+            font-size: 0.9rem;
+        }
+        p{
+            font-size: 0.8rem;
+        }
+    }
 }
 
 /* Navigation bar */
@@ -212,7 +232,7 @@ label[for="file-or-link"]{
     button{
         border-radius: $default_rounding;
         border: $default_border;
-        background: none;
+        background: $background_color;
         aspect-ratio: 1;
         position: absolute;
         right: 0;
@@ -241,14 +261,27 @@ label[for="file-or-link"]{
 #file-or-link:not(:checked) ~ #to-upload{
     display: none;
 }
+@media screen and (max-width: 600px){
+    #url_handle{
+        input{
+            padding: 0;
+            width: 20px;
+        }
+        button{
+            bottom: -100px;
+            left: 0;
+            margin: auto
+        }
+    }
+}
 
 /* Forms */
-.form{
+form:not(#url_handle){
     @extend %form;
 }
 .separator{
     flex-basis: 0;
-    height: 80%;
+    height: 79%;
     align-self: center;
     margin: 0 20px 20px 30px;
     border: 1px solid whitesmoke;
@@ -258,18 +291,46 @@ label[for="file-or-link"]{
     flex-direction: column;
 }
 #password-form{
-    height: 280px;
-}
-#profile-form > a, #password-form > a{
-    align-self: center;
-    margin-top: 10px;
+    height: 270px !important;
 }
 #register-form{
     width: 600px;
     flex-wrap: wrap;
-    #inputs-box{
-        display: flex;
-        flex-direction: row;
+}
+#inputs-container{
+    padding: 0;
+    margin: 0 0 -10px 0;
+    display: flex;
+    flex-direction: row;
+}
+@media screen and (max-width: 600px){
+    form:not(#url_handle),
+    form:not(#url_handle) ~ aside
+    {
+        max-width: 65vw;
+    }
+    form:not(#url_handle) ~ aside{
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    #register-form{
+        flex-direction: column;
+        flex-wrap: nowrap;
+        height: 400px !important;
+    }
+    #inputs-container{
+        padding: 0;
+        margin: 0;
+        display: inherit;
+        flex-direction: inherit;
+    }
+    .separator{
+        height: 0;
+        width: 89%;
+        margin: 0 0 15px 6px !important;
+        align-self: center;
+        margin: 0;
+        border: 1px solid whitesmoke;
     }
 }
 
@@ -318,10 +379,16 @@ dialog::backdrop{
 @media screen and (max-width: 600px){
     #flash-zone{padding: 0;}
 }
-@media screen and (max-height: 750px){
+@media screen
+and (max-height: 750px)
+and (max-width: 600px)
+{
     #flash-zone{min-height: 1vh;}
 }
-@media screen and (min-height: 900px){
+@media screen
+and (min-height: 900px)
+and (max-width: 600px)
+{
     #flash-zone{min-height: 6vh;}
 }
 
@@ -348,8 +415,8 @@ tbody tr:hover{
 .delete-action{
     color: #aa3939;
 }
-.td-original-filename{
-    max-width: 200px;
+.td-original{
+    max-width: 150px;
     overflow-x: auto;
     white-space: nowrap;
 }
@@ -364,6 +431,20 @@ tbody tr:hover{
 ::-webkit-scrollbar-thumb{
     background: whitesmoke;
     border-radius: $default_rounding;
+}
+@-moz-document url-prefix(){
+    tr:hover td:first-child, th:first-child{
+        border-radius: 2rem 0 0 2rem;
+    }
+    .td-short, .th-short{
+        min-width: 300px;
+    }
+    .td-original{
+        height: 50px;
+        display: block;
+        scrollbar-width: auto;
+        scrollbar-color: whitesmoke $default_hover_color;
+    }
 }
 
 /* Pagination bar */
@@ -404,5 +485,18 @@ footer{
         height: auto;
         position: relative;
         top: 5px;
+    }
+}
+@media screen and (max-width: 600px){
+    footer{
+        display: grid;
+        justify-items: center;
+        p{
+            font-size: 0.7rem;
+            display: inline-block;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
     }
 }
