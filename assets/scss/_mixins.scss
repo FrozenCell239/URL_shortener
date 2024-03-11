@@ -36,6 +36,9 @@
     button:hover{
         color: rgb(172, 16, 16);
     }
+    @media screen and (max-width: 480px){
+        max-width: 87vw;
+    }
     @-moz-document url-prefix(){
         button{
             font-size: 1.55rem;

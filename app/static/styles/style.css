@@ -86,7 +86,7 @@ aside {
   margin-top: 5px;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 480px) {
   main {
     padding: 0;
   }
@@ -173,7 +173,7 @@ nav a:hover,
   padding: 10px 30px 10px 30px;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 480px) {
   .nav-dropdown, nav a {
     float: right;
   }
@@ -181,7 +181,7 @@ nav a:hover,
     float: left;
   }
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 480px) {
   nav {
     margin-bottom: 120px;
   }
@@ -322,7 +322,7 @@ label[for=file-or-link] {
   display: none;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 480px) {
   #url_handle input {
     padding: 0;
     width: 20px;
@@ -363,7 +363,7 @@ label[for=file-or-link] {
   flex-direction: row;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 480px) {
   form:not(#url_handle),
   form:not(#url_handle) ~ aside {
     max-width: 65vw;
@@ -473,6 +473,11 @@ dialog::backdrop {
 .danger-flash button:hover {
   color: rgb(172, 16, 16);
 }
+@media screen and (max-width: 480px) {
+  .danger-flash {
+    max-width: 87vw;
+  }
+}
 @-moz-document url-prefix() {
   .danger-flash button {
     font-size: 1.55rem;
@@ -517,6 +522,11 @@ dialog::backdrop {
 }
 .info-flash button:hover {
   color: rgb(172, 16, 16);
+}
+@media screen and (max-width: 480px) {
+  .info-flash {
+    max-width: 87vw;
+  }
 }
 @-moz-document url-prefix() {
   .info-flash button {
@@ -563,6 +573,11 @@ dialog::backdrop {
 .warning-flash button:hover {
   color: rgb(172, 16, 16);
 }
+@media screen and (max-width: 480px) {
+  .warning-flash {
+    max-width: 87vw;
+  }
+}
 @-moz-document url-prefix() {
   .warning-flash button {
     font-size: 1.55rem;
@@ -608,6 +623,11 @@ dialog::backdrop {
 .success-flash button:hover {
   color: rgb(172, 16, 16);
 }
+@media screen and (max-width: 480px) {
+  .success-flash {
+    max-width: 87vw;
+  }
+}
 @-moz-document url-prefix() {
   .success-flash button {
     font-size: 1.55rem;
@@ -615,17 +635,17 @@ dialog::backdrop {
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 480px) {
   #flash-zone {
     padding: 0;
   }
 }
-@media screen and (max-height: 750px) and (max-width: 600px) {
+@media screen and (max-height: 750px) and (max-width: 480px) {
   #flash-zone {
     min-height: 1vh;
   }
 }
-@media screen and (min-height: 900px) and (max-width: 600px) {
+@media screen and (min-height: 900px) and (max-width: 480px) {
   #flash-zone {
     min-height: 6vh;
   }
@@ -740,7 +760,7 @@ footer img {
   top: 5px;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 480px) {
   footer {
     display: grid;
     justify-items: center;
