@@ -113,7 +113,10 @@ def links():
 
     # Getting user's links
     user_links = (Link.query
-        .filter_by(owner_id = session['user_id'])
+        .filter_by(
+            link_type = 'link',
+            owner_id = session['user_id']
+        )
         .order_by(Link.id)
         .paginate(
             page = selected_page,
@@ -181,7 +184,10 @@ def files():
 
     # Getting user's files
     user_files = (Link.query
-        .filter_by(owner_id = session['user_id'])
+        .filter_by(
+            link_type = 'file',
+            owner_id = session['user_id']
+        )
         .order_by(Link.id)
         .paginate(
             page = selected_page,
