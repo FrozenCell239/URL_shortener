@@ -1,6 +1,8 @@
 from os import urandom, environ
 from datetime import timedelta
 
+DOMAIN_NAME = environ.get('DOMAIN_NAME')
+
 class AppInfos :
     """
     Contains somes informations about the app that the app often needs to work properly and might be modified fastly later when needed if so.\n
@@ -33,7 +35,7 @@ class AppInfos :
     def web_app_name() -> str : return "Easy Link"
 
     @staticmethod
-    def domain_name() -> str : return 'http://localhost:8052/'
+    def domain_name() -> str : return f'http://{DOMAIN_NAME}/'
 
     @staticmethod
     def allowed_extensions() -> list[str] :
@@ -58,7 +60,7 @@ class AppInfos :
             # Allowed video file formats
             'mp4', 'avi',
 
-            # Allowed zipped file formats
+            # Allowed compressed file formats
             'zip', 'rar', 'tar', 'gz', '7z'
         ]
     
@@ -104,7 +106,7 @@ class Config :
     # Security config
     SECRET_KEY = environ.get('SECRET_KEY')\
         or urandom(32).hex()
-    PERMANENT_SESSION_LIFETIME = timedelta(minutes=10)
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes = 10)
 
     # Database config
     SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URI')
