@@ -78,3 +78,45 @@ function disableUserEditForm(){
     document.getElementById('buttons-separator').setAttribute('hidden', true)
     document.getElementById('edit').removeAttribute('hidden');
 };
+
+// Cards carousel
+const next = document.getElementById('next-slide');
+const previous = document.getElementById('previous-slide');
+const slide_counter = document.getElementById('current-slide');
+let cards = document.querySelectorAll('#slider .link-card');
+let active = 0;
+
+function loadShow(){
+    let state = 0;
+    cards[active].style.transform = 'none';
+    cards[active].style.zIndex = 1;
+    cards[active].style.filter = 'none';
+    cards[active].style.opacity = 1;
+    for(let i = active + 1; i < cards.length; i++){
+        state++;
+        cards[i].style.transform = `translateX(${160 * state}px) scale(${1 - 0.2 * state}) perspective(16px)`;
+        cards[i].style.zIndex = -state;
+        cards[i].style.filter = 'blur(5px)';
+        cards[i].style.opacity = state > 2 ? 0 : 0.6;
+    };
+    state = 0;
+    for(let i = active - 1; i >= 0; i--){
+        state++;
+        cards[i].style.transform = `translateX(${-160 * state}px) scale(${1 - 0.2 * state}) perspective(16px)`;
+        cards[i].style.zIndex = -state;
+        cards[i].style.filter = 'blur(5px)';
+        cards[i].style.opacity = state > 2 ? 0 : 0.6;
+    };
+};
+
+loadShow();
+next.onclick = function(){
+    active = active + 1 < cards.length ? active + 1 : active;
+    slide_counter.innerText = (active + 1).toString();
+    loadShow();
+};
+previous.onclick = function(){
+    active = active - 1 >= 0 ? active - 1 : active;
+    slide_counter.innerText = (active + 1).toString();
+    loadShow();
+};

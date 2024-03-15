@@ -107,10 +107,6 @@ def password():
 @user_bp.route('/links')
 @login_required
 def links():
-    # Getting selected page number from GET
-    selected_page = request.args.get('page', 1, int)
-    if selected_page < 1 : selected_page = 1
-
     # Getting user's links
     user_links = (Link.query
         .filter_by(
@@ -118,10 +114,7 @@ def links():
             owner_id = session['user_id']
         )
         .order_by(Link.id)
-        .paginate(
-            page = selected_page,
-            per_page = AppInfos.default_per_page()
-        )
+        .all()
     )
     user_links_created_at = []
     user_links_last_visit_at = []
@@ -178,10 +171,6 @@ def delete_link(link_id : int):
 @user_bp.route('/files')
 @login_required
 def files():
-    # Getting selected page number from GET
-    selected_page = request.args.get('page', 1, int)
-    if selected_page < 1 : selected_page = 1
-
     # Getting user's files
     user_files = (Link.query
         .filter_by(
@@ -189,10 +178,7 @@ def files():
             owner_id = session['user_id']
         )
         .order_by(Link.id)
-        .paginate(
-            page = selected_page,
-            per_page = AppInfos.default_per_page()
-        )
+        .all()
     )
     user_files_created_at = []
     user_files_last_visit_at = []

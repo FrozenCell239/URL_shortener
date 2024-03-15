@@ -1,0 +1,11 @@
+@keyframes horizontal-text-scroll{
+    0%, 20%{
+        transform: translateX(0);
+    }
+    60%, 90%{
+        transform: translateX(-70%);
+    }
+    100%{
+        transform: translateX(0);
+    }
+}

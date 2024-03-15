@@ -85,9 +85,6 @@ class AppInfos :
     @staticmethod
     def password_limits() -> str : return '200/day;100/hour;20/minute'
 
-    @staticmethod
-    def default_per_page() -> int : return 4
-
 class Config :
     """
     Contains the app's configuration.\n

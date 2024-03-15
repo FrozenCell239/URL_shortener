@@ -1,6 +1,7 @@
 @import './_variables.scss';
 @import './_mixins.scss';
 @import './_placeholders.scss';
+@import './animations.scss';
 
 /* Generals */
 :root{
@@ -397,58 +398,122 @@ and (max-width: 480px)
     #flash-zone{min-height: 6vh;}
 }
 
-/* Links tables */
-table{
-    text-align: center;
-    border-collapse: collapse;
+/* Link infos cards */
+#slider-container{
+    position: absolute;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#slider{
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    overflow: hidden;
+}
+.link-card{
+    position: absolute;
+    width: 300px;
+    text-align: justify;
+    height: 320px;
+    background-color: rgb(40, 50, 60);
+    transition: 0.5s;
+    left: calc(50% - 250px);
+    top: 0;
+    border: $default_border;
+    border-radius: $default_rounding;
+    padding: 20px 30px 20px 30px;
+}
+td, th{
+    padding: 10px 0 10px 15px;
+    border-radius: $default_rounding;
+}
+th{
+    min-width: 200px;
+    margin-right: 10px;
+}
+#previous-slide, #next-slide{
+    position: absolute;
+    top: 30%;
+    color: whitesmoke;
+    background-color: transparent;
+    border: none;
+    font-size: 4rem;
+    font-family: monospace;
+    font-weight: bold;
+    left: 50px;
+    z-index: 10;
+}
+#next-slide{
+    left: unset;
+    right: 50px;
+}
+#slides-counter{
+    position: absolute;
+    bottom: 7vh;
 }
 th{
     background-color: #061639;
 }
-tr:hover td:first-child, th:first-child{
-    border-radius: 2rem 0 0 2rem;
-}
-tr:hover td:last-child, th:last-child{
-    border-radius: 0 2rem 2rem 0;
-}
-td, th{
-    padding: 10px 15px 10px 15px;
-}
-tbody tr:hover{
-    background-color: $default_hover_color;
-}
 .delete-action{
     color: #aa3939;
 }
-.td-original{
-    max-width: 150px;
-    overflow-x: auto;
+.td-original, .td-short{
+    min-width: 200px;
+    overflow: hidden;
+    position: relative;
+}
+.td-actions{
+    margin: 0;
+    padding: 5px 0 0 0;
+    text-align: center;
+}
+.scrolling-text{
+    animation: horizontal-text-scroll 15s linear 0s infinite normal none;
     white-space: nowrap;
+    position: absolute;
+    top: 20%;
 }
-.td-date{
-    min-width: 150px;
-}
-::-webkit-scrollbar{
-    height: 6px;
-    background-color: $button_main_color;
-    border-radius: $default_rounding;
-}
-::-webkit-scrollbar-thumb{
-    background: whitesmoke;
-    border-radius: $default_rounding;
-}
-@-moz-document url-prefix(){
-    tr:hover td:first-child, th:first-child{
-        border-radius: 2rem 0 0 2rem;
+@media screen and (max-width: 480px){
+    #previous-slide, #next-slide{
+        top: unset;
+        bottom: 17vh;
+        color: whitesmoke;
+        font-size: 2rem;
+        font-family: monospace;
+        font-weight: bold;
+        left: 50px;
+        z-index: 10;
     }
-    .td-short, .th-short{
-        min-width: 300px;
+    #next-slide{
+        left: unset;
+        right: 50px;
     }
-    .td-original{
-        height: 50px;
-        display: block;
-        scrollbar-width: auto;
-        scrollbar-color: whitesmoke $default_hover_color;
+    #slides-counter{
+        position: absolute;
+        bottom: 14vh;
+        font-size: 1.2rem;
+    }
+    .td-original,
+    .td-short,
+    .td-last-visit,
+    .td-date{
+        min-width: 10px;
+    }
+    .link-card{
+        width: 100vw;
+        left: 0;
+        right: 0;
+        font-size: smaller;
+    }
+}
+@media screen and (max-width: 410px){
+    .link-card{
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: small;
     }
 }
 
