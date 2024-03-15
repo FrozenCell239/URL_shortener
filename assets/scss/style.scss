@@ -362,6 +362,11 @@ dialog::backdrop{
 #dialog-confirm:hover, #dialog-confirm:focus{
     background-color: $default_hover_color;
 }
+@media screen and (max-width: 480px){
+    dialog{
+        width: 75vw;
+    }
+}
 
 /* Flash message boxes */
 #flash-zone{
