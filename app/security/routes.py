@@ -2,11 +2,11 @@ from app.extensions import limiter
 from app.security import security_bp
 from app.models.user import User
 from app.utils import logout_required, login_required
-from config import AppInfos
+from config import Config
 from flask import render_template, redirect, url_for, flash, request, session
 
 @security_bp.route('/login', methods = ['POST', 'GET'])
-@limiter.limit(AppInfos.password_limits())
+@limiter.limit(Config.PASSWORD_LIMITS)
 @logout_required
 def login():
     # Login form handling

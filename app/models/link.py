@@ -1,6 +1,6 @@
 from app.extensions import db
 from random import choice
-from config import AppInfos
+from config import Config
 from sqlalchemy.sql import func
 from validators import url
 
@@ -28,15 +28,15 @@ class Link(db.Model):
         owner_id : int,
         link_type : str,
         original : str,
-        short_length : int = AppInfos.link_lengths('default')
+        short_length : int = Config.DEFAULT_LINK_LENGTH
     ) -> None :
-        if short_length < AppInfos.link_lengths('min') :
+        if short_length < Config.MIN_LINK_LENGTH :
             raise ValueError(
-                f'Too short length. Minimum is {AppInfos.link_lengths('min')}.'
+                f'Too short length. Minimum is {Config.MIN_LINK_LENGTH}.'
             )
-        if short_length > AppInfos.link_lengths('max') :
+        if short_length > Config.MAX_LINK_LENGTH :
             raise ValueError(
-                f'Too long length. Maximum is {AppInfos.link_lengths('max')}.'
+                f'Too long length. Maximum is {Config.MAX_LINK_LENGTH}.'
             )
         if original is None :
             raise ValueError('Original cannot be empty.')
@@ -80,7 +80,7 @@ class Link(db.Model):
     @staticmethod
     def isFileFormatAllowed(filename : str) -> bool :
         return '.' in filename and \
-            filename.rsplit('.', 1)[1].lower() in AppInfos.allowed_extensions()
+            filename.rsplit('.', 1)[1].lower() in Config.UPLOAD_EXTENSIONS
 
     # Original link's validity checker
     @staticmethod

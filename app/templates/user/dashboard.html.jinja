@@ -20,7 +20,7 @@
                     <th class="th-short">Raccourci</th>
                     <td class="td-short">
                         <span class="scrolling-text">
-                            <a href='{{ domain_name ~ link.short }}'>{{ domain_name ~ link.short }}</a>
+                            <a href='{{ domain_name ~ link.short }}'>https://{{ domain_name ~ link.short }}</a>
                         </span>
                     </td>
                 <tr>
@@ -36,9 +36,9 @@
                     <th class="th-original">{{ "Lien original" if type == 'links' else "Nom du fichier" }}</th>
                     <td class="td-original">
                         <span class="scrolling-text">
-                            {{ "<a href=\"" ~ link.original ~ "\">" if link. original else "" }}
+                            {{ "<a href=\"" ~ link.original ~ "\">" if type == 'links' else "" }}
                             {{ link.original or link.attached_file_name }}
-                            {{ "</a>" if link. original else "" }}
+                            {{ "</a>" if type == 'links' else "" }}
                         </span>
                     </td>
                 <tr>

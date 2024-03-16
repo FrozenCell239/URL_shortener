@@ -2,7 +2,7 @@ from app.extensions import db
 from app.main import main_bp
 from app.models.link import Link
 from app.models.user import User
-from config import AppInfos
+from config import Config
 from datetime import datetime, timezone
 from os import makedirs
 from os.path import join, isdir, isfile
@@ -77,7 +77,7 @@ def index(requested_link : str = None):
                     <a
                         href="#"
                         id="new-link"
-                        onclick="toClipboard('{AppInfos.domain_name() + new_link.short}')"
+                        onclick="toClipboard('{Config.DOMAIN_NAME + new_link.short}')"
                     >
                         Copier
                     </a>
@@ -102,10 +102,10 @@ def index(requested_link : str = None):
             # File upload if no error occured
             if errors == [] :
                 # Creating the uploads directory if it doesn't exist
-                if not isdir(AppInfos.upload_folder()) : makedirs(AppInfos.upload_folder())
+                if not isdir(Config.UPLOAD_FOLDER) : makedirs(Config.UPLOAD_FOLDER)
 
                 # Saving the file on the server
-                new_upload.save(join(AppInfos.upload_folder(), new_filename))
+                new_upload.save(join(Config.UPLOAD_FOLDER, new_filename))
 
                 # Registering the file in the database
                 new_file_link = Link(
@@ -123,7 +123,7 @@ def index(requested_link : str = None):
                     <a
                         href="#"
                         id="new-link"
-                        onclick="toClipboard('{AppInfos.domain_name()}dl/{new_file_link.short}')"
+                        onclick="toClipboard('{Config.DOMAIN_NAME}dl/{new_file_link.short}')"
                     >
                         Copier le lien
                     </a>
@@ -150,7 +150,7 @@ def index(requested_link : str = None):
 
     # Main page display with errors if some occured
     for error in errors : flash(error, 'danger')
-    return render_template('index.html.jinja', title = AppInfos.web_app_name())
+    return render_template('index.html.jinja', title = Config.WEB_APP_NAME)
 
 @main_bp.route('/dl/<string:requested_file>')
 def download(requested_file : str = None):
@@ -163,14 +163,14 @@ def download(requested_file : str = None):
     # Sending the file if it exists and is not disabled
     if file and file.link_type == 'file' and file.state :
         # Checking if the file still exists on the server
-        if not isfile(f'{AppInfos.upload_folder()}/{file.original}') :
+        if not isfile(f'{Config.UPLOAD_FOLDER}/{file.original}') :
             return redirect(url_for('error.index', error_type = 'FILE_NOT_FOUND'))
 
         # Sending the file to the user
         file.clicks += 1
         db.session.commit()
         return send_from_directory(
-            '../' + AppInfos.upload_folder(),
+            '../' + Config.UPLOAD_FOLDER,
             file.original,
             as_attachment = True
         )
@@ -184,7 +184,7 @@ def download(requested_file : str = None):
 @main_bp.errorhandler(RequestEntityTooLarge)
 def max_upload_size_exceeded(e):
     flash(
-        f"Fichier trop volumineux. Taille max supportée : {AppInfos.max_upload_size(str)}.",
+        f"Fichier trop volumineux. Taille max supportée : {Config.MAX_UPLOAD_SIZE}.",
         'danger'
     )
     return redirect(url_for('main.index'))

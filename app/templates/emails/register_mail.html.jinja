@@ -2,7 +2,7 @@
 <hr>
 <p>Bonjour {{ infos.username }} !</p>
 <p>
-    Afin d'utiliser notre service de manière optimale, vous devez confirmer votre inscription en cliquant <a href="{{ domain_name[:-1] ~ url_for('registration.verify_user', token = infos.token) }}">ici</a>.
+    Afin d'utiliser notre service de manière optimale, vous devez confirmer votre inscription en cliquant <a href="https://{{ domain_name[:-1] ~ url_for('registration.verify_user', token = infos.token) }}">ici</a>.
 </p>
 <p style="font-style: italic;">
     Notez que ce lien expire dans {{ infos.token_validity_time }} heures.

@@ -1,5 +1,5 @@
 from app.extensions import mailer
-from config import Config, AppInfos
+from config import Config
 from datetime import datetime, timedelta, timezone
 from flask import flash, redirect, url_for, render_template, session
 from flask_mail import Message
@@ -49,7 +49,7 @@ def sendMail(
             recipients = [to],
             html = render_template(
                 template_path,
-                domain_name = AppInfos.domain_name(),
+                domain_name = Config.DOMAIN_NAME,
                 infos = infos
             )
         )

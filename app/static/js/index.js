@@ -33,7 +33,7 @@ function closeDialog(){
 
 // Exporting the new link to user's clipboard
 function toClipboard(new_link){
-    navigator.clipboard.writeText(new_link);
+    navigator.clipboard.writeText(`https://${new_link}`);
     document.getElementById('new-link').innerText = "Copié !";
 };
 

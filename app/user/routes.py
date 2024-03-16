@@ -4,7 +4,7 @@ from app.utils import login_required
 from app.extensions import db, limiter
 from app.models.user import User
 from app.models.link import Link
-from config import AppInfos
+from config import Config
 from os import remove
 from os.path import join, isfile
 
@@ -60,7 +60,7 @@ def profile():
     )
 
 @user_bp.route('/password', methods = ['POST', 'GET'])
-@limiter.limit(AppInfos.password_limits())
+@limiter.limit(Config.PASSWORD_LIMITS)
 @login_required
 def password():
     # Register form handling
@@ -125,7 +125,7 @@ def links():
     # User's links page display
     return render_template(
         'user/dashboard.html.jinja',
-        domain_name = AppInfos.domain_name(),
+        domain_name = Config.DOMAIN_NAME,
         title = "Mes liens",
         type = 'links',
         links = user_links,
@@ -189,7 +189,7 @@ def files():
     # User's files page display
     return render_template(
         'user/dashboard.html.jinja',
-        domain_name = AppInfos.domain_name(),
+        domain_name = Config.DOMAIN_NAME,
         title = "Mes fichiers",
         type = 'files',
         links = user_files,
@@ -228,7 +228,7 @@ def delete_file(file_id : int):
     else:
         # Deleting from the server
         file_path = join(
-            AppInfos.upload_folder(),
+            Config.UPLOAD_FOLDER,
             file.original
         )
         if isfile(file_path) : remove(file_path)
