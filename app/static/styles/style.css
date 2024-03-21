@@ -797,29 +797,6 @@ th {
     font-size: small;
   }
 }
-/* Pagination bar */
-#pagination-bar {
-  position: absolute;
-  bottom: 90px;
-}
-
-#pagination-bar a {
-  text-decoration: none;
-}
-
-#pagination-bar span, #pagination-bar a {
-  border-radius: 2rem;
-  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-}
-
-#pagination-bar a:hover {
-  background-color: #616161;
-}
-
-#current-page {
-  border: 2px solid whitesmoke;
-}
-
 /* Footer */
 footer {
   position: absolute;

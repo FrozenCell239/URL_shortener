@@ -517,25 +517,6 @@ th{
     }
 }
 
-/* Pagination bar */
-#pagination-bar{
-    position: absolute;
-    bottom: 90px;
-}
-#pagination-bar a{
-    text-decoration: none;
-}
-#pagination-bar span, #pagination-bar a{
-    border-radius: $default_rounding;
-    padding: $default_button_padding;
-}
-#pagination-bar a:hover{
-    background-color: $default_hover_color;
-}
-#current-page{
-    border: $default_border;
-}
-
 /* Footer */
 footer{
     position: absolute;
