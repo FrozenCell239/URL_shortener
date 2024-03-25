@@ -17,51 +17,7 @@
     <body>
         <header>
             {% block header %}
-            <nav class="navbar">
-                <a href="{{ url_for('main.index') }}" id="logo">Easy Link</a>
-                {% if session.username %}
-                    <a href="{{ url_for('security.logout') }}">Déconnexion</a>
-                    <div class="nav-dropdown">
-                        <button class="nav-dropbtn">
-                            Mes infos
-                            <img
-                                class="nav-dropdown-icon"
-                                src="{{ url_for('static', filename = 'icons/dropdown-icon.svg') }}"
-                                alt="Dropdown icon."
-                            >
-                        </button>
-                        <div class="nav-dropdown-content">
-                            {% if self._TemplateReference__context.name != "user/profile.html.jinja" %}
-                            <a href="{{ url_for('user.profile') }}">Profil</a>
-                            {% endif %}
-                            {% if self._TemplateReference__context.name != "user/password.html.jinja" %}
-                            <a href="{{ url_for('user.password') }}">Mot de passe</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% if self._TemplateReference__context.name != "user/files.html.jinja" %}
-                    <a href="{{ url_for('user.files') }}">Mes fichiers</a>
-                    {% endif %}
-                    {% if self._TemplateReference__context.name != "user/links.html.jinja" %}
-                    <a href="{{ url_for('user.links') }}">Mes liens</a>
-                    {% endif %}
-                {% else %}
-                    {% if self._TemplateReference__context.name != "login.html.jinja" %}
-                    <a href="{{ url_for('security.login') }}">Se connecter</a>
-                    {% endif %}
-                    {% if self._TemplateReference__context.name != "register.html.jinja" %}
-                    <a href="{{ url_for('registration.index') }}">S'inscrire</a>
-                    {% endif %}
-                {% endif %}
-                <a
-                    href="#"
-                    style="font-size:15px;"
-                    id="nav-menu-icon"
-                    onclick="responsiveMenuDisplay()"
-                >
-                    &#9776;
-                </a>
-            </nav>
+                {% include './_partials/_navbar.html.jinja' %}
             {% endblock %}
             <div id="flash-zone">
             {% with messages = get_flashed_messages(with_categories = true) %}
@@ -79,13 +35,7 @@
             {% block main %}{% endblock %}
         </main>
         <footer>
-            <p>Ce service est gratuit et...&nbsp;<a href="https://github.com/FrozenCell239/URL_shortener">open source</a>&nbsp;! =]</p>
-            <p>
-                Fait avec &#10084;, mais aussi avec&nbsp;
-                <span><img src="{{ url_for('static', filename = 'icons/flask-original.svg') }}" alt="Flask"></span>,&nbsp;
-                <span><img src="{{ url_for('static', filename = 'icons/postgresql-original.svg') }}" alt="PostGreSQL"></span>, et&nbsp;
-                <span><img src="{{ url_for('static', filename = 'icons/sass-original.svg') }}" alt="Sass"></span>&nbsp;!
-            </p>
+            {% include './_partials/_footer.html.jinja' %}
         </footer>
     </body>
 </html>

@@ -1,0 +1,33 @@
+<nav class="navbar">
+    <a href="{{ url_for('main.index') }}" id="logo">Easy Link</a>
+    {% if session.username %}
+        <a href="{{ url_for('security.logout') }}">Déconnexion</a>
+        <div class="nav-dropdown">
+            <button class="nav-dropbtn">
+                Mes infos
+                <img
+                    class="nav-dropdown-icon"
+                    src="{{ url_for('static', filename = 'icons/dropdown-icon.svg') }}"
+                    alt="Dropdown icon."
+                >
+            </button>
+            <div class="nav-dropdown-content">
+                <a href="{{ url_for('user.profile') }}">Profil</a>
+                <a href="{{ url_for('user.password') }}">Mot de passe</a>
+            </div>
+        </div>
+        <a href="{{ url_for('user.files') }}">Mes fichiers</a>
+        <a href="{{ url_for('user.links') }}">Mes liens</a>
+    {% else %}
+        <a href="{{ url_for('security.login') }}">Se connecter</a>
+        <a href="{{ url_for('registration.index') }}">S'inscrire</a>
+    {% endif %}
+    <a
+        href="#"
+        style="font-size:15px;"
+        id="nav-menu-icon"
+        onclick="responsiveMenuDisplay()"
+    >
+        &#9776;
+    </a>
+</nav>
