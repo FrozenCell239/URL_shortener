@@ -1,5 +1,5 @@
-from flask import render_template, request
 from app.error import error_bp
+from flask import render_template, request
 
 @error_bp.route('/', methods = ['GET'])
 def index():

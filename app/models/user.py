@@ -1,6 +1,6 @@
 from app.extensions import db, bcrypt
-from sqlalchemy.sql import func
 from re import search
+from sqlalchemy.sql import func
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)

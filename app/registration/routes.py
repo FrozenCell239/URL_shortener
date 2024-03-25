@@ -2,6 +2,7 @@ from app.extensions import db, limiter
 from app.models.user import User
 from app.registration import registration_bp
 from app.utils import JWT, sendMail, logout_required, login_required
+from config import Config
 from flask import render_template, redirect, url_for, flash, request, session
 
 @registration_bp.route('/register', methods = ['POST', 'GET'])
@@ -52,7 +53,7 @@ def index():
                 token_validity_time = 24
                 sendMail(
                     to = user.mail,
-                    subject = "EasyLink : Activation de votre compte",
+                    subject = f"{Config.WEB_APP_NAME} : Activation de votre compte",
                     template_path = 'emails/register_mail.html.jinja',
                     infos = {
                         'username' : user.username.title(),
@@ -118,7 +119,7 @@ def resend_verification():
             token_validity_time : float = 24
             sendMail(
                 to = user.mail,
-                subject = "EasyLink : activation de votre compte",
+                subject = f"{Config.WEB_APP_NAME} : Activation de votre compte",
                 template_path = 'emails/register_mail.html.jinja',
                 infos = {
                     'username' : user.username.title(),

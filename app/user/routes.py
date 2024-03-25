@@ -1,10 +1,10 @@
-from flask import render_template, flash, redirect, url_for, request, session
+from app.extensions import db, limiter
+from app.models.link import Link
+from app.models.user import User
 from app.user import user_bp
 from app.utils import login_required
-from app.extensions import db, limiter
-from app.models.user import User
-from app.models.link import Link
 from config import Config
+from flask import render_template, flash, redirect, url_for, request, session
 from os import remove
 from os.path import join, isfile
 

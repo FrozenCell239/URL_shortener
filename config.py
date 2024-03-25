@@ -1,5 +1,5 @@
-from os import urandom, environ
 from datetime import timedelta
+from os import urandom, environ
 
 class Config :
     """

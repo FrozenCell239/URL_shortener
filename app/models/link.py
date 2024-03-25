@@ -1,6 +1,6 @@
 from app.extensions import db
-from random import choice
 from config import Config
+from random import choice
 from sqlalchemy.sql import func
 from validators import url
 
