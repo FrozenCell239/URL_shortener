@@ -6,6 +6,7 @@ from flask_mail import Message
 from functools import wraps
 from jwt import encode, decode
 
+# Decorators
 def login_required(route):
     """
     When applied to a route as a decorator, redirects the user to login page if they're not logged in.
@@ -33,6 +34,7 @@ def logout_required(route):
 
     return decorated_route
 
+# Microservices
 def sendMail(
     to : str,    
     subject : str,
