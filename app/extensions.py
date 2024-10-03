@@ -1,3 +1,5 @@
+from os import getenv
+
 # SQLAlchemy for database
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
@@ -13,7 +15,7 @@ limiter = Limiter(
     get_remote_address,
 
     # Memcached options
-    storage_uri = 'memcached://localhost:11211',
+    storage_uri = getenv('CACHE_STORAGE_URI'),
     storage_options = {}
 
     # Redis options
