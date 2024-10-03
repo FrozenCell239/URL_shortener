@@ -39,17 +39,17 @@ def index():
 
         # New user registering if no error occured
         if errors == [] :
-            try:
-                # Register user into the database
-                user = User(
-                    request.form['username'],
-                    request.form['mail']
-                )
-                user.setPassword(request.form['password'])
-                db.session.add(user)
-                db.session.commit()
+            # Register user into the database
+            user = User(
+                request.form['username'],
+                request.form['mail']
+            )
+            user.setPassword(request.form['password'])
+            db.session.add(user)
+            db.session.commit()
 
-                # Sending verification mail to user
+            # Sending verification mail to user
+            try:
                 token_validity_time = 24
                 sendMail(
                     to = user.mail,
@@ -66,18 +66,18 @@ def index():
                 )
             except:
                 flash(
-                    "Un problème est survenu lors de la création de votre compte. Veuillez réessayer ultérieurement.",
+                    "Un problème est survenu lors de l'envoi du mail de vérification de votre compte." + \
+                    "&nbsp;Veuillez réessayer ultérieurement.",
                     'danger'
                 )
-                return redirect(url_for('registration.index'))
-            else:
-                # Automatically log-in the user
-                session.permanent = True
-                session['user_id'] = (User.query.filter_by(mail = user.mail).first()).id
-                session['username'] = user.username
 
-                # Redirecting user to main page
-                return redirect(url_for('main.index'))
+            # Automatically log in the user
+            session.permanent = True
+            session['user_id'] = (User.query.filter_by(mail = user.mail).first()).id
+            session['username'] = user.username
+
+            # Redirecting user to main page
+            return redirect(url_for('main.index'))
         
     # Register page display with errors if some occured
     for error in errors : flash(error, 'danger')
@@ -115,7 +115,7 @@ def resend_verification():
     # Sending verification mail to user if still not verified
     if not user.is_verified :
         try:
-            # Sending verification mail to user
+            # Attempting to send verification mail to user
             token_validity_time : float = 24
             sendMail(
                 to = user.mail,
@@ -132,7 +132,8 @@ def resend_verification():
             )
         except:
             flash(
-                "Un problème est survenu lors du renvoi du mail. Veuillez réessayer ultérieurement.",
+                "Un problème est survenu lors du renvoi du mail." + \
+                "&nbsp;Veuillez réessayer ultérieurement.",
                 'danger'
             )
             return redirect(url_for('registration.index'))
