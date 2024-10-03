@@ -1,5 +1,5 @@
 from datetime import timedelta
-from os import urandom, environ
+from os import urandom, getenv
 
 class Config :
     """
@@ -17,13 +17,13 @@ class Config :
         )
 
     # Security configuration
-    SECRET_KEY : str = environ.get('SECRET_KEY')\
+    SECRET_KEY : str = getenv('SECRET_KEY')\
         or urandom(32).hex()
     PERMANENT_SESSION_LIFETIME : timedelta = timedelta(minutes = 10)
-    PASSWORD_LIMITS : str = environ.get('PASSWORD_LIMITS')
+    PASSWORD_LIMITS : str = getenv('PASSWORD_LIMITS')
 
     # Database configuration
-    SQLALCHEMY_DATABASE_URI : str = environ.get('DATABASE_URI')
+    SQLALCHEMY_DATABASE_URI : str = getenv('DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS : bool = False
 
     # Link shortening feature configuration
@@ -57,14 +57,14 @@ class Config :
     ]
 
     # Mail service configuration
-    MAIL_SERVER : str = environ.get('MAIL_SERVER')
-    MAIL_PORT : int = environ.get('MAIL_PORT')
-    MAIL_DEFAULT_SENDER : str = environ.get('MAIL_DEFAULT_SENDER')
-    MAIL_USE_TLS : bool = environ.get('MAIL_USE_TLS')
-    MAIL_USE_SSL : bool = environ.get('MAIL_USE_SSL')
-    MAIL_USERNAME : str =  environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD : str =  environ.get('MAIL_PASSWORD')
+    MAIL_SERVER : str = getenv('MAIL_SERVER')
+    MAIL_PORT : int = getenv('MAIL_PORT')
+    MAIL_DEFAULT_SENDER : str = getenv('MAIL_DEFAULT_SENDER')
+    MAIL_USE_TLS : bool = True if getenv('MAIL_USE_TLS') == 'enabled' else False
+    MAIL_USE_SSL : bool = True if getenv('MAIL_USE_SSL') == 'enabled' else False
+    MAIL_USERNAME : str =  getenv('MAIL_USERNAME')
+    MAIL_PASSWORD : str =  getenv('MAIL_PASSWORD')
 
     # Running environnement configuration
-    WEB_APP_NAME : str = environ.get('WEB_APP_NAME')
-    DOMAIN_NAME : str = environ.get('DOMAIN_NAME') + "/"
+    WEB_APP_NAME : str = getenv('WEB_APP_NAME')
+    DOMAIN_NAME : str = getenv('DOMAIN_NAME') + '/'
